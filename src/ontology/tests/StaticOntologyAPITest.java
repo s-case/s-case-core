@@ -24,7 +24,7 @@ public class StaticOntologyAPITest {
 
 		// Add an actor
 		ontology.addActor("user");
-		ontology.connectRequirementToConcept("FR1", "actor");
+		ontology.connectRequirementToConcept("FR1", "user");
 
 		// Add an object
 		ontology.addObject("bookmark");
