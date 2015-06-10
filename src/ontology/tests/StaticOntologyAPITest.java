@@ -34,12 +34,12 @@ public class StaticOntologyAPITest {
 		ontology.addAction("create");
 		ontology.connectRequirementToOperation("FR1", "create");
 		ontology.connectActorToAction("user", "create");
-		ontology.connectObjectToAction("bookmark", "create");
+		ontology.connectActionToObject("create","bookmark");
 
 		// Add a property
 		ontology.addProperty("tag");
 		ontology.connectRequirementToConcept("FR1", "tag");
-		ontology.connectPropertyToElement("tag", "bookmark");
+		ontology.connectElementToProperty("bookmark", "tag");
 
 		// Close and save the ontology
 		ontology.close();

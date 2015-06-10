@@ -170,12 +170,12 @@ public class StaticOntologyAPI {
 	}
 
 	/**
-	 * Connects an object to an action.
+	 * Connects an action to an object.
 	 * 
-	 * @param object the object to be connected.
 	 * @param action the action to be connected to the object.
+	 * @param object the object to be connected.
 	 */
-	public void connectObjectToAction(String object, String action) {
+	public void connectActionToObject(String action, String object) {
 		staticOntology.addPropertyAndReverseBetweenIndividuals(action, "acts_on", object);
 	}
 
@@ -189,12 +189,12 @@ public class StaticOntologyAPI {
 	}
 
 	/**
-	 * Connects a property to an element.
+	 * Connects an element to a property.
 	 * 
+	 * @param element the element to be connected to the property.
 	 * @param property the property to be connected.
-	 * @param element the element to be connected to the object.
 	 */
-	public void connectPropertyToElement(String property, String element) {
+	public void connectElementToProperty(String element, String property) {
 		staticOntology.addPropertyAndReverseBetweenIndividuals(element, "has_property", property);
 	}
 }
