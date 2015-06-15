@@ -3,7 +3,7 @@
 	<modelVersion>4.0.0</modelVersion>
         <groupId>eu.scasefp7</groupId>
 	<artifactId>s-case-core</artifactId>
-	<version>1.0.1-SNAPSHOT</version>
+	<version>1.0.1</version>
 
         <parent>
             <groupId>eu.scasefp7</groupId>
@@ -24,7 +24,7 @@
             <connection>scm:git:git@github.com:s-case/s-case-core.git</connection>
             <developerConnection>scm:git:git@github.com:s-case/s-case-core.git</developerConnection>
             <url>https://github.com/s-case/s-case-core.git</url>
-            <tag>HEAD</tag>
+            <tag>s-case-core-1.0.1</tag>
         </scm>
 
 	<dependencies>
