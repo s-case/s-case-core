@@ -3,3 +3,5 @@ Bundle-ManifestVersion: 2
 Bundle-Name: s-case-core
 Bundle-SymbolicName: s-case-core
 Bundle-Version: 1.0.0.qualifier
+Require-Bundle: org.eclipse.ui.workbench,
+ org.eclipse.osgi
