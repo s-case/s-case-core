@@ -4,6 +4,7 @@
 	<artifactId>s-case-core</artifactId>
 	<version>1.0.2-SNAPSHOT</version>
 
+
         <parent>
             <groupId>eu.scasefp7</groupId>
             <artifactId>scase-parent</artifactId>
