@@ -1,7 +1,8 @@
-package s_case_core;
+package eu.scasefp7.core;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
 
 /**
  * The activator class controls the plug-in life cycle

@@ -1,8 +1,8 @@
-package ontology;
+package eu.scasefp7.core.ontology;
 
 import java.util.ArrayList;
 
-import ontology.OntologySource.OntologyType;
+import eu.scasefp7.core.ontology.OntologySource.OntologyType;
 
 /**
  * Provides an API for the linked ontology in OWL format. Allows adding/deleting instances and properties.

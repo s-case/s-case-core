@@ -1,4 +1,4 @@
-package ontology;
+package eu.scasefp7.core.ontology;
 
 /**
  * Links the static and the dynamic ontologies into one linked ontology.

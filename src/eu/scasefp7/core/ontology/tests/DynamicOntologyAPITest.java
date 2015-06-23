@@ -1,6 +1,6 @@
-package ontology.tests;
+package eu.scasefp7.core.ontology.tests;
 
-import ontology.DynamicOntologyAPI;
+import eu.scasefp7.core.ontology.DynamicOntologyAPI;
 
 /**
  * An example instantiation of the dynamic ontology.
