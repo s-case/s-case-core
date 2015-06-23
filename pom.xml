@@ -1,101 +1,127 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 
-    <modelVersion>4.0.0</modelVersion>
-    <artifactId>s-case-core</artifactId>
-    <version>1.0.2-SNAPSHOT</version>
-    <packaging>eclipse-plugin</packaging>
-
-
-    <parent>
-        <groupId>eu.scasefp7</groupId>
-        <artifactId>scase-parent</artifactId>
-        <version>1.0.17</version>
-    </parent>
-
-    <developers>
-        <developer>
-            <name>Themistoklis Diamantopoulos</name>
-            <email>thdiaman@issel.ee.auth.gr</email>
-            <organization>Aristotle University of Thessaloniki</organization>
-            <organizationUrl>http://www.auth.gr/en</organizationUrl>
-        </developer>
-    </developers>
-
-    <scm>
-        <connection>scm:git:git@github.com:s-case/s-case-core.git</connection>
-        <developerConnection>scm:git:git@github.com:s-case/s-case-core.git</developerConnection>
-        <url>https://github.com/s-case/s-case-core.git</url>
-        <tag>HEAD</tag>
-    </scm>
-
-    <repositories>
-        <repository>
-            <id>luna</id>
-            <layout>p2</layout>
-            <url>http://download.eclipse.org/releases/luna</url>
-        </repository>
-    </repositories>
+	<modelVersion>4.0.0</modelVersion>
+	<artifactId>s-case-core</artifactId>
+	<version>1.0.2-SNAPSHOT</version>
+	<packaging>eclipse-plugin</packaging>
 
 
-    <dependencies>
-        <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-core</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.jena</groupId>
-            <artifactId>jena-arq</artifactId>
-            <version>2.13.0</version>
-        </dependency>
-    </dependencies>
+	<parent>
+		<groupId>eu.scasefp7</groupId>
+		<artifactId>scase-parent</artifactId>
+		<version>1.0.17</version>
+	</parent>
 
-    <build>
-        <plugins>
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>tycho-maven-plugin</artifactId>
-                <version>0.23.0</version>
-                <extensions>true</extensions>
-            </plugin>
+	<developers>
+		<developer>
+			<name>Themistoklis Diamantopoulos</name>
+			<email>thdiaman@issel.ee.auth.gr</email>
+			<organization>Aristotle University of Thessaloniki</organization>
+			<organizationUrl>http://www.auth.gr/en</organizationUrl>
+		</developer>
+	</developers>
 
-            <plugin>
-                <groupId>org.eclipse.tycho</groupId>
-                <artifactId>target-platform-configuration</artifactId>
-                <version>0.23.0</version>
-                <configuration>
-                    <environments>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>linux</os>
-                            <ws>gtk</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86</arch>
-                        </environment>
-                        <environment>
-                            <os>win32</os>
-                            <ws>win32</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                        <environment>
-                            <os>macosx</os>
-                            <ws>cocoa</ws>
-                            <arch>x86_64</arch>
-                        </environment>
-                    </environments>
-                </configuration>
-            </plugin>
+	<scm>
+		<connection>scm:git:git@github.com:s-case/s-case-core.git</connection>
+		<developerConnection>scm:git:git@github.com:s-case/s-case-core.git</developerConnection>
+		<url>https://github.com/s-case/s-case-core.git</url>
+		<tag>HEAD</tag>
+	</scm>
 
-        </plugins>
-    </build>
+	<repositories>
+		<repository>
+			<id>luna</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/luna</url>
+		</repository>
+	</repositories>
+
+
+	<dependencies>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-core</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+	</dependencies>
+
+	<build>
+		<plugins>
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>tycho-maven-plugin</artifactId>
+				<version>0.23.0</version>
+				<extensions>true</extensions>
+			</plugin>
+
+			<plugin>
+				<groupId>org.eclipse.tycho</groupId>
+				<artifactId>target-platform-configuration</artifactId>
+				<version>0.23.0</version>
+				<configuration>
+					<environments>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>linux</os>
+							<ws>gtk</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86</arch>
+						</environment>
+						<environment>
+							<os>win32</os>
+							<ws>win32</ws>
+							<arch>x86_64</arch>
+						</environment>
+						<environment>
+							<os>macosx</os>
+							<ws>cocoa</ws>
+							<arch>x86_64</arch>
+						</environment>
+					</environments>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<!-- Copy non-Ecipse plugins to target/dependency so that may be referenced 
+					for runtime use. -->
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>classpath</id>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<configuration>
+							<fileSeparator>/</fileSeparator>
+							<prefix>target/dependency</prefix>
+							<outputFile>${project.build.directory}/classPath.txt</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
+		</plugins>
+	</build>
 
 </project>
