@@ -4,4 +4,6 @@ Bundle-Name: s-case-core
 Bundle-SymbolicName: s-case-core
 Bundle-Version: 1.0.0.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
- org.eclipse.osgi
+ org.eclipse.osgi,
+ org.eclipse.core.runtime;bundle-version="3.10.0"
+Export-Package: eu.scasefp7.core
