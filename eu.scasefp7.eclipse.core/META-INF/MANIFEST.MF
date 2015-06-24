@@ -1,32 +1,13 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
-Bundle-Name: eu.scasefp7.eclipse.core
+Bundle-Name: S-CASE Core
 Bundle-SymbolicName: eu.scasefp7.eclipse.core
 Bundle-Version: 1.0.2.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.osgi,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.apache.jena.osgi
 Bundle-ClassPath: .,
- target/classes,
- target/dependency/plugins/com.fasterxml.jackson.core.jackson-annotations_2.3.0.jar,\
- target/dependency/plugins/com.fasterxml.jackson.core.jackson-core_2.3.3.jar,\
- target/dependency/plugins/com.fasterxml.jackson.core.jackson-databind_2.3.3.jar,\
- target/dependency/plugins/com.github.jsonld-java_0.5.1.jar,\
- target/dependency/plugins/jcl.over.slf4j_1.7.6.jar,\
- target/dependency/plugins/log4j_1.2.17.jar,\
- target/dependency/plugins/org.apache.commons.codec_1.6.0.jar,\
- target/dependency/plugins/org.apache.commons.csv_1.0.0.jar,\
- target/dependency/plugins/org.apache.commons.lang3_3.3.2.jar,\
- target/dependency/plugins/org.apache.httpcomponents.httpclient_4.2.6.jar,\
- target/dependency/plugins/org.apache.httpcomponents.httpclient-cache_4.2.6.jar,\
- target/dependency/plugins/org.apache.httpcomponents.httpcore_4.2.5.jar,\
- target/dependency/plugins/org.apache.jena.arq_2.13.0.jar,\
- target/dependency/plugins/org.apache.jena.core_2.13.0.jar,\
- target/dependency/plugins/org.apache.jena.iri_1.1.2.jar,\
- target/dependency/plugins/org.apache.thrift_0.9.2.jar,\
- target/dependency/plugins/slf4j.api_1.7.6.jar,\
- target/dependency/plugins/slf4j.log4j12_1.7.6.jar,\
- target/dependency/plugins/xerces.Impl_2.11.0.jar,\
- target/dependency/plugins/xml-apis_1.4.1.jar
+ target/classes
 Export-Package: eu.scasefp7.eclipse.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
