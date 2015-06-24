@@ -1,4 +1,4 @@
-package ontology;
+package eu.scasefp7.eclipse.core.ontology;
 
 import java.io.File;
 import java.io.FileNotFoundException;
@@ -9,7 +9,7 @@ import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Iterator;
 
-import ontology.OntologySource.OntologyType;
+import eu.scasefp7.eclipse.core.ontology.OntologySource;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -28,6 +28,8 @@ import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
+
+import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 
 /**
  * Provides an API for an ontology in OWL format. Allows adding/deleting instances and properties.

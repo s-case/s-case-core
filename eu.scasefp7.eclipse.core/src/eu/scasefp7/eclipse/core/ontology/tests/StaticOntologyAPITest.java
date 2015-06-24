@@ -1,6 +1,6 @@
-package ontology.tests;
+package eu.scasefp7.eclipse.core.ontology.tests;
 
-import ontology.StaticOntologyAPI;
+import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
 
 /**
  * An example instantiation of the static ontology.

@@ -1,4 +1,8 @@
-package ontology;
+package eu.scasefp7.eclipse.core.ontology;
+
+import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
+import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
+import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
 
 /**
  * Links the static and the dynamic ontologies into one linked ontology.

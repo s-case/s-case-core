@@ -38,3 +38,4 @@ Bundle-ClassPath: .,
  target/dependency/xercesImpl-2.11.0.jar,
  target/dependency/xml-apis-1.4.01.jar
 Export-Package: eu.scasefp7.eclipse.core
+Bundle-RequiredExecutionEnvironment: JavaSE-1.7

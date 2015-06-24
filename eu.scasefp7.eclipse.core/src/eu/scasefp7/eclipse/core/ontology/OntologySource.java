@@ -1,4 +1,4 @@
-package ontology;
+package eu.scasefp7.eclipse.core.ontology;
 
 /**
  * Class containing the source of the three ontologies.
