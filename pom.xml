@@ -10,6 +10,8 @@
 	<modules>
 		<module>eu.scasefp7.eclipse.core</module>
 		<module>eu.scasefp7.eclipse.core.ui</module>
+		<module>eu.scasefp7.eclipse.core.feature</module>
+		<module>update-site</module>
 	</modules>
 
 	<parent>
