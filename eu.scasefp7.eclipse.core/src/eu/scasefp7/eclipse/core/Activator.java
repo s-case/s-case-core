@@ -1,4 +1,4 @@
-package s_case_core;
+package eu.scasefp7.eclipse.core;
 
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
@@ -9,7 +9,7 @@ import org.osgi.framework.BundleContext;
 public class Activator extends AbstractUIPlugin {
 
 	// The plug-in ID
-	public static final String PLUGIN_ID = "s-case-core"; //$NON-NLS-1$
+	public static final String PLUGIN_ID = "eu.scasefp7.eclipse.core"; //$NON-NLS-1$
 
 	// The shared instance
 	private static Activator plugin;

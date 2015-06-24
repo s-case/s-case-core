@@ -11,12 +11,20 @@
 		<module>eu.scasefp7.eclipse.core</module>
 		<module>eu.scasefp7.eclipse.core.ui</module>
 	</modules>
-	
-<!-- 	<parent> -->
-<!-- 		<groupId>eu.scasefp7</groupId> -->
-<!-- 		<artifactId>scase-parent</artifactId> -->
-<!-- 		<version>1.0.18-SNAPSHOT</version> -->
-<!-- 	</parent> -->
+
+	<parent>
+		<groupId>eu.scasefp7</groupId>
+		<artifactId>scase-parent</artifactId>
+		<version>1.0.18</version>
+	</parent>
+
+	<repositories>
+		<repository>
+			<id>luna</id>
+			<layout>p2</layout>
+			<url>http://download.eclipse.org/releases/luna</url>
+		</repository>
+	</repositories>
 
 	<developers>
 		<developer>
@@ -48,8 +56,12 @@
 	<dependencies>
 		<dependency>
 			<groupId>org.apache.jena</groupId>
-			<artifactId>apache-jena-libs</artifactId>
-			<type>pom</type>
+			<artifactId>jena-core</artifactId>
+			<version>2.13.0</version>
+		</dependency>
+		<dependency>
+			<groupId>org.apache.jena</groupId>
+			<artifactId>jena-arq</artifactId>
 			<version>2.13.0</version>
 		</dependency>
 	</dependencies>
@@ -98,9 +110,33 @@
 				</configuration>
 			</plugin>
 
+			<plugin>
+				<!-- Copy non-Ecipse plugins to target/dependency so that may be referenced 
+					for runtime use. -->
+				<artifactId>maven-dependency-plugin</artifactId>
+				<version>2.1</version>
+				<executions>
+					<execution>
+						<id>copy-dependencies</id>
+						<goals>
+							<goal>copy-dependencies</goal>
+						</goals>
+					</execution>
+					<execution>
+						<id>classpath</id>
+						<goals>
+							<goal>build-classpath</goal>
+						</goals>
+						<configuration>
+							<fileSeparator>/</fileSeparator>
+							<prefix>target/dependency</prefix>
+							<outputFile>${project.build.directory}/classPath.txt</outputFile>
+						</configuration>
+					</execution>
+				</executions>
+			</plugin>
+
 		</plugins>
 	</build>
-
-
 
 </project>
