@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension
+         point="org.eclipse.ui.perspectives">
+      <perspective
+            class="eu.scasefp7.eclipse.core.ui.perspectives.ScasePerspective"
+            icon="icons/s-case_16x16.png"
+            id="eu.scasefp7.eclipse.core.ui.ScasePerspective"
+            name="S-CASE">
+      </perspective>
+   </extension>
+
+  <extension
+         point="org.eclipse.ui.perspectiveExtensions">
+      <perspectiveExtension targetID="org.eclipse.ui.resourcePerspective">
+         <perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
+      </perspectiveExtension>
+
+      <perspectiveExtension targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
+         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
+         <showInPart id="org.eclipse.team.ui.GenericHistoryView"/>
+         <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
+         <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
+      </perspectiveExtension>
+  </extension>
+
+</plugin>
