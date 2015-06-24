@@ -21,14 +21,18 @@ import org.eclipse.ui.progress.IProgressConstants;
 //import org.eclipse.jdt.ui.JavaUI;
 
 /**
- * This class is meant to serve as an example for how various contributions are
- * made to a perspective. Note that some of the extension point id's are
- * referred to as API constants while others are hardcoded and may be subject to
- * change.
+ * Based on org.eclipse.jdt.internal.ui.JavaPerspectiveFactory, 
+ * https://git.eclipse.org/c/jdt/eclipse.jdt.ui.git/tree/org.eclipse.jdt.ui/ui/org/eclipse/jdt/internal/ui/JavaPerspectiveFactory.java
+ * copyrighted by:
+ * Copyright (c) 2000, 2010 IBM Corporation and others.
+ * All rights reserved. This program and the accompanying materials
+ * are made available under the terms of the Eclipse Public License v1.0
+ * which accompanies this distribution, and is available at
+ * http://www.eclipse.org/legal/epl-v10.html
  */
 public class ScasePerspective implements IPerspectiveFactory {
 
-	public final String PERSPECTIVE_ID = "eu.scasefp7.eclipse.perspectives.scase";
+	public final String ID_PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective";
 
 	private IPageLayout factory;
 

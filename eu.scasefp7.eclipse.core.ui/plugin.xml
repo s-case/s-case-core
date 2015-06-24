@@ -6,9 +6,9 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="eu.scasefp7.eclipse.core.ui.perspectives.ScasePerspective"
-            icon="icons/s-case_16x16.gif"
+            icon="icons/s-case_16x16.png"
             id="eu.scasefp7.eclipse.core.ui.ScasePerspective"
-            name="S-CASE">
+            name="%perspective.name">
       </perspective>
    </extension>
 
@@ -24,6 +24,35 @@
          <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
          <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
       </perspectiveExtension>
+      <perspectiveExtension
+            targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
+         <view
+               id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
+               ratio="0.5"
+               relationship="bottom"
+               relative="org.eclipse.ui.views.ProblemView">
+         </view>
+      </perspectiveExtension>
+  </extension>
+  <extension
+        point="org.eclipse.ui.views">
+     <category
+           id="eu.scasefp7.eclipse.category"
+           name="%category.name">
+     </category>
+     <view
+           category="eu.scasefp7.eclipse.core.ui"
+           class="eu.scasefp7.eclipse.core.ui.views.Dashboard"
+           icon="icons/s-case_16x16.png"
+           id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
+           name="%dashboard.name">
+     </view>
+  </extension>
+  <extension
+        point="org.eclipse.help.contexts">
+     <contexts
+           file="contexts.xml">
+     </contexts>
   </extension>
 
 </plugin>
