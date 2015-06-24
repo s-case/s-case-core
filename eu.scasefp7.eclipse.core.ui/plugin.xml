@@ -6,7 +6,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="eu.scasefp7.eclipse.core.ui.perspectives.ScasePerspective"
-            icon="icons/s-case_16x16.png"
+            icon="icons/s-case_16x16.gif"
             id="eu.scasefp7.eclipse.core.ui.ScasePerspective"
             name="S-CASE">
       </perspective>
