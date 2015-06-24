@@ -5,8 +5,8 @@ Bundle-SymbolicName: eu.scasefp7.eclipse.core
 Bundle-Version: 1.0.2.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.osgi,
- org.eclipse.core.runtime,
- org.apache.jena.osgi
+ org.eclipse.core.runtime
+ org.apache.jena.osgi;bundle-version="2.13.0"
 Bundle-ClassPath: .,
  target/classes
 Export-Package: eu.scasefp7.eclipse.core
