@@ -1,2 +1,2 @@
 # s-case-core
-The s-case core library
+The S-CASE Core module providing common processing and UI for S-CASE development tools.
