@@ -37,11 +37,14 @@
 							<artifacts>
 								<!-- specify your depencies here -->
 								<!-- groupId:artifactId:version -->
+<!-- 								<artifact> -->
+<!-- 									<id>org.apache.jena:jena-core:2.13.0</id> -->
+<!-- 								</artifact> -->
+<!-- 								<artifact> -->
+<!-- 									<id>org.apache.jena:jena-arq:2.13.0</id> -->
+<!-- 								</artifact> -->
 								<artifact>
-									<id>org.apache.jena:jena-core:2.13.0</id>
-								</artifact>
-								<artifact>
-									<id>org.apache.jena:jena-arq:2.13.0</id>
+									<id>org.apache.jena:jena-osgi:2.13.0</id>
 								</artifact>
 							</artifacts>
 						</configuration>
