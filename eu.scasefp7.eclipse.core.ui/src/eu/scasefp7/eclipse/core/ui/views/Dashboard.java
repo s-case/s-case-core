@@ -2,10 +2,11 @@ package eu.scasefp7.eclipse.core.ui.views;
 
 
 import org.eclipse.core.commands.Command;
-import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
+import org.eclipse.core.commands.Parameterization;
+import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
@@ -29,8 +30,10 @@ import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchCommandConstants;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
+import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
@@ -127,18 +130,22 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
-				IServiceLocator serviceLocator = PlatformUI.getWorkbench();
+				IServiceLocator serviceLocator = getSite();
 				// or a site from within a editor or view:
 				// IServiceLocator serviceLocator = getSite();
 
 				ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
-
+				IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
+				
 				try  { 
 				    // Lookup commmand with its ID
-				    Command command = commandService.getCommand("org.eclipse.ui.newWizard");
+				    Command command = commandService.getCommand(IWorkbenchCommandConstants.FILE_IMPORT);
 
-				    // Optionally pass a ExecutionEvent instance, default no-param arg creates blank event
-				    command.executeWithChecks(new ExecutionEvent());
+					Parameterization[] params = new Parameterization[] { new Parameterization(
+		                    command.getParameter(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID), "eu.scasefp7.eclipse.umlrec.importWizard") };
+					ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params);
+					
+					handlerService.executeCommand(parametrizedCommand, null);
 				        
 				} catch (ExecutionException | NotDefinedException |
 				        NotEnabledException | NotHandledException ex) {
