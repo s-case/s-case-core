@@ -5,9 +5,10 @@ Bundle-SymbolicName: eu.scasefp7.eclipse.core.ui;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
- org.eclipse.core.commands
+ org.eclipse.core.commands,
+ org.eclipse.core.resources
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
-Export-Package: eu.scasefp7.eclipse.core.ui.perspectives
+Export-Package: eu.scasefp7.eclipse.core.ui;version="1.0.2.qualifier"
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .,
  swing2swt.jar
