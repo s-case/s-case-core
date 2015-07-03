@@ -4,16 +4,22 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
+import org.eclipse.jface.viewers.TreeViewer;
+import org.eclipse.jface.viewers.ViewerFilter;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.events.SelectionAdapter;
-import org.eclipse.swt.events.SelectionEvent;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Label;
-import org.eclipse.swt.widgets.Tree;
-import org.eclipse.swt.widgets.TreeItem;
+import org.eclipse.swt.widgets.Text;
+import org.eclipse.ui.dialogs.FilteredTree;
+import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
@@ -26,6 +32,46 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	
 	private Label domainLabel;
 
+	private boolean locked;
+	
+	private Composite composite;
+	private Composite cmpLabels;
+	
+	protected DomainFilteredTree filteredTree;
+	protected TreeViewer treeViewer;
+	
+	protected class DomainFilteredTree extends FilteredTree {
+		private ViewerFilter viewerFilter;
+
+		DomainFilteredTree(Composite parent, int treeStyle, PatternFilter filter) {
+			super(parent, treeStyle, filter, true);
+		}
+
+		protected void addFilter(ViewerFilter filter) {
+			viewerFilter = filter;
+			getViewer().addFilter(filter);
+
+			if (filterText != null) {
+				setFilterText("type filter text");
+				textChanged();
+			}
+		}
+
+		protected void updateToolbar(boolean visible) {
+			super.updateToolbar((viewerFilter != null) || (visible));
+		}
+
+		protected void clearText() {
+			setFilterText("");
+
+			if ((!locked) && (viewerFilter != null)) {
+				getViewer().removeFilter(viewerFilter);
+				viewerFilter = null;
+			}
+			textChanged();
+		}
+	}
+	
 	/**
 	 * Constructor for SamplePropertyPage.
 	 */
@@ -33,27 +79,13 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		super();
 		setMessage("");
 	}
-
-	private void addDomainItems(Tree tree, int selectedId) {
-		
-		for(DomainEntry d : IProjectDomains.PROJECT_DOMAINS) {
-			TreeItem treeitem = new TreeItem(tree, SWT.NONE);
-			treeitem.setData(d);
-			treeitem.setText(d.getName());
-			
-			for(DomainEntry c : d.getChildren()) {
-				TreeItem child = new TreeItem(treeitem, SWT.NONE);
-				child.setData(c);
-				child.setText(c.getName());
-				
-				if(selectedId == c.getId()) {
-					//child.getParentItem().setExpanded(true);
-					tree.setSelection(child);
-					updateDomainLabel(child);
-				}
-			}
-		}
+	
+	protected void setContentAndLabelProviders(TreeViewer treeViewer)
+	{
+		treeViewer.setLabelProvider(new DomainBoldLabelProvider(filteredTree));
+		treeViewer.setContentProvider(new DomainContentProvider());
 	}
+	
 
 	/**
 	 * Read the configured properties and set the label
@@ -73,8 +105,47 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		return DOMAIN_DEFAULT;
 	}
 
-	private void addDomainLabel(Composite parent, Object data) {
-		Composite cmpLabels = new Composite(parent, SWT.NONE);
+	protected void selectSavedItem()
+	{
+		DomainEntry[] domains = IProjectDomains.PROJECT_DOMAINS;
+		treeViewer.setInput(domains);
+
+		int domainId = loadProperties();
+		
+		DomainEntry domain = findDomainById(domains, domainId);
+		if (domain != null) {
+			treeViewer.setSelection(new StructuredSelection(domain), true);
+		}
+		
+		// Set focus to tree or the filter control
+		if (treeViewer.getTree().getItemCount() > 1) {
+			Text filterText = filteredTree.getFilterControl();
+			if (filterText != null) {
+				filterText.setFocus();
+			}
+		} else {
+			treeViewer.getControl().setFocus();
+		}
+	}
+	
+	
+	private DomainEntry findDomainById(DomainEntry[] domains, int domainId) {
+		for (DomainEntry de : domains) {
+			if (de.getId() == domainId) {
+				return de;
+			}
+			for (DomainEntry child : de.getChildren()) {
+				if(de.getId() == domainId) {
+					return child;
+				}
+			}
+		}
+		return null;
+	}
+	
+	
+	private void createDomainLabel(Composite parent, Object data) {
+		cmpLabels = new Composite(parent, SWT.NONE);
 		GridLayout gl_cmpLabels = new GridLayout(2, false);
 		gl_cmpLabels.marginWidth = 0;
 		cmpLabels.setLayout(gl_cmpLabels);
@@ -94,7 +165,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * @see PreferencePage#createContents(Composite)
 	 */
 	protected Control createContents(Composite parent) {
-		Composite composite = new Composite(parent, SWT.NONE);
+		composite = new Composite(parent, SWT.NONE);
 		GridLayout gl_composite = new GridLayout();
 		gl_composite.marginWidth = 0;
 		gl_composite.marginHeight = 0;
@@ -106,28 +177,56 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		int domainId = loadProperties();
 		
 		// Add the domain label
-		addDomainLabel(composite, (domainId != DOMAIN_DEFAULT) ? domainId : null);
+		createDomainLabel(composite, (domainId != DOMAIN_DEFAULT) ? domainId : null);
 		
 		// Add tree
-		final Tree tree = new Tree(composite, SWT.BORDER | SWT.FULL_SELECTION);
-		tree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true, 1, 1));
-		//cmpTree.setContent(tree);
-		//cmpTree.setMinSize(tree.computeSize(SWT.DEFAULT, SWT.DEFAULT));
-		tree.addSelectionListener(new SelectionAdapter() {
-			@Override
-			public void widgetSelected(SelectionEvent e) {
-				if(tree.getSelectionCount() > 0) {
-					TreeItem[] selection = tree.getSelection();
-					TreeItem item = selection[0];
-					updateDomainLabel(item);
-				}
-			}
-		});
+		treeViewer = createTreeViewer(composite);
 		
-		// Add the list of domains
-		addDomainItems(tree, domainId);
+		// Load the saved property
+		selectSavedItem();
 
 		return composite;
+	}
+
+	protected TreeViewer createTreeViewer(Composite parent) {
+		TreeViewer tree;
+
+		filteredTree = new DomainFilteredTree(parent, SWT.FILL, new PatternFilter());
+		filteredTree.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+//		horizontalIndent = 7;
+		filteredTree.setBackground(parent.getDisplay().getSystemColor(SWT.COLOR_LIST_BACKGROUND));
+
+		tree = filteredTree.getViewer();
+
+		setContentAndLabelProviders(tree);
+		tree.setInput(IProjectDomains.PROJECT_DOMAINS);
+
+		tree.addSelectionChangedListener(new ISelectionChangedListener() {
+
+			public void selectionChanged(SelectionChangedEvent event) {
+				handleTreeSelectionChanged(event);
+			}
+
+		});
+		
+		//super.addListeners(tree);
+		return tree;
+	}
+	
+	protected DomainEntry getSingleSelection(ISelection selection)
+	{
+	  if (!selection.isEmpty()) {
+	    IStructuredSelection structured = (IStructuredSelection)selection;
+	    if ((structured.getFirstElement() instanceof DomainEntry)) {
+	      return (DomainEntry)structured.getFirstElement();
+	    }
+	  }
+	  return null;
+	}
+	
+	protected void handleTreeSelectionChanged(SelectionChangedEvent event) {
+		DomainEntry de = getSingleSelection(event.getSelection());
+		updateDomainLabel(de);
 	}
 
 	protected void performDefaults() {
@@ -161,15 +260,18 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	/**
 	 * @param selection
 	 */
-	private void updateDomainLabel(TreeItem selection) {
-		TreeItem parent = selection.getParentItem();
+	private void updateDomainLabel(DomainEntry domain) {
+		if(domain == null)
+			return; 
+		
+		DomainEntry parent = domain.getParent();
 		
 		if(parent != null) {
-			String text = parent.getText() + "/" + selection.getText();
+			String text = parent.getName() + "/" + domain.getName();
 			
 			// Escape text for SWT
 			domainLabel.setText(text.replaceAll("&", "&&"));
-			domainLabel.setData(selection.getData());
+			domainLabel.setData(domain);
 		}
 	}
 
