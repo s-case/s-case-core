@@ -20,8 +20,9 @@ package eu.scasefp7.eclipse.core.ui.preferences.internal;
  *
  */
 public class DomainEntry {
-	private String name;
-	private DomainEntry[] children;
+	private String name = null;
+	private DomainEntry[] children = null;
+	private DomainEntry parent = null;
 	private int	id;
 	
 	/**
@@ -71,6 +72,10 @@ public class DomainEntry {
 	 */
 	public void setChildren(DomainEntry[] children) {
 		this.children = children;
+		
+		for(int ix=0; ix<children.length; ix++) {
+			children[ix].setParent(this);
+		}
 	}
 	/**
 	 * @return the id
@@ -83,6 +88,27 @@ public class DomainEntry {
 	 */
 	public void setId(int id) {
 		this.id = id;
+	}
+
+	/**
+	 * @return the parent
+	 */
+	public DomainEntry getParent() {
+		return parent;
+	}
+
+	/**
+	 * @param parent the parent to set
+	 */
+	public void setParent(DomainEntry parent) {
+		this.parent = parent;
+	}
+
+	/**
+	 * @return true if the entry has children
+	 */
+	public boolean hasChildren() {
+		return this.getChildren() != null && this.getChildren().length > 0;
 	}
 	
 	
