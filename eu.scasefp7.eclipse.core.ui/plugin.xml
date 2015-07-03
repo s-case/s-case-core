@@ -59,6 +59,7 @@
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.ProjectDomainPropertyPage"
            id="eu.scasefp7.eclipse.core.ui.propertyPages.ProjectDomainPropertyPage"
+           category=""
            name="Domain">
 		 <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
