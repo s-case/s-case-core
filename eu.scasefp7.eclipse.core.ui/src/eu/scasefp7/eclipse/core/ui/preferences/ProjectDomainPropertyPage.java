@@ -134,9 +134,11 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 			if (de.getId() == domainId) {
 				return de;
 			}
-			for (DomainEntry child : de.getChildren()) {
-				if(de.getId() == domainId) {
-					return child;
+			if(de.hasChildren()) {
+				for (DomainEntry child : de.getChildren()) {
+					if(child.getId() == domainId) {
+						return child;
+					}
 				}
 			}
 		}
