@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<module>prepare-osgi</module>
+		<!--<module>prepare-osgi</module>-->
 		<module>eu.scasefp7.eclipse.core</module>
 		<module>eu.scasefp7.eclipse.core.ui</module>
 		<module>eu.scasefp7.eclipse.core.feature</module>
@@ -27,6 +27,11 @@
 			<id>luna</id>
 			<layout>p2</layout>
 			<url>http://download.eclipse.org/releases/luna</url>
+		</repository>
+		<repository>
+			<id>maven-p2-dependency-bridge</id>
+			<layout>p2</layout>
+			<url>file://${project.basedir}/../maven-p2-dependency-bridge/target/repository</url>
 		</repository>
 		<repository>
 			<id>OSSRH snapshots</id>
@@ -70,6 +75,18 @@
 	</properties>
 
 	<build>
+		<pluginManagement>
+	                <plugins>
+	                        <plugin>
+	                                <groupId>org.eclipse.tycho</groupId>
+	                                <artifactId>tycho-p2-repository-plugin</artifactId>
+					<version>${tycho.version}</version>
+	                                <configuration>
+	                                        <includeAllDependencies>true</includeAllDependencies>
+	                                </configuration>
+	                        </plugin>
+	                </plugins>
+		</pluginManagement>
 		<plugins>
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
@@ -119,7 +136,6 @@
 					</environments>
 				</configuration>
 			</plugin>
-
 		</plugins>
 	</build>
 
