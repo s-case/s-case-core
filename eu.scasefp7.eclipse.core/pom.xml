@@ -12,6 +12,7 @@
 	<artifactId>eu.scasefp7.eclipse.core</artifactId>
 	<packaging>eclipse-plugin</packaging>
 
+<<<<<<< HEAD
 	
 
 <!-- 	<build> -->
@@ -103,4 +104,6 @@
 <!-- 			<version>2.13.0</version> -->
 <!-- 		</dependency> -->
 	</dependencies>
+=======
+>>>>>>> 44cebdfc61fe777582815b99650e0661010b976b
 </project>
