@@ -6,9 +6,12 @@ Bundle-Version: 1.0.2.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.osgi,
  org.eclipse.core.runtime,
- org.apache.jena.core;bundle-version="2.13.0",
- org.apache.jena.arq;bundle-version="2.13.0",
- log4j;bundle-version="1.2.17"
+ org.apache.jena.osgi;bundle-version="[2.13.0,3.0.0)"
 Bundle-ClassPath: .
 Export-Package: eu.scasefp7.eclipse.core
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Import-Package: com.hp.hpl.jena.ontology;version="[2.13.0,3.0.0)",
+ com.hp.hpl.jena.query;version="[2.13.0,3.0.0)",
+ com.hp.hpl.jena.rdf.model;version="[2.13.0,3.0.0)",
+ com.hp.hpl.jena.util;version="[2.13.0,3.0.0)",
+ com.hp.hpl.jena.util.iterator;version="[2.13.0,3.0.0)"
