@@ -3,6 +3,9 @@
    <feature url="features/eu.scasefp7.eclipse.core.feature_1.0.2.qualifier.jar" id="eu.scasefp7.eclipse.core.feature" version="1.0.2.qualifier">
       <category name="eu.scasefp7.scase.eclipse"/>
    </feature>
+   <feature url="features/eu.scasefp7.eclipse.core.dependencies.feature_1.0.2.qualifier.jar" id="eu.scasefp7.eclipse.core.dependencies.feature" version="1.0.2.qualifier">
+      <category name="eu.scasefp7.scase.eclipse"/>
+   </feature>
    <category-def name="eu.scasefp7.scase.eclipse" label="S-CASE">
       <description>
          S-CASE developer tools

@@ -15,6 +15,21 @@
     <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
+	<repositories>
+		<repository>
+			<id>OSSRH snapshots</id>
+			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
+			<snapshots>
+				<enabled>true</enabled>
+				<updatePolicy>always</updatePolicy>
+			</snapshots>
+		</repository>
+		<repository>
+			<id>Apache releases</id>
+			<url>https://repository.apache.org/content/repositories/releases</url>
+		</repository>
+	</repositories>
+	
     <build>
         <plugins>
             <plugin>
@@ -29,14 +44,22 @@
                                 <!-- specify your depencies here -->
                                 <!-- groupId:artifactId:version -->
                                 <artifact>
-                                    <id>org.apache.jena:jena-core:2.13.0</id>
-                                </artifact>
-                                <artifact>
-                                    <id>org.apache.jena:jena-arq:2.13.0</id>
-                                </artifact>
-                                <artifact>
-                                    <id>log4j:log4j:1.2.17</id>
-                                </artifact>
+									<id>org.apache.jena:jena-osgi:2.13.0</id>
+								</artifact>
+								
+<!-- 								<artifact> -->
+<!-- 									<id>org.apache.jena:jena-core:2.13.0</id> -->
+<!-- 								</artifact> -->
+<!-- 								<artifact> -->
+<!-- 									<id>org.apache.jena:jena-arq:2.13.0</id> -->
+<!-- 								</artifact> -->
+<!-- 								<artifact> -->
+<!-- 									<id>org.apache.jena:jena-iri:1.1.2</id> -->
+<!-- 								</artifact> -->
+								
+<!--  								<artifact>  -->
+<!-- 									<id>javax.management:jmx:1.2.1</id> -->
+<!-- 								</artifact> -->
                             </artifacts>
                         </configuration>
                     </execution>

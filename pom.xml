@@ -12,6 +12,7 @@
 		<module>eu.scasefp7.eclipse.core</module>
 		<module>eu.scasefp7.eclipse.core.ui</module>
 		<module>eu.scasefp7.eclipse.core.feature</module>
+		<module>eu.scasefp7.eclipse.core.dependencies.feature</module>
 		<module>update-site</module>
 		<module>target-platform</module>
 	</modules>
@@ -31,19 +32,7 @@
 		<repository>
 			<id>maven-p2-dependency-bridge</id>
 			<layout>p2</layout>
-			<url>file://${project.basedir}/../maven-p2-dependency-bridge/target/repository</url>
-		</repository>
-		<repository>
-			<id>OSSRH snapshots</id>
-			<url>https://oss.sonatype.org/content/repositories/snapshots</url>
-			<snapshots>
-				<enabled>true</enabled>
-				<updatePolicy>always</updatePolicy>
-			</snapshots>
-		</repository>
-		<repository>
-			<id>Apache releases</id>
-			<url>https://repository.apache.org/content/repositories/releases</url>
+			<url>file:///${project.basedir}/../maven-p2-dependency-bridge/target/repository</url>
 		</repository>
 	</repositories>
 
@@ -76,16 +65,16 @@
 
 	<build>
 		<pluginManagement>
-	                <plugins>
-	                        <plugin>
-	                                <groupId>org.eclipse.tycho</groupId>
-	                                <artifactId>tycho-p2-repository-plugin</artifactId>
+	        <plugins>
+	            <plugin>
+	            	<groupId>org.eclipse.tycho</groupId>
+	                <artifactId>tycho-p2-repository-plugin</artifactId>
 					<version>${tycho.version}</version>
-	                                <configuration>
-	                                        <includeAllDependencies>true</includeAllDependencies>
-	                                </configuration>
-	                        </plugin>
-	                </plugins>
+	                <configuration>
+	                	<includeAllDependencies>true</includeAllDependencies>
+	                </configuration>
+	            </plugin>
+            </plugins>
 		</pluginManagement>
 		<plugins>
 			<plugin>
