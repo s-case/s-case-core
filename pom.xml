@@ -8,7 +8,7 @@
 	<packaging>pom</packaging>
 
 	<modules>
-		<!--<module>prepare-osgi</module>-->
+		<!--<module>maven-p2-dependency-bridge</module>-->
 		<module>eu.scasefp7.eclipse.core</module>
 		<module>eu.scasefp7.eclipse.core.ui</module>
 		<module>eu.scasefp7.eclipse.core.feature</module>
