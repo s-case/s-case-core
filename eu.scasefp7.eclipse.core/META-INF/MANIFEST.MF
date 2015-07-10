@@ -1,13 +1,15 @@
 Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: S-CASE Core
-Bundle-SymbolicName: eu.scasefp7.eclipse.core
+Bundle-SymbolicName: eu.scasefp7.eclipse.core;singleton:=true
 Bundle-Version: 1.0.2.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.osgi,
- org.eclipse.core.runtime
+ org.eclipse.core.runtime,
+ org.eclipse.core.commands
 Bundle-ClassPath: .
-Export-Package: eu.scasefp7.eclipse.core
+Export-Package: eu.scasefp7.eclipse.core,
+ eu.scasefp7.eclipse.core.ontology
 Bundle-RequiredExecutionEnvironment: JavaSE-1.7
 Import-Package: com.hp.hpl.jena.ontology;version="[2.13.0,3.0.0)",
  com.hp.hpl.jena.query;version="[2.13.0,3.0.0)",
