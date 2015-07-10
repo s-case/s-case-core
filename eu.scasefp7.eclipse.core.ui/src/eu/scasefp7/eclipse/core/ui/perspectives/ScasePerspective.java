@@ -50,7 +50,7 @@ public class ScasePerspective implements IPerspectiveFactory {
 /*		folder.addView(JavaUI.ID_PACKAGES);
 		folder.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
 		folder.addPlaceholder(JavaPlugin.ID_RES_NAV);
-*/		folder.addPlaceholder(IPageLayout.ID_PROJECT_EXPLORER);
+*/		folder.addView(IPageLayout.ID_PROJECT_EXPLORER);
 
 		IFolderLayout outputfolder = layout.createFolder(
 				"bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
@@ -59,8 +59,8 @@ public class ScasePerspective implements IPerspectiveFactory {
 		outputfolder.addView(JavaUI.ID_SOURCE_VIEW);
 		outputfolder.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
 		outputfolder.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
-*/		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
-		outputfolder.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
+		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
+*/		outputfolder.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
 
 		IFolderLayout outlineFolder = layout.createFolder(
 				"right", IPageLayout.RIGHT, (float) 0.75, editorArea); //$NON-NLS-1$

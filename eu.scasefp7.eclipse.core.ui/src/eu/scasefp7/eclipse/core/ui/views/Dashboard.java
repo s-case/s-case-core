@@ -1,6 +1,10 @@
 package eu.scasefp7.eclipse.core.ui.views;
 
 
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
+
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.commands.NotEnabledException;
@@ -36,6 +40,8 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
+
+import eu.scasefp7.eclipse.core.ui.IScaseUiConstants;
 
 
 /**
@@ -124,35 +130,22 @@ public class Dashboard extends ViewPart {
 		
 		Button btnRequirements = new Button(groupStatic, SWT.NONE);
 		btnRequirements.setText("Requirements");
+		btnRequirements.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				HashMap<String, String> args = new HashMap<String, String>();
+				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, IScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);
+				executeCommand(IWorkbenchCommandConstants.FILE_NEW, args);
+			}
+		});
 		
 		Button btnImportUmlDiagram = new Button(groupStatic, SWT.NONE);
 		btnImportUmlDiagram.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
-				IServiceLocator serviceLocator = getSite();
-				// or a site from within a editor or view:
-				// IServiceLocator serviceLocator = getSite();
-
-				ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
-				IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
-				
-				try  { 
-				    // Lookup commmand with its ID
-				    Command command = commandService.getCommand(IWorkbenchCommandConstants.FILE_IMPORT);
-
-					Parameterization[] params = new Parameterization[] { new Parameterization(
-		                    command.getParameter(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID), "eu.scasefp7.eclipse.umlrec.importWizard") };
-					ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params);
-					
-					handlerService.executeCommand(parametrizedCommand, null);
-				        
-				} catch (ExecutionException | NotDefinedException |
-				        NotEnabledException | NotHandledException ex) {
-				    
-				    // Replace with real-world exception handling
-				    ex.printStackTrace();
-				}
+				HashMap<String, String> args = new HashMap<String, String>();
+				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, IScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
+				executeCommand(IWorkbenchCommandConstants.FILE_IMPORT, args);
 			}
 		});
 		btnImportUmlDiagram.setText("Import UML diagram");
@@ -181,6 +174,12 @@ public class Dashboard extends ViewPart {
 		
 		Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnRequirements_1.setText("Requirements");
+		btnRequirements_1.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				executeCommand(IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+			}
+		});
 		
 		Button btnWebServiceComposition = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnWebServiceComposition.setText("Web service composition");
@@ -263,5 +262,62 @@ public class Dashboard extends ViewPart {
 		
 	}
 
+	/**
+	 * Convenience method to call a command with parameters.
+	 * 
+	 * @param commandId ID of the command to execute
+	 * @param parameters map of command parameters in form (parameterId, value)
+	 */
+	protected void executeCommand(String commandId, Map<String, String> parameters) {
+		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
+		IServiceLocator serviceLocator = getSite();
+		// or a site from within a editor or view:
+		// IServiceLocator serviceLocator = getSite();
+
+		ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
+		
+		try  { 
+		    // Lookup commmand with its ID
+		    Command command = commandService.getCommand(commandId);
+
+		    ArrayList<Parameterization> params = new ArrayList<Parameterization>();
+		    for(Map.Entry<String, String> entry : parameters.entrySet()) {
+				Parameterization param = new Parameterization(command.getParameter(entry.getKey()), entry.getValue());
+				params.add(param);
+		    }
+			ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params.toArray(new Parameterization[params.size()]));
+		    handlerService.executeCommand(parametrizedCommand, null);
+		        
+		} catch (ExecutionException | NotDefinedException |
+		        NotEnabledException | NotHandledException ex) {
+		    
+		    // Replace with real-world exception handling
+		    ex.printStackTrace();
+		}
+	}
+
+	/**
+	 * Convenience method to call a command with no parameters.
+	 * 
+	 * @param commandId ID of the command to execute
+	 */
+	protected void executeCommand(String commandId) {
+		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
+		IServiceLocator serviceLocator = getSite();
+		// or a site from within a editor or view:
+		// IServiceLocator serviceLocator = getSite();
+
+		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
+		
+		try  { 
+		    // Lookup commmand with its ID
+			handlerService.executeCommand(commandId, null);        
+		} catch (ExecutionException | NotDefinedException |
+		        NotEnabledException | NotHandledException ex) {
+		    // Replace with real-world exception handling
+		    ex.printStackTrace();
+		}
+	}
 
 }

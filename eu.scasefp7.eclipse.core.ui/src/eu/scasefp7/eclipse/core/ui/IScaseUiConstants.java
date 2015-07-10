@@ -25,6 +25,12 @@ public interface IScaseUiConstants {
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
 	
 	/* These are external, included here for convenience */
-	public static final String UML_RECOGNIZER_WIZARDID = "eu.scasefp7.eclipse.umlrec.ui.wizard.MyWizard"; //$NON-NLS-1$
+	
+	/* UML recognizer */
+	public static final String UML_RECOGNIZER_NEWWIZARDID = "eu.scasefp7.eclipse.umlrec.importWizard"; //$NON-NLS-1$
+
+	/* Requirements editor */
+	public static final String REQUIREMENTS_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard"; //$NON-NLS-1$
+	public static final String REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"; //$NON-NLS-1$
 	
 }
