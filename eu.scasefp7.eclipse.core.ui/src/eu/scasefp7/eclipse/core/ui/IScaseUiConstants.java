@@ -23,6 +23,8 @@ public interface IScaseUiConstants {
 	public static final String CATEGORY = "eu.scasefp7.eclipse.category"; //$NON-NLS-1$
 	public static final String PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective"; //$NON-NLS-1$
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
+
+	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; 
 	
 	/* These are external, included here for convenience */
 	

@@ -7,7 +7,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.core.commands,
  org.eclipse.core.resources
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.scasefp7.eclipse.core.ui;version="1.0.2.qualifier"
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .,

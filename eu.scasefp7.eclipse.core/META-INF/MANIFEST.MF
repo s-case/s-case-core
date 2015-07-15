@@ -12,7 +12,7 @@ Require-Bundle: org.eclipse.ui.workbench,
 Bundle-ClassPath: .
 Export-Package: eu.scasefp7.eclipse.core,
  eu.scasefp7.eclipse.core.ontology
-Bundle-RequiredExecutionEnvironment: JavaSE-1.7
+Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.hp.hpl.jena.ontology;version="[2.13.0,3.0.0)",
  com.hp.hpl.jena.query;version="[2.13.0,3.0.0)",
  com.hp.hpl.jena.rdf.model;version="[2.13.0,3.0.0)",

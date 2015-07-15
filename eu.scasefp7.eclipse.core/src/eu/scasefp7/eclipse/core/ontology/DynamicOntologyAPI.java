@@ -2,6 +2,8 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IProject;
+
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 import eu.scasefp7.eclipse.core.ontology.OntologyJenaAPI;
 
@@ -22,13 +24,13 @@ public class DynamicOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the linked ontology.
+	 * @param project the project to connect to in the dynamic ontology.
 	 * @param forceDelete boolean denoting whether any existing ontology file should be deleted.
 	 */
-	public DynamicOntologyAPI(String projectName, boolean forceDelete) {
-		dynamicOntology = new OntologyJenaAPI(OntologyType.DYNAMIC,
+	public DynamicOntologyAPI(IProject project, boolean forceDelete) {
+		dynamicOntology = new OntologyJenaAPI(project, OntologyType.DYNAMIC,
 				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
-		this.projectName = projectName;
+		this.projectName = project.getName();
 		dynamicOntology.addIndividual("Project", projectName);
 	}
 
@@ -36,11 +38,23 @@ public class DynamicOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the linked ontology.
+	 * @param project the project to connect to in the dynamic ontology.
+	 */
+	public DynamicOntologyAPI(IProject project) {
+		dynamicOntology = new OntologyJenaAPI(project, OntologyType.DYNAMIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		this.projectName = project.getName();
+		dynamicOntology.addIndividual("Project", projectName);
+	}
+
+	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
 	 */
 	public DynamicOntologyAPI(String projectName) {
-		dynamicOntology = new OntologyJenaAPI(OntologyType.DYNAMIC,
-				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		dynamicOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", true);
 		this.projectName = projectName;
 		dynamicOntology.addIndividual("Project", projectName);
 	}

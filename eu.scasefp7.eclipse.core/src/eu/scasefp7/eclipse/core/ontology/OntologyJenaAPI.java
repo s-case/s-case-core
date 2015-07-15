@@ -1,13 +1,18 @@
 package eu.scasefp7.eclipse.core.ontology;
 
-import java.io.File;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.IOException;
+import java.io.ByteArrayInputStream;
+import java.io.ByteArrayOutputStream;
 import java.io.InputStream;
-import java.io.PrintWriter;
+import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
+
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -24,7 +29,6 @@ import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
-import com.hp.hpl.jena.util.FileManager;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
@@ -36,8 +40,8 @@ import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
  */
 public class OntologyJenaAPI {
 
-	/** The filename where the ontology resides. */
-	private String filename;
+	/** The file where the ontology resides. */
+	private IFile file;
 
 	/** The namespace of the ontology. */
 	private String NS;
@@ -51,12 +55,74 @@ public class OntologyJenaAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param ontologyType the type of the the ontology.
+	 * @param project the project to connect the ontology to.
+	 * @param ontologyType the type of the ontology.
 	 * @param source the source URI of the ontology.
 	 * @param forceDelete boolean denoting whether any existing ontology file should be deleted.
 	 */
-	public OntologyJenaAPI(OntologyType ontologyType, String source, boolean forceDelete) {
+	public OntologyJenaAPI(IProject project, OntologyType ontologyType, String source, boolean forceDelete) {
 		this.ontologyType = ontologyType;
+		file = getPathOfOntologyFile(project, ontologyType);
+		NS = source + "#";
+
+		if (forceDelete) {
+			if (file.exists()) {
+				try {
+					file.delete(IResource.FORCE, null);
+					String ontologyContents = OntologySource.getOntology(ontologyType);
+					InputStream ontologyStream = new ByteArrayInputStream(
+							ontologyContents.getBytes(StandardCharsets.UTF_8));
+					file.create(ontologyStream, IResource.FORCE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
+		}
+		initialize();
+	}
+
+	/**
+	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
+	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
+	 * 
+	 * @param project the project to connect the ontology to.
+	 * @param ontologyType the type of the ontology.
+	 * @param source the source URI of the ontology.
+	 */
+	public OntologyJenaAPI(IProject project, OntologyType ontologyType, String source) {
+		this(project, ontologyType, source, false);
+	}
+
+	/**
+	 * Returns the ontology file, in the given project, or in the workspace if the project is null.
+	 * 
+	 * @param project the project to connect the ontology to.
+	 * @param ontologyType the type of the ontology.
+	 * @return the ontology file.
+	 */
+	private IFile getPathOfOntologyFile(IProject project, OntologyType ontologyType) {
+		IFile file = null;
+		String filename = getFilenameForOntologyType(ontologyType);
+		if (project != null) {
+			if (filename != null)
+				file = project.getFile(filename);
+		} else {
+			if (filename != null) {
+				filename = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString() + "/" + filename;
+				file = ResourcesPlugin.getWorkspace().getRoot().getFile(new Path(filename));
+			}
+		}
+		return file;
+	}
+
+	/**
+	 * Returns the filename for an ontology type.
+	 * 
+	 * @param ontologyType the type of the ontology.
+	 * @return the ontology filename.
+	 */
+	private String getFilenameForOntologyType(OntologyType ontologyType) {
+		String filename = null;
 		switch (ontologyType) {
 		case STATIC:
 			filename = "StaticOntology.owl";
@@ -68,27 +134,10 @@ public class OntologyJenaAPI {
 			filename = "LinkedOntology.owl";
 			break;
 		default:
+			filename = null;
 			break;
 		}
-		NS = source + "#";
-
-		if (forceDelete) {
-			File file = new File(filename);
-			if (file.exists())
-				file.delete();
-		}
-		initialize();
-	}
-
-	/**
-	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
-	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
-	 * 
-	 * @param ontologyType the type of the the ontology.
-	 * @param source the source URI of the ontology.
-	 */
-	public OntologyJenaAPI(OntologyType ontologyType, String source) {
-		this(ontologyType, source, false);
+		return filename;
 	}
 
 	/**
@@ -99,25 +148,20 @@ public class OntologyJenaAPI {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 		base = ModelFactory.createOntologyModel();
 
-		InputStream in = FileManager.get().open(filename);
-		if (in == null) {
+		if (!file.exists()) {
+			String ontologyContents = OntologySource.getOntology(ontologyType);
+			InputStream ontologyStream = new ByteArrayInputStream(ontologyContents.getBytes(StandardCharsets.UTF_8));
 			try {
-				PrintWriter out = new PrintWriter(filename);
-				out.write(OntologySource.getOntology(ontologyType));
-				out.close();
-			} catch (FileNotFoundException e) {
+				file.create(ontologyStream, IResource.FORCE, null);
+			} catch (CoreException e) {
 				e.printStackTrace();
 			}
-			in = FileManager.get().open(filename);
-			if (in == null)
-				throw new IllegalArgumentException("File: " + filename + " not found");
 		}
-
-		base.read(in, null);
-
 		try {
-			in.close();
-		} catch (IOException e) {
+			InputStream in = file.getContents();
+			base.read(in, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
 	}
 
@@ -340,7 +384,7 @@ public class OntologyJenaAPI {
 	public String getIndividualPropertyValue(String individualName, String propertyName) {
 		Individual individual = getIndividual(individualName);
 		Property property = getProperty(propertyName);
-		return /*(Literal)*/ individual.getPropertyValue(property).toString().split("#")[1];
+		return /* (Literal) */individual.getPropertyValue(property).toString().split("#")[1];
 	}
 
 	/**
@@ -361,12 +405,14 @@ public class OntologyJenaAPI {
 	 * called, then the ontology is not saved.
 	 */
 	public void close() {
-		File file = new File(filename);
-		FileOutputStream out = null;
+		ByteArrayOutputStream originalOutputStream = new ByteArrayOutputStream();
+		base.write(originalOutputStream);
+		byte[] byteArray = originalOutputStream.toByteArray();
+		InputStream originalInputStream = new ByteArrayInputStream(byteArray);
 		try {
-			out = new FileOutputStream(file);
-		} catch (FileNotFoundException e1) {
+			file.setContents(originalInputStream, IResource.FORCE, null);
+		} catch (CoreException e) {
+			e.printStackTrace();
 		}
-		base.write(out);
 	}
 }

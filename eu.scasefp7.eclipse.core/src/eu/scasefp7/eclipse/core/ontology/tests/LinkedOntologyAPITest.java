@@ -1,4 +1,4 @@
-package eu.scasefp7.eclipse.core.ontology;
+package eu.scasefp7.eclipse.core.ontology.tests;
 
 import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
@@ -9,7 +9,7 @@ import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
  * 
  * @author themis
  */
-public class LinkOntologies {
+public class LinkedOntologyAPITest {
 
 	/**
 	 * Links the static and the dynamic ontologies. The ontologies are read and combined in a new ontology. The static
@@ -20,14 +20,14 @@ public class LinkOntologies {
 	 * @param args unused parameter.
 	 */
 	public static void main(String[] args) {
-		String project = "Restmarks";
+		String projectName = "Restmarks";
 
 		// Load the two ontologies
-		StaticOntologyAPI staticOntology = new StaticOntologyAPI("Restmarks");
-		DynamicOntologyAPI dynamicOntology = new DynamicOntologyAPI("Restmarks");
+		StaticOntologyAPI staticOntology = new StaticOntologyAPI(projectName);
+		DynamicOntologyAPI dynamicOntology = new DynamicOntologyAPI(projectName);
 
 		// Create a new file for the linked ontology and instantiate it
-		LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(project, true);
+		LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(projectName);
 
 		// Iterate over all objects of the static ontology
 		for (String object : staticOntology.getObjects()) {

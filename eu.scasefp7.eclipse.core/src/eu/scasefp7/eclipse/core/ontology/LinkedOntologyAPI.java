@@ -2,6 +2,8 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IProject;
+
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 import eu.scasefp7.eclipse.core.ontology.OntologyJenaAPI;
 
@@ -22,13 +24,13 @@ public class LinkedOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the linked ontology.
+	 * @param project the project to connect to in the linked ontology.
 	 * @param forceDelete boolean denoting whether any existing ontology file should be deleted.
 	 */
-	public LinkedOntologyAPI(String projectName, boolean forceDelete) {
-		linkedOntology = new OntologyJenaAPI(OntologyType.LINKED,
+	public LinkedOntologyAPI(IProject project, boolean forceDelete) {
+		linkedOntology = new OntologyJenaAPI(project, OntologyType.LINKED,
 				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
-		this.projectName = projectName;
+		this.projectName = project.getName();
 		linkedOntology.addIndividual("Project", projectName);
 	}
 
@@ -36,11 +38,23 @@ public class LinkedOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the linked ontology.
+	 * @param project the project to connect to in the linked ontology.
+	 */
+	public LinkedOntologyAPI(IProject project) {
+		linkedOntology = new OntologyJenaAPI(project, OntologyType.LINKED,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		this.projectName = project.getName();
+		linkedOntology.addIndividual("Project", projectName);
+	}
+
+	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
 	 */
 	public LinkedOntologyAPI(String projectName) {
-		linkedOntology = new OntologyJenaAPI(OntologyType.LINKED,
-				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		linkedOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", true);
 		this.projectName = projectName;
 		linkedOntology.addIndividual("Project", projectName);
 	}

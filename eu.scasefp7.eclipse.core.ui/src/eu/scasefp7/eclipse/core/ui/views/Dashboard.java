@@ -214,16 +214,16 @@ public class Dashboard extends ViewPart {
 		grpRequirementsCompilation.setLayout(fl_grpRequirementsCompilation);
 		
 		final Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
-		btnRequirements_1.setText("Requirements");
+		btnRequirements_1.setText("Link ontologies");
 		btnRequirements_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				executeCommand(IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+				executeCommand(IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 			}
 		});
 		
 		// Add command listener
-		setupCommandListener(btnRequirements_1, IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+		setupCommandListener(btnRequirements_1, IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 		
 		Button btnWebServiceComposition = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnWebServiceComposition.setText("Web service composition");
