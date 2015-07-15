@@ -2,6 +2,8 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import java.util.ArrayList;
 
+import org.eclipse.core.resources.IProject;
+
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 import eu.scasefp7.eclipse.core.ontology.OntologyJenaAPI;
 
@@ -22,13 +24,13 @@ public class StaticOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the static ontology.
+	 * @param project the project to connect to in the static ontology.
 	 * @param forceDelete boolean denoting whether any existing ontology file should be deleted.
 	 */
-	public StaticOntologyAPI(String projectName, boolean forceDelete) {
-		staticOntology = new OntologyJenaAPI(OntologyType.STATIC,
+	public StaticOntologyAPI(IProject project, boolean forceDelete) {
+		staticOntology = new OntologyJenaAPI(project, OntologyType.STATIC,
 				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
-		this.projectName = projectName;
+		this.projectName = project.getName();
 		staticOntology.addIndividual("Project", projectName);
 	}
 
@@ -36,11 +38,23 @@ public class StaticOntologyAPI {
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 * 
-	 * @param projectName the project to connect to in the static ontology.
+	 * @param project the project to connect to in the static ontology.
+	 */
+	public StaticOntologyAPI(IProject project) {
+		staticOntology = new OntologyJenaAPI(project, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		this.projectName = project.getName();
+		staticOntology.addIndividual("Project", projectName);
+	}
+
+	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
 	 */
 	public StaticOntologyAPI(String projectName) {
-		staticOntology = new OntologyJenaAPI(OntologyType.STATIC,
-				"http://www.owl-ontologies.com/Ontology1273059028.owl");
+		staticOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", true);
 		this.projectName = projectName;
 		staticOntology.addIndividual("Project", projectName);
 	}
