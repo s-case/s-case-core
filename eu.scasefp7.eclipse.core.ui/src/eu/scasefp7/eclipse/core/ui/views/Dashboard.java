@@ -6,7 +6,9 @@ import java.util.HashMap;
 import java.util.Map;
 
 import org.eclipse.core.commands.Command;
+import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.commands.ICommandListener;
 import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
@@ -25,11 +27,14 @@ import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Color;
+import org.eclipse.swt.graphics.GC;
 import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISharedImages;
@@ -42,6 +47,7 @@ import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
 import eu.scasefp7.eclipse.core.ui.IScaseUiConstants;
+import org.eclipse.wb.swt.SWTResourceManager;
 
 
 /**
@@ -69,40 +75,8 @@ public class Dashboard extends ViewPart {
 	 */
 	public static final String ID = "eu.scasefp7.eclipse.core.ui.views.Dashboard";
 
-	/*
-	 * The content provider class is responsible for
-	 * providing objects to the view. It can wrap
-	 * existing objects in adapters or simply return
-	 * objects as-is. These objects may be sensitive
-	 * to the current input of the view, or ignore
-	 * it and always show the same content 
-	 * (like Task List, for example).
-	 */
-	 
-	class ViewContentProvider implements IStructuredContentProvider {
-		public void inputChanged(Viewer v, Object oldInput, Object newInput) {
-		}
-		public void dispose() {
-		}
-		public Object[] getElements(Object parent) {
-			return new String[] { "One", "Two", "Three" };
-		}
-	}
-	class ViewLabelProvider extends LabelProvider implements ITableLabelProvider {
-		public String getColumnText(Object obj, int index) {
-			return getText(obj);
-		}
-		public Image getColumnImage(Object obj, int index) {
-			return getImage(obj);
-		}
-		public Image getImage(Object obj) {
-			return PlatformUI.getWorkbench().
-					getSharedImages().getImage(ISharedImages.IMG_OBJ_ELEMENT);
-		}
-	}
-	class NameSorter extends ViewerSorter {
-	}
-
+	protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>(); 
+	
 	/**
 	 * The constructor.
 	 */
@@ -114,14 +88,70 @@ public class Dashboard extends ViewPart {
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+		
+		int startR = 95,
+			stopR = 0,
+			startG = 197,
+			stopG = 61,
+			startB = 186,
+			stopB = 92;
+		int steps = 4;
+		int step = 0;
+		
+				//
+//		Color color1 = new Color(device, r, g, b);
+//        Color color2 = Color.BLUE;
+//        int steps = 30;
+//        int rectWidth = 10;
+//        int rectHeight = 10;
+//
+//        for (int i = 0; i < steps; i++) {
+//            float ratio = (float) i / (float) steps;
+//            int red = (int) (color2.getRed() * ratio + color1.getRed() * (1 - ratio));
+//            int green = (int) (color2.getGreen() * ratio + color1.getGreen() * (1 - ratio));
+//            int blue = (int) (color2.getBlue() * ratio + color1.getBlue() * (1 - ratio));
+//            Color stepColor = new Color(red, green, blue);
+//            Rectangle2D rect2D = new Rectangle2D.Float(rectWidth * i, 0, rectWidth, rectHeight);
+//            g2.setPaint(stepColor);
+//            g2.fill(rect2D);
+//        }
+		
 		RowLayout rl_parent = new RowLayout(SWT.HORIZONTAL);
+		rl_parent.pack = false;
+		rl_parent.fill = true;
 		rl_parent.marginWidth = 10;
 		rl_parent.marginHeight = 10;
 		rl_parent.spacing = 10;
 		parent.setLayout(rl_parent);
 		
+		// Project setup
+		Group groupProject = new Group(parent, SWT.NONE);
+		groupProject.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
+		groupProject.setText("Project setup");
+		FillLayout fl_groupProject = new FillLayout(SWT.VERTICAL);
+		fl_groupProject.spacing = 10;
+		fl_groupProject.marginWidth = 10;
+		fl_groupProject.marginHeight = 10;
+		groupProject.setLayout(fl_groupProject);
+		
+		Button btnNature = new Button(groupProject, SWT.NONE);
+		btnNature.setText("Configure project");
+		btnNature.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				executeCommand("eu.scasefp7.eclipse.core.commands.testSetup");
+			}
+		});
+		
+		// Add command listener
+		setupCommandListener(btnNature, "eu.scasefp7.eclipse.core.commands.testSetup");
+		
+		// Increment gradient step
+		step++;
+		
 		Group groupStatic = new Group(parent, SWT.NONE);
 		groupStatic.setText("Static modeling");
+		groupStatic.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
 		FillLayout fl_groupStatic = new FillLayout(SWT.VERTICAL);
 		fl_groupStatic.spacing = 10;
 		fl_groupStatic.marginWidth = 10;
@@ -139,7 +169,12 @@ public class Dashboard extends ViewPart {
 			}
 		});
 		
+		// Add command listener
+		setupCommandListener(btnRequirements, IWorkbenchCommandConstants.FILE_NEW);
+		
+		
 		Button btnImportUmlDiagram = new Button(groupStatic, SWT.NONE);
+		btnImportUmlDiagram.setText("Import UML diagram");
 		btnImportUmlDiagram.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -148,10 +183,13 @@ public class Dashboard extends ViewPart {
 				executeCommand(IWorkbenchCommandConstants.FILE_IMPORT, args);
 			}
 		});
-		btnImportUmlDiagram.setText("Import UML diagram");
+		
+		// Add command listener
+		setupCommandListener(btnImportUmlDiagram, IWorkbenchCommandConstants.FILE_IMPORT);
 		
 		Group groupDynamic = new Group(parent, SWT.NONE);
 		groupDynamic.setText("Dynamic modeling");
+		groupDynamic.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
 		FillLayout fl_groupDynamic = new FillLayout(SWT.VERTICAL);
 		fl_groupDynamic.spacing = 10;
 		fl_groupDynamic.marginWidth = 10;
@@ -164,15 +202,18 @@ public class Dashboard extends ViewPart {
 		Button btnImportUmlDiagram2 = new Button(groupDynamic, SWT.NONE);
 		btnImportUmlDiagram2.setText("Import UML diagram");
 		
+		step++;
+		
 		Group grpRequirementsCompilation = new Group(parent, SWT.NONE);
 		grpRequirementsCompilation.setText("Requirements compilation");
+		grpRequirementsCompilation.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
 		FillLayout fl_grpRequirementsCompilation = new FillLayout(SWT.VERTICAL);
 		fl_grpRequirementsCompilation.spacing = 10;
 		fl_grpRequirementsCompilation.marginWidth = 10;
 		fl_grpRequirementsCompilation.marginHeight = 10;
 		grpRequirementsCompilation.setLayout(fl_grpRequirementsCompilation);
 		
-		Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
+		final Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnRequirements_1.setText("Requirements");
 		btnRequirements_1.addMouseListener(new MouseAdapter() {
 			@Override
@@ -181,11 +222,17 @@ public class Dashboard extends ViewPart {
 			}
 		});
 		
+		// Add command listener
+		setupCommandListener(btnRequirements_1, IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+		
 		Button btnWebServiceComposition = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnWebServiceComposition.setText("Web service composition");
 		
+		step++;
+		
 		Group grpModeldrivenEngineering = new Group(parent, SWT.NONE);
 		grpModeldrivenEngineering.setText("Model-driven engineering");
+		grpModeldrivenEngineering.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
 		FillLayout fl_grpModeldrivenEngineering = new FillLayout(SWT.VERTICAL);
 		fl_grpModeldrivenEngineering.spacing = 10;
 		fl_grpModeldrivenEngineering.marginWidth = 10;
@@ -194,6 +241,15 @@ public class Dashboard extends ViewPart {
 		
 		Button btnRefine = new Button(grpModeldrivenEngineering, SWT.NONE);
 		btnRefine.setText("Refine");
+		btnRefine.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				executeCommand("eu.scasefp7.eclipse.core.commands.testOntology");
+			}
+		});
+		
+		// Add command listener
+		setupCommandListener(btnRefine, "eu.scasefp7.eclipse.core.commands.testOntology");
 		
 		Group grpGenerateCode = new Group(grpModeldrivenEngineering, SWT.NONE);
 		grpGenerateCode.setText("Generate code");
@@ -209,8 +265,11 @@ public class Dashboard extends ViewPart {
 		Button btnAdvanced = new Button(grpGenerateCode, SWT.NONE);
 		btnAdvanced.setText("Advanced");
 		
+		step++;
+		
 		Group grpYourest = new Group(parent, SWT.NONE);
 		grpYourest.setText("YouREST");
+		grpYourest.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
 		FillLayout fl_grpYourest = new FillLayout(SWT.VERTICAL);
 		fl_grpYourest.spacing = 10;
 		fl_grpYourest.marginWidth = 10;
@@ -219,6 +278,7 @@ public class Dashboard extends ViewPart {
 		
 		Button btnDeploy = new Button(grpYourest, SWT.NONE);
 		btnDeploy.setText("Deploy");
+			
 		hookContextMenu();
 		contributeToActionBars();
 	}
@@ -261,6 +321,64 @@ public class Dashboard extends ViewPart {
 	public void setFocus() {
 		
 	}
+	
+	/* (non-Javadoc)
+	 * @see org.eclipse.ui.part.WorkbenchPart#dispose()
+	 */
+	@Override
+	public void dispose() {
+		super.dispose();
+		
+		if(this.registeredCommandListeners.isEmpty()) {
+			return;
+		}
+		
+		// Get the command service
+		ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
+		
+		// Clear out the listeners
+		for(Map.Entry<ICommandListener, String> entry : this.registeredCommandListeners.entrySet()) {
+			Command command = commandService.getCommand(entry.getValue());
+			command.removeCommandListener(entry.getKey());
+		}
+	}
+
+	/**
+	 * Convenience method to register a command listener and enable/disable control based on command enablement.
+	 * 
+	 * @param control
+	 * @param commandId ID of the command to execute
+	 */
+	private void setupCommandListener(final Control control, String commandId) {
+		{
+			// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
+			IServiceLocator serviceLocator = getSite();
+			// or a site from within a editor or view:
+			// IServiceLocator serviceLocator = getSite();
+	
+			// Get CommandService
+			ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+			
+		    // Lookup commmand with its ID
+		    final Command command = commandService.getCommand(commandId);
+		    
+		    // Update UI initially
+		    control.setEnabled(command.isDefined() && command.isEnabled());
+		    
+		    // Register state listener
+		    ICommandListener listener = new ICommandListener() {
+				@Override
+				public void commandChanged(CommandEvent cmdEvent) {
+					if(cmdEvent.isEnabledChanged() || cmdEvent.isEnabledChanged()) {
+						control.setEnabled(command.isDefined() && command.isEnabled());
+					}
+				}
+			}; 
+		    
+		    command.addCommandListener(listener);
+		    registeredCommandListeners.put(listener, commandId);
+		}
+	}
 
 	/**
 	 * Convenience method to call a command with parameters.
@@ -297,6 +415,7 @@ public class Dashboard extends ViewPart {
 		}
 	}
 
+	
 	/**
 	 * Convenience method to call a command with no parameters.
 	 * 
@@ -309,9 +428,8 @@ public class Dashboard extends ViewPart {
 		// IServiceLocator serviceLocator = getSite();
 
 		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
-		
 		try  { 
-		    // Lookup commmand with its ID
+		    // Execute commmand via its ID
 			handlerService.executeCommand(commandId, null);        
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {

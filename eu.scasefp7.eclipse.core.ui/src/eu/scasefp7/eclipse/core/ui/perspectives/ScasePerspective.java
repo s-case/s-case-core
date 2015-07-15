@@ -4,11 +4,7 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.progress.IProgressConstants;
-import org.eclipse.ui.IFolderLayout;
-import org.eclipse.ui.IPageLayout;
-import org.eclipse.ui.IPerspectiveFactory;
 //import org.eclipse.ui.console.IConsoleConstants;
-import org.eclipse.ui.progress.IProgressConstants;
 
 // import org.eclipse.ui.texteditor.templates.TemplatesView;
 
@@ -55,12 +51,12 @@ public class ScasePerspective implements IPerspectiveFactory {
 		IFolderLayout outputfolder = layout.createFolder(
 				"bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
 		outputfolder.addView(IPageLayout.ID_PROBLEM_VIEW);
-/*		outputfolder.addView(JavaUI.ID_JAVADOC_VIEW);
-		outputfolder.addView(JavaUI.ID_SOURCE_VIEW);
-		outputfolder.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
-		outputfolder.addPlaceholder(IConsoleConstants.ID_CONSOLE_VIEW);
-		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
-*/		outputfolder.addPlaceholder(IProgressConstants.PROGRESS_VIEW_ID);
+//		outputfolder.addView(JavaUI.ID_JAVADOC_VIEW);
+//		outputfolder.addView(JavaUI.ID_SOURCE_VIEW);
+//		outputfolder.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
+		outputfolder.addPlaceholder("org.eclipse.ui.console.ConsoleView"); //$NON-NLS-1$
+//		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
+		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET);
 
 		IFolderLayout outlineFolder = layout.createFolder(
 				"right", IPageLayout.RIGHT, (float) 0.75, editorArea); //$NON-NLS-1$
