@@ -5,7 +5,7 @@
 	<parent>
 		<groupId>eu.scasefp7.eclipse</groupId>
 		<artifactId>s-case-core</artifactId>
-		<version>1.0.2</version>
+		<version>1.0.2-SNAPSHOT</version>
 	</parent>
 
 	<artifactId>target-platform</artifactId>
