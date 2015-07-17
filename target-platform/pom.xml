@@ -1,12 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
 	<parent>
 		<groupId>eu.scasefp7.eclipse</groupId>
 		<artifactId>s-case-core</artifactId>
-		<version>1.0.2-SNAPSHOT</version>
+		<version>1.0.2</version>
 	</parent>
 
 	<artifactId>target-platform</artifactId>
@@ -16,14 +15,14 @@
 <!--         <outputDirectory>dependencies</outputDirectory> -->
 <!--     </properties> -->
   
-	<dependencies>
-		<dependency>
-			<groupId>eu.scasefp7.eclipse</groupId>
-			<artifactId>maven-p2-dependency-bridge</artifactId>
-			<version>1.0.2-SNAPSHOT</version>
-			<type>pom</type>
-		</dependency>
-    </dependencies>
+<!-- 	<dependencies> -->
+<!-- 		<dependency> -->
+<!-- 			<groupId>eu.scasefp7.eclipse</groupId> -->
+<!-- 			<artifactId>maven-p2-dependency-bridge</artifactId> -->
+<!-- 			<version>1.0.2-SNAPSHOT</version> -->
+<!-- 			<type>pom</type> -->
+<!-- 		</dependency> -->
+<!--     </dependencies> -->
    
 <!--     <build> -->
 <!--         <plugins> -->
