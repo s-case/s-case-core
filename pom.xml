@@ -30,9 +30,9 @@
 			<url>http://download.eclipse.org/releases/luna</url>
 		</repository>
 		<repository>
-			<id>maven-p2-dependency-bridge</id>
+			<id>s-case</id>
 			<layout>p2</layout>
-			<url>file:///${project.basedir}/../maven-p2-dependency-bridge/target/repository</url>
+			<url>http://s-case.github.io/s-case_update_site/</url>
 		</repository>
 	</repositories>
 
