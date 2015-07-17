@@ -13,6 +13,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <packaging>eclipse-repository</packaging>
 
   <dependencies>
+    <!-- Core -->
   	<dependency>
   		<groupId>eu.scasefp7.eclipse</groupId>
   		<artifactId>eu.scasefp7.eclipse.core.feature</artifactId>
@@ -29,6 +30,27 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
     <dependency>
   		<groupId>eu.scasefp7.eclipse</groupId>
   		<artifactId>eu.scasefp7.eclipse.core.feature</artifactId>
+  		<version>1.0.2-SNAPSHOT</version>
+        <classifier>p2artifacts</classifier>
+        <type>xml</type>
+    </dependency>
+    <!-- Dependencies -->
+    <dependency>
+  		<groupId>eu.scasefp7.eclipse</groupId>
+  		<artifactId>eu.scasefp7.eclipse.core.dependencies.feature</artifactId>
+  		<version>1.0.2-SNAPSHOT</version>
+  		<type>eclipse-feature</type>
+  	</dependency>    
+  	<dependency>
+  		<groupId>eu.scasefp7.eclipse</groupId>
+  		<artifactId>eu.scasefp7.eclipse.core.dependencies.feature</artifactId>
+  		<version>1.0.2-SNAPSHOT</version>
+        <classifier>p2metadata</classifier>
+        <type>xml</type>
+    </dependency>
+    <dependency>
+  		<groupId>eu.scasefp7.eclipse</groupId>
+  		<artifactId>eu.scasefp7.eclipse.core.dependencies.feature</artifactId>
   		<version>1.0.2-SNAPSHOT</version>
         <classifier>p2artifacts</classifier>
         <type>xml</type>
