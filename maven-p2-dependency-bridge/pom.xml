@@ -11,7 +11,7 @@
     <modelVersion>4.0.0</modelVersion>
 
     <artifactId>maven-p2-dependency-bridge</artifactId>
-    <groupId>s-case-core</groupId>
+    <groupId>eu.scasefp7.eclipse</groupId>
     <version>1.0.2-SNAPSHOT</version>
     <packaging>pom</packaging>
 
