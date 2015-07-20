@@ -160,6 +160,7 @@ public class Dashboard extends ViewPart {
 		
 		Button btnRequirements = new Button(groupStatic, SWT.NONE);
 		btnRequirements.setText("Requirements");
+		btnRequirements.setToolTipText("Create new textual requirements collection");
 		btnRequirements.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -169,12 +170,12 @@ public class Dashboard extends ViewPart {
 			}
 		});
 		
-		// Add command listener
-		setupCommandListener(btnRequirements, IWorkbenchCommandConstants.FILE_NEW);
-		
-		
+//		// Add command listener
+//		setupCommandListener(btnRequirements, IWorkbenchCommandConstants.FILE_NEW);
+//		
 		Button btnImportUmlDiagram = new Button(groupStatic, SWT.NONE);
 		btnImportUmlDiagram.setText("Import UML diagram");
+		btnImportUmlDiagram.setToolTipText("Import UML diagram from an image");
 		btnImportUmlDiagram.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
@@ -184,9 +185,9 @@ public class Dashboard extends ViewPart {
 			}
 		});
 		
-		// Add command listener
-		setupCommandListener(btnImportUmlDiagram, IWorkbenchCommandConstants.FILE_IMPORT);
-		
+//		// Add command listener
+//		setupCommandListener(btnImportUmlDiagram, IWorkbenchCommandConstants.FILE_IMPORT);
+//		
 		Group groupDynamic = new Group(parent, SWT.NONE);
 		groupDynamic.setText("Dynamic modeling");
 		groupDynamic.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
@@ -198,11 +199,33 @@ public class Dashboard extends ViewPart {
 		
 		Button btnStoryboards = new Button(groupDynamic, SWT.NONE);
 		btnStoryboards.setText("Storyboards");
+		btnStoryboards.setToolTipText("Create new storyboard diagram");
+		btnStoryboards.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				HashMap<String, String> args = new HashMap<String, String>();
+				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, IScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);
+				executeCommand(IWorkbenchCommandConstants.FILE_NEW, args);
+			}
+		});
+		
+//		// Add command listener
+//		setupCommandListener(btnStoryboards, IWorkbenchCommandConstants.FILE_NEW);
 		
 		Button btnImportUmlDiagram2 = new Button(groupDynamic, SWT.NONE);
 		btnImportUmlDiagram2.setText("Import UML diagram");
+		btnImportUmlDiagram2.setToolTipText("Import UML diagram from an image");
+		btnImportUmlDiagram2.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				HashMap<String, String> args = new HashMap<String, String>();
+				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, IScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
+				executeCommand(IWorkbenchCommandConstants.FILE_IMPORT, args);
+			}
+		});
 		
 		step++;
+		// END GROUP
 		
 		Group grpRequirementsCompilation = new Group(parent, SWT.NONE);
 		grpRequirementsCompilation.setText("Requirements compilation");
@@ -213,6 +236,33 @@ public class Dashboard extends ViewPart {
 		fl_grpRequirementsCompilation.marginHeight = 10;
 		grpRequirementsCompilation.setLayout(fl_grpRequirementsCompilation);
 		
+		// Compile ontologies - RQS
+		final Button btnRQSCompile = new Button(grpRequirementsCompilation, SWT.NONE);
+		btnRQSCompile.setText("Compile requirements");
+		btnRQSCompile.setToolTipText("Select a textual requirements file to compile");
+		btnRQSCompile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				executeCommand(IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+			}
+		});
+		// Add command listener
+		setupCommandListener(btnRQSCompile, IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+		
+		// Compile ontologies - Storyboards
+		final Button btnSBDCompile = new Button(grpRequirementsCompilation, SWT.NONE);
+		btnSBDCompile.setText("Compile storyboards");
+		btnSBDCompile.setToolTipText("Select a storyboard file to compile");
+		btnSBDCompile.addMouseListener(new MouseAdapter() {
+			@Override
+			public void mouseDown(MouseEvent e) {
+				executeCommand(IScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
+			}
+		});
+		// Add command listener
+		setupCommandListener(btnSBDCompile, IScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
+		
+		// Link ontologies
 		final Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnRequirements_1.setText("Link ontologies");
 		btnRequirements_1.addMouseListener(new MouseAdapter() {
@@ -221,7 +271,6 @@ public class Dashboard extends ViewPart {
 				executeCommand(IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 			}
 		});
-		
 		// Add command listener
 		setupCommandListener(btnRequirements_1, IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 		

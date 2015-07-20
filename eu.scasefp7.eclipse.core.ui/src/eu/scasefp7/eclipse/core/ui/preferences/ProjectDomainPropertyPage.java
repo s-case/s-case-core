@@ -1,6 +1,7 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
@@ -94,7 +95,8 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	private int loadProperties() {
 		// Populate domain label
 		try {
-			String domain = ((IResource) getElement()).getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
+			IResource project = ((IProject) getElement().getAdapter(IResource.class));
+			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
 			if(domain != null) {
 				return Integer.parseInt(domain);
 			}
@@ -272,7 +274,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 			String text = parent.getName() + "/" + domain.getName();
 			
 			// Escape text for SWT
-			domainLabel.setText(text.replaceAll("&", "&&"));
+			domainLabel.setText(text.replaceAll("&", "&&")); //$NON-NLS-1$ //$NON-NLS-2$
 			domainLabel.setData(domain);
 		}
 	}

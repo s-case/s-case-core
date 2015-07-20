@@ -24,7 +24,8 @@ public interface IScaseUiConstants {
 	public static final String PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective"; //$NON-NLS-1$
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
 
-	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; 
+	/* Commands */
+	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
 	
 	/* These are external, included here for convenience */
 	
@@ -34,5 +35,9 @@ public interface IScaseUiConstants {
 	/* Requirements editor */
 	public static final String REQUIREMENTS_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard"; //$NON-NLS-1$
 	public static final String REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"; //$NON-NLS-1$
+
+	/* Storyboards editor */
+	public static final String STORYBOARD_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.storyboards.presentation.StoryboardsModelWizardID"; //$NON-NLS-1$
+	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportToOntology"; //$NON-NLS-1$
 	
 }
