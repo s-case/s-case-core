@@ -384,7 +384,10 @@ public class OntologyJenaAPI {
 	public String getIndividualPropertyValue(String individualName, String propertyName) {
 		Individual individual = getIndividual(individualName);
 		Property property = getProperty(propertyName);
-		return /* (Literal) */individual.getPropertyValue(property).toString().split("#")[1];
+		if (individual != null && individual.getPropertyValue(property) != null)
+			return individual.getPropertyValue(property).toString().split("#")[1];
+		else
+			return null;
 	}
 
 	/**

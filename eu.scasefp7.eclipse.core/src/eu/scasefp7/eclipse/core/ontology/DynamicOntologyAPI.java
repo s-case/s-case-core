@@ -180,7 +180,8 @@ public class DynamicOntologyAPI {
 	 * @return a {@link String} containing the name of the type.
 	 */
 	public String getActivityTypeOfActivity(String activity) {
-		return dynamicOntology.getIndividualPropertyValue(activity, "activitytype");
+		String activityType = dynamicOntology.getIndividualPropertyValue(activity, "activitytype");
+		return activityType != null ? activityType : "Other";
 	}
 
 	/**
