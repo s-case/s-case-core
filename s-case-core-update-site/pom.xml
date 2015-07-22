@@ -65,6 +65,27 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
                        <includeAllDependencies>true</includeAllDependencies>
                </configuration>
 	        </plugin>
+	        <!-- Disable javadoc and source plugins (no source in the project) -->
+			<plugin>
+			  <artifactId>maven-source-plugin</artifactId>
+			  <version>2.4</version>
+			  <executions>
+			    <execution>
+			      <id>attach-sources</id>
+			      <phase/>
+			    </execution>
+			  </executions>
+			</plugin>
+			<plugin>
+			  <artifactId>maven-javadoc-plugin</artifactId>
+			  <version>2.10.3</version>
+			  <executions>
+			    <execution>
+			      <id>attach-javadocs</id>
+			      <phase/>
+			    </execution>
+			  </executions>
+			</plugin>
         </plugins>
     </build>
 </project>
