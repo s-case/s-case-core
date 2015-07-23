@@ -4,7 +4,9 @@ import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.progress.IProgressConstants;
+
 //import org.eclipse.ui.console.IConsoleConstants;
+import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
 // import org.eclipse.ui.texteditor.templates.TemplatesView;
 
@@ -28,17 +30,13 @@ import org.eclipse.ui.progress.IProgressConstants;
  */
 public class ScasePerspective implements IPerspectiveFactory {
 
-	public final String ID_PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective";
-
-	private IPageLayout factory;
+	public static final String ID_PERSPECTIVE = ScaseUiConstants.PERSPECTIVE;
 
 	public ScasePerspective() {
 		super();
 	}
 
 	public void createInitialLayout(IPageLayout layout) {
-		this.factory = factory;
-
 		String editorArea = layout.getEditorArea();
 
 		IFolderLayout folder = layout.createFolder(

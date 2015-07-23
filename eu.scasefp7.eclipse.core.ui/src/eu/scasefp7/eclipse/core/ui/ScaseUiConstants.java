@@ -16,10 +16,16 @@
 package eu.scasefp7.eclipse.core.ui;
 
 /**
+ * Convenience collection of constants to reference various IDs.
+ * 
  * @author emaorli
  *
  */
-public interface IScaseUiConstants {
+public final class ScaseUiConstants {
+	
+	/** Used to store constants, cannot be instantiated */
+	private ScaseUiConstants() {};
+	
 	public static final String CATEGORY = "eu.scasefp7.eclipse.category"; //$NON-NLS-1$
 	public static final String PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective"; //$NON-NLS-1$
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$

@@ -19,17 +19,9 @@ import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
-import org.eclipse.jface.viewers.IStructuredContentProvider;
-import org.eclipse.jface.viewers.ITableLabelProvider;
-import org.eclipse.jface.viewers.LabelProvider;
-import org.eclipse.jface.viewers.Viewer;
-import org.eclipse.jface.viewers.ViewerSorter;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Color;
-import org.eclipse.swt.graphics.GC;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
@@ -37,17 +29,15 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
 import org.eclipse.ui.IActionBars;
-import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchCommandConstants;
-import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
-
-import eu.scasefp7.eclipse.core.ui.IScaseUiConstants;
 import org.eclipse.wb.swt.SWTResourceManager;
+
+import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
 
 /**
@@ -165,7 +155,7 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				HashMap<String, String> args = new HashMap<String, String>();
-				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, IScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);
+				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, ScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);
 				executeCommand(IWorkbenchCommandConstants.FILE_NEW, args);
 			}
 		});
@@ -180,7 +170,7 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				HashMap<String, String> args = new HashMap<String, String>();
-				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, IScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
+				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, ScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
 				executeCommand(IWorkbenchCommandConstants.FILE_IMPORT, args);
 			}
 		});
@@ -204,7 +194,7 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				HashMap<String, String> args = new HashMap<String, String>();
-				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, IScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);
+				args.put(IWorkbenchCommandConstants.FILE_NEW_PARM_WIZARDID, ScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);
 				executeCommand(IWorkbenchCommandConstants.FILE_NEW, args);
 			}
 		});
@@ -219,7 +209,7 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void mouseDown(MouseEvent e) {
 				HashMap<String, String> args = new HashMap<String, String>();
-				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, IScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
+				args.put(IWorkbenchCommandConstants.FILE_IMPORT_PARM_WIZARDID, ScaseUiConstants.UML_RECOGNIZER_NEWWIZARDID);
 				executeCommand(IWorkbenchCommandConstants.FILE_IMPORT, args);
 			}
 		});
@@ -243,11 +233,11 @@ public class Dashboard extends ViewPart {
 		btnRQSCompile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				executeCommand(IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+				executeCommand(ScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
 			}
 		});
 		// Add command listener
-		setupCommandListener(btnRQSCompile, IScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
+		setupCommandListener(btnRQSCompile, ScaseUiConstants.REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY);
 		
 		// Compile ontologies - Storyboards
 		final Button btnSBDCompile = new Button(grpRequirementsCompilation, SWT.NONE);
@@ -256,11 +246,11 @@ public class Dashboard extends ViewPart {
 		btnSBDCompile.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				executeCommand(IScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
+				executeCommand(ScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
 			}
 		});
 		// Add command listener
-		setupCommandListener(btnSBDCompile, IScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
+		setupCommandListener(btnSBDCompile, ScaseUiConstants.STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY);
 		
 		// Link ontologies
 		final Button btnRequirements_1 = new Button(grpRequirementsCompilation, SWT.NONE);
@@ -268,11 +258,11 @@ public class Dashboard extends ViewPart {
 		btnRequirements_1.addMouseListener(new MouseAdapter() {
 			@Override
 			public void mouseDown(MouseEvent e) {
-				executeCommand(IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
+				executeCommand(ScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 			}
 		});
 		// Add command listener
-		setupCommandListener(btnRequirements_1, IScaseUiConstants.COMMAND_EXPORTONTOLOGY);
+		setupCommandListener(btnRequirements_1, ScaseUiConstants.COMMAND_EXPORTONTOLOGY);
 		
 		Button btnWebServiceComposition = new Button(grpRequirementsCompilation, SWT.NONE);
 		btnWebServiceComposition.setText("Web service composition");
@@ -399,34 +389,33 @@ public class Dashboard extends ViewPart {
 	 * @param commandId ID of the command to execute
 	 */
 	private void setupCommandListener(final Control control, String commandId) {
-		{
-			// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
-			IServiceLocator serviceLocator = getSite();
-			// or a site from within a editor or view:
-			// IServiceLocator serviceLocator = getSite();
-	
-			// Get CommandService
-			ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
-			
-		    // Lookup commmand with its ID
-		    final Command command = commandService.getCommand(commandId);
-		    
-		    // Update UI initially
-		    control.setEnabled(command.isDefined() && command.isEnabled());
-		    
-		    // Register state listener
-		    ICommandListener listener = new ICommandListener() {
-				@Override
-				public void commandChanged(CommandEvent cmdEvent) {
-					if(cmdEvent.isEnabledChanged() || cmdEvent.isEnabledChanged()) {
-						control.setEnabled(command.isDefined() && command.isEnabled());
-					}
+
+		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
+		IServiceLocator serviceLocator = getSite();
+		// or a site from within a editor or view:
+		// IServiceLocator serviceLocator = getSite();
+
+		// Get CommandService
+		ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+		
+	    // Lookup commmand with its ID
+	    final Command command = commandService.getCommand(commandId);
+	    
+	    // Update UI initially
+	    control.setEnabled(command.isDefined() && command.isEnabled());
+	    
+	    // Register state listener
+	    ICommandListener listener = new ICommandListener() {
+			@Override
+			public void commandChanged(CommandEvent cmdEvent) {
+				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged()) {
+					control.setEnabled(command.isDefined() && command.isEnabled());
 				}
-			}; 
-		    
-		    command.addCommandListener(listener);
-		    registeredCommandListeners.put(listener, commandId);
-		}
+			}
+		}; 
+	    
+	    command.addCommandListener(listener);
+	    registeredCommandListeners.put(listener, commandId);
 	}
 
 	/**

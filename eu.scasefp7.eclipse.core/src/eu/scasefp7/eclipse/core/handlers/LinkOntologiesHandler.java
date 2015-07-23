@@ -23,15 +23,19 @@ public class LinkOntologiesHandler extends AbstractHandler {
 		for (Object object : selectionList) {
 			IFile file = (IFile) Platform.getAdapterManager().getAdapter(object, IFile.class);
 			IProject theproject = null;
-			if (file != null)
+			if (file != null) {
 				theproject = file.getProject();
-			else
+			} else {
 				theproject = (IProject) Platform.getAdapterManager().getAdapter(object, IProject.class);
+			}
 			if (theproject != null) {
-				if (project == null)
+				if (project == null) {
 					project = theproject;
-				else if (!project.equals(theproject))
-					return null;
+				} else {
+					if (!project.equals(theproject)) {
+						return null;
+					}
+				}
 			}
 		}
 		return project;
