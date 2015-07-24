@@ -5,7 +5,7 @@
  * you may not use this file except in compliance with the License.
  * You may obtain a copy of the License at
  *
- *     http://www.apache.org/licenses/LICENSE-2.0
+ * http://www.apache.org/licenses/LICENSE-2.0
  *
  * Unless required by applicable law or agreed to in writing, software
  * distributed under the License is distributed on an "AS IS" BASIS,
@@ -13,6 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 package eu.scasefp7.eclipse.core.ui.preferences;
 
 import org.eclipse.jface.viewers.ITreeContentProvider;
@@ -22,37 +23,37 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 
 public class DomainContentProvider implements ITreeContentProvider {
 
-	private DomainEntry[] domains;
-	
-	@Override
-	public void dispose() {
+    private DomainEntry[] domains;
 
-	}
+    @Override
+    public void dispose() {
 
-	@Override
-	public Object[] getChildren(Object parentElement) {
-		return ((DomainEntry) parentElement).getChildren();
-	}
+    }
 
-	@Override
-	public Object[] getElements(Object inputElement) {
-		return domains;
-	}
+    @Override
+    public Object[] getChildren(Object parentElement) {
+        return ((DomainEntry) parentElement).getChildren();
+    }
 
-	@Override
-	public Object getParent(Object element) {
-		return ((DomainEntry) element).getParent();
-	}
+    @Override
+    public Object[] getElements(Object inputElement) {
+        return domains;
+    }
 
-	@Override
-	public boolean hasChildren(Object element) {
-		DomainEntry de = (DomainEntry) element;
-		return (de.hasChildren() && ((DomainEntry)element).getChildren().length > 0);
-	}
+    @Override
+    public Object getParent(Object element) {
+        return ((DomainEntry) element).getParent();
+    }
 
-	@Override
-	public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
-		this.domains = (DomainEntry[]) newInput;
-	}
+    @Override
+    public boolean hasChildren(Object element) {
+        DomainEntry de = (DomainEntry) element;
+        return (de.hasChildren() && ((DomainEntry) element).getChildren().length > 0);
+    }
+
+    @Override
+    public void inputChanged(Viewer viewer, Object oldInput, Object newInput) {
+        this.domains = (DomainEntry[]) newInput;
+    }
 
 }
