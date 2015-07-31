@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
+   <extension-point id="eu.scasefp7.eclipse.core.ui.dashboardItem" name="Dashboard command" schema="schema/eu.scasefp7.eclipse.core.ui.dashboardItem.exsd"/>
 
    <extension
          point="org.eclipse.ui.perspectives">
@@ -41,7 +42,7 @@
            name="%category.name">
      </category>
      <view
-           category="eu.scasefp7.eclipse.core.ui"
+           category="eu.scasefp7.eclipse.category"
            class="eu.scasefp7.eclipse.core.ui.views.Dashboard"
            icon="icons/s-case_16x16.png"
            id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
@@ -66,6 +67,108 @@
 		     </adapt>         
          </enabledWhen>     
      </page>
+  </extension>
+  <extension
+        point="org.eclipse.core.runtime.preferences">
+     <initializer
+           class="eu.scasefp7.eclipse.core.ui.preferences.PreferenceInitializer">
+     </initializer>
+  </extension>
+  <extension
+        point="org.eclipse.ui.preferencePages">
+     <page
+           class="eu.scasefp7.eclipse.core.ui.preferences.GlobalPreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.preferences.global"
+           name="%category.name" />
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.preferences.MDEPreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.preferences.MDEPreferencePage"
+           name="MDE Code generation" />
+  </extension>
+  <extension
+        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
+     <group
+           name="Project setup">
+        <command
+              commandId="eu.scasefp7.eclipse.core.commands.testSetup"
+              label="Configure project">
+        </command>
+     </group>
+     <group
+           name="Static modeling">
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create requirements"
+              tooltip="Create new textual requirements collection">
+              <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
+        </command>
+        <command
+              commandId="org.eclipse.ui.file.import"
+              label="Import UML diagram"
+              tooltip="Import UML diagram from an image">
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
+        </command>
+     </group>
+     <group
+           name="Dynamic modeling">
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create storyboards"
+              >
+              <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
+        </command>
+        <command
+              commandId="org.eclipse.ui.file.import"
+              label="Import UML diagram"
+              tooltip="Import UML diagram from an image">
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
+        </command>
+     </group>
+     <group
+           name="Requirements compilation">
+        <command
+              commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
+              label="Compile requirements">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.storyboards.commands.exportToOntology"
+              label="Compile storyboards">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
+              label="Link ontologies">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.command8"
+              label="Web service compilation">
+        </command>
+     </group>
+     <group
+           name="Model-driven engineering">
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.command9"
+              label="Refine">
+        </command>
+        <group
+              name="Generate code">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.command10"
+                 label="Simple">
+           </command>
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.command11"
+                 label="Advanced">
+           </command>
+        </group>
+     </group>
+     <group
+           name="YouREST">
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.command12"
+              label="Deploy">
+        </command>
+     </group>
   </extension>
 
 </plugin>

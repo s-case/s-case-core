@@ -78,7 +78,8 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 */
 	public ProjectDomainPropertyPage() {
 		super();
-		setMessage("");
+		setMessage("Project domain");
+		setDescription("Configures project semantical domain");
 	}
 	
 	protected void setContentAndLabelProviders(TreeViewer treeViewer)
