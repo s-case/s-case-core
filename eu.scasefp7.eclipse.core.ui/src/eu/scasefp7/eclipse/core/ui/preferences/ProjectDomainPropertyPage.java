@@ -74,7 +74,8 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	/**
-	 * Constructor for SamplePropertyPage.
+	 * Constructor for ProjectDomainPropertyPage.
+	 * Sets the message and description.
 	 */
 	public ProjectDomainPropertyPage() {
 		super();
@@ -253,7 +254,8 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		return true;
 	}
 
-	/* (non-Javadoc)
+	/**
+	 * {@inheritDoc}
 	 * @see org.eclipse.jface.preference.PreferencePage#isValid()
 	 */
 	@Override

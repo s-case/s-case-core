@@ -7,7 +7,7 @@
          point="org.eclipse.ui.perspectives">
       <perspective
             class="eu.scasefp7.eclipse.core.ui.perspectives.ScasePerspective"
-            icon="icons/s-case_16x16.png"
+            icon="icons/view16/s-case_16.png"
             id="eu.scasefp7.eclipse.core.ui.ScasePerspective"
             name="%perspective.name">
       </perspective>
@@ -44,7 +44,7 @@
      <view
            category="eu.scasefp7.eclipse.category"
            class="eu.scasefp7.eclipse.core.ui.views.Dashboard"
-           icon="icons/s-case_16x16.png"
+           icon="icons/view16/s-case_16.png"
            id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
            name="%dashboard.name">
      </view>
@@ -58,9 +58,14 @@
   <extension
         point="org.eclipse.ui.propertyPages">
      <page
+           class="eu.scasefp7.eclipse.core.ui.preferences.GlobalPreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.preferences.global"
+           name="%category.name" />
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
            class="eu.scasefp7.eclipse.core.ui.preferences.ProjectDomainPropertyPage"
            id="eu.scasefp7.eclipse.core.ui.propertyPages.ProjectDomainPropertyPage"
-           name="Project domain">
+           name="%projectDomain.page">
 		 <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
 		          <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
@@ -68,24 +73,23 @@
          </enabledWhen>     
      </page>
   </extension>
+  <!--
   <extension
         point="org.eclipse.core.runtime.preferences">
      <initializer
            class="eu.scasefp7.eclipse.core.ui.preferences.PreferenceInitializer">
      </initializer>
   </extension>
+  -->
   <extension
         point="org.eclipse.ui.preferencePages">
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.GlobalPreferencePage"
            id="eu.scasefp7.eclipse.core.ui.preferences.global"
            name="%category.name" />
-     <page
-           category="eu.scasefp7.eclipse.core.ui.preferences.global"
-           class="eu.scasefp7.eclipse.core.ui.preferences.MDEPreferencePage"
-           id="eu.scasefp7.eclipse.core.ui.preferences.MDEPreferencePage"
-           name="MDE Code generation" />
   </extension>
+  
+  <!-- Dashboard commands -->
   <extension
         point="eu.scasefp7.eclipse.core.ui.dashboardItem">
      <group
@@ -170,5 +174,5 @@
         </command>
      </group>
   </extension>
-
+  
 </plugin>
