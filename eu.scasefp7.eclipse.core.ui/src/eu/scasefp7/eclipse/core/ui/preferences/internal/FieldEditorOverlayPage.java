@@ -9,7 +9,7 @@
  * Berthold Daum
  * see https://eclipse.org/articles/Article-Mutatis-mutandis/overlay-pages.html
  *******************************************************************************/
-package eu.scasefp7.eclipse.core.ui.preferences;
+package eu.scasefp7.eclipse.core.ui.preferences.internal;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -43,6 +43,7 @@ import org.eclipse.ui.IWorkbenchPropertyPage;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
+import eu.scasefp7.eclipse.core.ui.preferences.PreferenceConstants;
 
 /**
  * Based on Berthold Daum's approach, but using project-scoped preference store

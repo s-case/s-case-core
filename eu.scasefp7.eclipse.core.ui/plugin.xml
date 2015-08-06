@@ -157,11 +157,11 @@
         <group
               name="Generate code">
            <command
-                 commandId="eu.scasefp7.eclipse.core.ui.command10"
+                 commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
                  label="Simple">
            </command>
            <command
-                 commandId="eu.scasefp7.eclipse.core.ui.command11"
+                 commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
                  label="Advanced">
            </command>
         </group>
