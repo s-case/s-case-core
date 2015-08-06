@@ -92,7 +92,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 
 	/**
 	 * Read the configured properties and set the label
-	 * @return 
+	 * @return domain code
 	 */
 	private int loadProperties() {
 		// Populate domain label

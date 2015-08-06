@@ -160,7 +160,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
      * a new PropertyStore as local preference store. After all control have
      * been create, we enable/disable these controls.
      * 
-     * @see org.eclipse.jface.preference.PreferencePage#createControl()
+     * @see org.eclipse.jface.preference.PreferencePage#createControl(Composite)
      */
     public void createControl(Composite parent) {
         // Special treatment for property pages
