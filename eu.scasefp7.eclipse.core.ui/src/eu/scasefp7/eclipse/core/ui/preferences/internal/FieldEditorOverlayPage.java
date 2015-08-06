@@ -126,6 +126,16 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
     }
 
     /**
+     * Delivers the project that owns the properties shown in this property page.
+     */
+    public IProject getProject() {
+        IAdaptable element = getElement();
+        
+        IProject adapter = (IProject) element.getAdapter(IProject.class);
+        return adapter;
+    }
+
+    /**
      * Returns true if this instance represents a property page
      * 
      * @return - true for property pages, false for preference pages
@@ -158,11 +168,15 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
             // Cache the page id
             pageId = getPageId();
             // Create an overlay preference store and fill it with properties
-            ProjectScope ps = new ProjectScope((IProject) getElement());
-            ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, Activator.PLUGIN_ID);
-            scoped.setSearchContexts(new IScopeContext[] { ps, InstanceScope.INSTANCE });
-            overlayStore = scoped;
-            // Set overlay store as current preference store
+            IProject project = getProject();
+            if(project != null)
+            {
+                ProjectScope ps = new ProjectScope(getProject());
+                ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, Activator.PLUGIN_ID);
+                scoped.setSearchContexts(new IScopeContext[] { ps, InstanceScope.INSTANCE });
+                overlayStore = scoped;
+                // Set overlay store as current preference store
+            }
         }
         super.createControl(parent);
         // Update state of all subclass controls
