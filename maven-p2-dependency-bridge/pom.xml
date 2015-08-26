@@ -41,12 +41,26 @@
                         <id>default-cli</id>
                         <configuration>
                             <artifacts>
-                                <!-- specify your depencies here -->
+                                <!-- specify your dependencies here -->
                                 <!-- groupId:artifactId:version -->
                                 <artifact>
 									<id>org.apache.jena:jena-osgi:2.13.0</id>
 								</artifact>
-								
+								<artifact>
+									<id>org.apache.servicemix.bundles:org.apache.servicemix.bundles.jung-api:2.0.1_2</id>
+								</artifact>
+								<artifact>
+									<id>org.apache.servicemix.bundles:org.apache.servicemix.bundles.jung-graph-impl:2.0.1_2</id>
+								</artifact>
+								<artifact>
+									<id>org.apache.servicemix.bundles:org.apache.servicemix.bundles.jsch:0.1.51_1</id>
+								</artifact>
+								<artifact>
+									<id>com.googlecode.json-simple:json-simple:1.1.1</id>
+								</artifact>
+								<artifact>
+									<id>eu.scasefp7:scase-wsparser-osgi:1.0.0-SNAPSHOT</id>
+								</artifact>
 <!-- 								<artifact> -->
 <!-- 									<id>org.apache.jena:jena-core:2.13.0</id> -->
 <!-- 								</artifact> -->
