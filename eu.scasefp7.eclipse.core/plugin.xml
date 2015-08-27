@@ -10,6 +10,11 @@
             id="eu.scasefp7.eclipse.core.commands.linkOntologies"
             name="Link Ontologies">
       </command>
+      <command
+            categoryId="eu.scasefp7.eclipse.core.commands.category"
+            id="eu.scasefp7.eclipse.core.commands.exportToYaml"
+            name="Export ontology to YAML">
+      </command>
    </extension>
 
    <extension point="org.eclipse.ui.handlers">
@@ -46,6 +51,10 @@
       </handler>
    </extension>
    
+   <extension point="org.eclipse.ui.handlers">
+      <handler class="eu.scasefp7.eclipse.core.handlers.OntologyToYamlHandler" commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"/>
+   </extension>
+   
    <extension
          point="org.eclipse.ui.menus">
       <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
@@ -60,6 +69,13 @@
 				           </with>
                   </visibleWhen>
             </command>
+      </menuContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
       </menuContribution>
    </extension>
   
