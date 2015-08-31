@@ -144,7 +144,11 @@
               label="Link ontologies">
         </command>
         <command
-              commandId="eu.scasefp7.eclipse.core.ui.command8"
+              commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
+              label="Export to YAML">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.command1"
               label="Web service compilation">
         </command>
      </group>
