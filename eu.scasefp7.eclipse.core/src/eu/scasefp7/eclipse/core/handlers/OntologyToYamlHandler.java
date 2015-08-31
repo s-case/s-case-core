@@ -60,10 +60,12 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 							String verbtype = verbTypeFinder.getVerbType(action);
 							if (verbTypeFinder.getVerbType(action).equals("Other")) {
 								// Verb is of type Other
-								Resource algoresource = new Resource(Stemmer.stem(resourceName) + "_"
-										+ Stemmer.stem(action), true);
+								String stemmedAction = Stemmer.stem(action);
+								String algorithmicResourceName = Stemmer.stem(resourceName)
+										+ stemmedAction.substring(0, 1).toUpperCase() + stemmedAction.substring(1);
+								Resource algoresource = new Resource(algorithmicResourceName, true);
 								if (!resources.contains(algoresource)) {
-									resource.addRelatedResource(Stemmer.stem(resourceName) + "_" + Stemmer.stem(action));
+									resource.addRelatedResource(algorithmicResourceName);
 									resources.add(algoresource);
 								}
 							} else
