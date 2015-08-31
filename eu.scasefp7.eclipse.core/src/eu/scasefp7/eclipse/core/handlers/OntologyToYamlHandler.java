@@ -90,7 +90,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 			}
 
 			// Open a new YAML file in the project
-			IFile file = project.getFile(project.getName() + ".yml");
+			IFile file = project.getFile("service.yml");
 			if (file.exists()) {
 				try {
 					file.delete(IResource.FORCE, null);
