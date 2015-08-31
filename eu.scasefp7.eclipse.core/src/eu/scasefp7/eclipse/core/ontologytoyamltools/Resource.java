@@ -123,7 +123,7 @@ public class Resource {
 	 * @return a YAML representation of this object.
 	 */
 	public String toYAMLString() {
-		String all = "- !!cim.Resource";
+		String all = "- !!eu.fp7.scase.inputParser.YamlResource";
 		all += "\n  Name: " + Name;
 		all += "\n  IsAlgorithmic: " + IsAlgorithmic;
 		all += "\n  CRUDActivities: " + Arrays.asList(CRUDActivities).toString().replaceAll("^\\[|\\]$", "");
