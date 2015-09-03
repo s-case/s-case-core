@@ -109,8 +109,8 @@
         </command>
         <command
               commandId="org.eclipse.ui.file.import"
-              label="Import UML diagram"
-              tooltip="Import UML diagram from an image">
+              label="Import UML Use case diagram"
+              tooltip="Import UML use case diagram from an image">
               <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
      </group>
@@ -124,8 +124,8 @@
         </command>
         <command
               commandId="org.eclipse.ui.file.import"
-              label="Import UML diagram"
-              tooltip="Import UML diagram from an image">
+              label="Import UML Activity diagram"
+              tooltip="Import UML Activity diagram from an image">
               <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
      </group>
@@ -147,28 +147,13 @@
               commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
               label="Export to YAML">
         </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.ui.command1"
-              label="Web service compilation">
-        </command>
      </group>
      <group
            name="Model-driven engineering">
         <command
-              commandId="eu.scasefp7.eclipse.core.ui.command9"
-              label="Refine">
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              label="Generate code">
         </command>
-        <group
-              name="Generate code">
-           <command
-                 commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-                 label="Simple">
-           </command>
-           <command
-                 commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-                 label="Advanced">
-           </command>
-        </group>
      </group>
      <group
            name="YouREST">
