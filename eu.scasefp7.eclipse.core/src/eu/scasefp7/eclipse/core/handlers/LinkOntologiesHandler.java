@@ -123,6 +123,10 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				String tobject = dynamicOntology.getObjectOfActivity(targetdynactivity);
 				String tactivity = taction + " " + tobject;
 
+				// Connect the activities
+				if (taction != null && saction != null)
+					linkedOntology.addNextActivityToActivity(sactivity, tactivity);
+
 				// Add the condition of the transition to the respective activity of the linked ontology.
 				if (condition != null && taction != null && saction != null) {
 					linkedOntology.addConditionToActivity(tactivity, condition);
@@ -130,7 +134,6 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 						linkedOntology.addActivityDiagram(diagram);
 						linkedOntology.connectActivityDiagramToElement(diagram, condition);
 					}
-					linkedOntology.addNextActivityToActivity(sactivity, tactivity);
 				}
 			}
 
