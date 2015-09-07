@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Development platform" sequenceNumber="52">
+<?pde version="3.8"?><target name="Development platform" sequenceNumber="69">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
-<location includeAllPlatforms="true" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.scasefp7.eclipse.core.dependencies.feature.feature.group" version="1.0.2.201507091319"/>
-<repository location="http://s-case.github.io/s-case_update_site/"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+<unit id="com.googlecode.json-simple" version="1.1.1"/>
+<unit id="eu.scasefp7.eclipse.core.dependencies.feature.feature.group" version="1.0.2.201509041443"/>
+<unit id="org.apache.servicemix.bundles.jung-graph-impl" version="2.0.1.2"/>
+<unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20150904153533"/>
+<unit id="eu.scasefp7.eclipse.core.feature.feature.group" version="1.0.2.201509041443"/>
+<repository location="http://s-case.github.io/s-case_dev_site/"/>
 </location>
 </locations>
 <launcherArgs>
