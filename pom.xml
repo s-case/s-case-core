@@ -20,7 +20,7 @@
 	<parent>
 		<groupId>eu.scasefp7</groupId>
 		<artifactId>scase-parent</artifactId>
-		<version>1.0.18</version>
+                <version>1.0.20</version>
 	</parent>
 
 	<repositories>
