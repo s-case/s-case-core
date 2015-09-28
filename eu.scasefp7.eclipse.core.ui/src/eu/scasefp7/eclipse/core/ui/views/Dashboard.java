@@ -281,8 +281,21 @@ public class Dashboard extends ViewPart {
 	    ICommandListener listener = new ICommandListener() {
 			@Override
 			public void commandChanged(CommandEvent cmdEvent) {
-				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged()) {
-					control.setEnabled(command.isDefined() && command.isEnabled());
+				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged() || cmdEvent.isHandledChanged()) {
+					Object handler = command.getHandler();
+					boolean defined = command.isDefined();
+					boolean enabled = command.isEnabled();
+					boolean handled = command.isHandled();
+					control.setEnabled(command.isDefined() && command.isEnabled() && command.isHandled());
+					
+					System.out.println(">>>>>>>>>>> IN LISTENER");
+					System.out.println(cmdEvent);
+					System.out.println("commandId " + command.getId());
+					System.out.println("defined " + defined);
+					System.out.println("enabled " + enabled);
+					System.out.println("handled " + handled);
+					System.out.println("control on " + control.isEnabled());
+					System.out.println(">>>>>>>>>>> OUT LISTENER");
 				}
 			}
 		}; 

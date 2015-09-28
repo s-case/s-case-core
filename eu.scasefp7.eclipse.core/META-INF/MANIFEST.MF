@@ -8,7 +8,8 @@ Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.core.runtime,
  org.eclipse.core.commands,
  org.eclipse.jface,
- org.eclipse.core.resources
+ org.eclipse.core.resources,
+ org.eclipse.ui
 Bundle-ClassPath: .
 Export-Package: eu.scasefp7.eclipse.core,
  eu.scasefp7.eclipse.core.ontology

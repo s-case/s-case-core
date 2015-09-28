@@ -67,7 +67,7 @@
            name="%projectDomain.page">
 		 <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
-		          <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
+		          <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.ui.scaseNature"/>
 		     </adapt>         
          </enabledWhen>     
      </page>
@@ -94,7 +94,7 @@
      <group
            name="Project setup">
         <command
-              commandId="eu.scasefp7.eclipse.core.commands.testSetup"
+              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
               label="Configure project">
         </command>
      </group>
@@ -131,6 +131,10 @@
      <group
            name="Requirements compilation">
         <command
+              commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
+              label="Compile">
+        </command>
+        <command
               commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
               label="Compile requirements">
         </command>
@@ -161,6 +165,136 @@
               label="Deploy">
         </command>
      </group>
+  </extension>
+  <extension
+        id="scaseNature"
+        name="S-Case Nature commands"
+        point="org.eclipse.core.resources.natures">
+     <runtime>
+        <run
+              class="eu.scasefp7.eclipse.core.ui.builder.SCaseNature">
+        </run>
+     </runtime>
+     <builder
+           id="eu.scasefp7.eclipse.core.ui.scaseBuilder">
+     </builder>
+  </extension>
+  <extension
+        id="scaseBuilder"
+        point="org.eclipse.core.resources.builders">
+     <builder
+           hasNature="true">
+        <run
+              class="eu.scasefp7.eclipse.core.ui.builder.SCaseBuilder">
+        </run>
+     </builder>
+  </extension>
+  <extension
+        point="org.eclipse.ui.commands">
+     <category
+           id="eu.scasefp7.eclipse.core.ui.category"
+           name="S-Case Nature commands">
+     </category>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
+           name="Add/Remove S-Case Project Nature">
+     </command>
+  </extension>
+  <extension
+        point="org.eclipse.ui.menus">
+     <menuContribution
+           allPopups="false"
+           locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
+              label="Convert to S-Case project"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="selection">
+                 <count
+                       value="1">
+                 </count>
+                 <iterate>
+                    <adapt
+                          type="org.eclipse.core.resources.IProject">
+                       <not>
+                          <test
+                                property="org.eclipse.core.resources.projectNature"
+                                value="eu.scasefp7.eclipse.core.ui.scaseNature">
+                          </test>
+                       </not>
+                    </adapt>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
+              label="Disable S-Case builder"
+              style="push">
+           <visibleWhen
+                 checkEnabled="false">
+              <with
+                    variable="selection">
+                 <count
+                       value="1">
+                 </count>
+                 <iterate>
+                    <adapt
+                          type="org.eclipse.core.resources.IProject">
+                       <test
+                             property="org.eclipse.core.resources.projectNature"
+                             value="eu.scasefp7.eclipse.core.ui.scaseNature">
+                       </test>
+                    </adapt>
+                 </iterate>
+              </with>
+           </visibleWhen>
+        </command>
+     </menuContribution>
+  </extension>
+  <extension
+        id="rqsProblem"
+        point="org.eclipse.core.resources.markers">
+     <persistent
+           value="true">
+     </persistent>
+     <super
+           type="org.eclipse.core.resources.problemmarker">
+     </super>
+  </extension>
+  <extension
+        point="org.eclipse.ui.handlers">
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.builder.AddRemoveSCaseNatureHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature">
+     </handler>
+  </extension>
+  <extension
+        point="org.eclipse.ui.ide.projectNatureImages">
+     <image
+           icon="icons/s-case_16x16.png"
+           id="eu.scasefp7.eclipse.core.ui.image"
+           natureId="eu.scasefp7.eclipse.core.ui.scaseNature">
+     </image>
+  </extension>
+  <extension
+        point="org.eclipse.ui.newWizards">
+     <category
+           id="eu.scasefp7.eclipse.core.ui.category"
+           name="S-Case">
+     </category>
+     <wizard
+           category=" eu.scasefp7.eclipse.core.ui.category"
+           class="eu.scasefp7.eclipse.core.ui.wizards.ScaseProjectNewWizard"
+           finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
+           icon="icons/s-case_16x16.png"
+           id="eu.scasefp7.eclipse.core.ui.wizard2"
+           name="S-Case Project"
+           project="true">
+     </wizard>
   </extension>
   
 </plugin>
