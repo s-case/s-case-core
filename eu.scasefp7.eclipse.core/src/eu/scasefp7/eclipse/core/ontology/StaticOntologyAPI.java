@@ -60,6 +60,18 @@ public class StaticOntologyAPI {
 	}
 
 	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
+	 */
+	public StaticOntologyAPI(String projectName, boolean forceDelete) {
+		staticOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
+		this.projectName = projectName;
+		staticOntology.addIndividual("Project", projectName);
+	}
+
+	/**
 	 * Adds a requirement in the ontology and connects it to the project.
 	 * 
 	 * @param requirementName the requirement to be added.

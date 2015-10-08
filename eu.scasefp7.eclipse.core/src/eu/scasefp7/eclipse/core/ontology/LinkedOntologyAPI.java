@@ -53,7 +53,7 @@ public class LinkedOntologyAPI {
 	 * @param projectName the name of the project.
 	 */
 	public LinkedOntologyAPI(String projectName) {
-		linkedOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+		linkedOntology = new OntologyJenaAPI(null, OntologyType.LINKED,
 				"http://www.owl-ontologies.com/Ontology1273059028.owl", true);
 		this.projectName = projectName;
 		linkedOntology.addIndividual("Project", projectName);

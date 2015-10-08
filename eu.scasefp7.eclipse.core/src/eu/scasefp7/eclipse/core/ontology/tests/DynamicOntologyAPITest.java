@@ -41,9 +41,9 @@ public class DynamicOntologyAPITest {
 		// Add an individual for another activity
 		ontology.addActivity("Add_tag");
 		ontology.connectActivityDiagramToElement("Add_Bookmark", "Add_tag");
-		ontology.addActionToActivity("add", "Add_tag");
-		ontology.addObjectToActivity("tag", "Add_tag");
-		ontology.addActivityTypeToActivity("create", "Add_tag");
+		ontology.addActionToActivity("Add_tag", "add");
+		ontology.addObjectToActivity("Add_tag", "tag");
+		ontology.addActivityTypeToActivity("Add_tag", "create");
 		ontology.addPropertyToActivity("Add_tag", "Tag_text");
 
 		// Add individuals for the first transition

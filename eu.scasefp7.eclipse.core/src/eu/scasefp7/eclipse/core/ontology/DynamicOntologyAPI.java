@@ -53,11 +53,25 @@ public class DynamicOntologyAPI {
 	 * @param projectName the name of the project.
 	 */
 	public DynamicOntologyAPI(String projectName) {
-		dynamicOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+		dynamicOntology = new OntologyJenaAPI(null, OntologyType.DYNAMIC,
 				"http://www.owl-ontologies.com/Ontology1273059028.owl", true);
 		this.projectName = projectName;
 		dynamicOntology.addIndividual("Project", projectName);
 	}
+
+	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
+	 * @param forceDelete boolean denoting whether any existing ontology file should be deleted.
+	 */
+	public DynamicOntologyAPI(String projectName, boolean forceDelete) {
+		dynamicOntology = new OntologyJenaAPI(null, OntologyType.DYNAMIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
+		this.projectName = projectName;
+		dynamicOntology.addIndividual("Project", projectName);
+	}
+
 
 	/**
 	 * Adds an activity diagram in the ontology and connects it to the project.
