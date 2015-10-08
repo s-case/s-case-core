@@ -2,7 +2,12 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import java.io.ByteArrayInputStream;
 import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.InputStream;
+import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -43,13 +48,17 @@ public class OntologyJenaAPI {
 	/** The file where the ontology resides. */
 	private IFile file;
 
+	/** Test file used for ontology tests. */
+	private File testfile;
+
 	/** The namespace of the ontology. */
 	private String NS;
 
 	/** The base URI of the ontology. */
 	private OntModel base;
 
-	OntologyType ontologyType;
+	/** The type of the ontology. */
+	private OntologyType ontologyType;
 
 	/**
 	 * Initializes the connection of this API with the ontology. Upon calling this function, the ontology is loaded in
@@ -62,11 +71,14 @@ public class OntologyJenaAPI {
 	 */
 	public OntologyJenaAPI(IProject project, OntologyType ontologyType, String source, boolean forceDelete) {
 		this.ontologyType = ontologyType;
-		file = getPathOfOntologyFile(project, ontologyType);
+		if (project == null)
+			testfile = new File(getFilenameForOntologyType(ontologyType));
+		else
+			file = getPathOfOntologyFile(project, ontologyType);
 		NS = source + "#";
 
 		if (forceDelete) {
-			if (file.exists()) {
+			if (file != null && file.exists()) {
 				try {
 					file.delete(IResource.FORCE, null);
 					String ontologyContents = OntologySource.getOntology(ontologyType);
@@ -74,6 +86,16 @@ public class OntologyJenaAPI {
 							ontologyContents.getBytes(StandardCharsets.UTF_8));
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			} else if (testfile != null && testfile.exists()) {
+				try {
+					testfile.delete();
+					String ontologyContents = OntologySource.getOntology(ontologyType);
+					PrintWriter writer = new PrintWriter(testfile);
+					writer.println(ontologyContents);
+					writer.close();
+				} catch (FileNotFoundException e) {
 					e.printStackTrace();
 				}
 			}
@@ -148,20 +170,41 @@ public class OntologyJenaAPI {
 		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 		base = ModelFactory.createOntologyModel();
 
-		if (!file.exists()) {
-			String ontologyContents = OntologySource.getOntology(ontologyType);
-			InputStream ontologyStream = new ByteArrayInputStream(ontologyContents.getBytes(StandardCharsets.UTF_8));
+		if (file != null) {
+			if (!file.exists()) {
+				String ontologyContents = OntologySource.getOntology(ontologyType);
+				InputStream ontologyStream = new ByteArrayInputStream(ontologyContents.getBytes(StandardCharsets.UTF_8));
+				try {
+					file.create(ontologyStream, IResource.FORCE, null);
+				} catch (CoreException e) {
+					e.printStackTrace();
+				}
+			}
 			try {
-				file.create(ontologyStream, IResource.FORCE, null);
+				InputStream in = file.getContents();
+				base.read(in, null);
 			} catch (CoreException e) {
 				e.printStackTrace();
 			}
 		}
-		try {
-			InputStream in = file.getContents();
-			base.read(in, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
+
+		if (testfile != null) {
+			if (!testfile.exists()) {
+				String ontologyContents = OntologySource.getOntology(ontologyType);
+				try {
+					PrintWriter writer = new PrintWriter(testfile);
+					writer.println(ontologyContents);
+					writer.close();
+				} catch (FileNotFoundException e) {
+					e.printStackTrace();
+				}
+			}
+			try {
+				InputStream in = new FileInputStream(testfile);
+				base.read(in, null);
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			}
 		}
 	}
 
@@ -411,14 +454,24 @@ public class OntologyJenaAPI {
 	 * called, then the ontology is not saved.
 	 */
 	public void close() {
-		ByteArrayOutputStream originalOutputStream = new ByteArrayOutputStream();
-		base.write(originalOutputStream);
-		byte[] byteArray = originalOutputStream.toByteArray();
-		InputStream originalInputStream = new ByteArrayInputStream(byteArray);
-		try {
-			file.setContents(originalInputStream, IResource.FORCE, null);
-		} catch (CoreException e) {
-			e.printStackTrace();
+		if (testfile != null) {
+			FileOutputStream out = null;
+			try {
+				out = new FileOutputStream(testfile);
+			} catch (FileNotFoundException e1) {
+			}
+			base.write(out);
+		} else {
+			ByteArrayOutputStream originalOutputStream = new ByteArrayOutputStream();
+			base.write(originalOutputStream);
+			byte[] byteArray = originalOutputStream.toByteArray();
+			InputStream originalInputStream = new ByteArrayInputStream(byteArray);
+			try {
+				file.setContents(originalInputStream, IResource.FORCE, null);
+			} catch (CoreException e) {
+				e.printStackTrace();
+			}
 		}
+
 	}
 }

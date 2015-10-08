@@ -12,10 +12,7 @@ import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
 public class LinkedOntologyAPITest {
 
 	/**
-	 * Links the static and the dynamic ontologies. The ontologies are read and combined in a new ontology. The static
-	 * ontology must be in {@code ".\\StaticOntology\\Restmarks.owl"}, and the dynamic ontology must be in
-	 * {@code ".\\DynamicOntology\\Restmarks.owl"}. The LinkedOntology is saved in
-	 * {@code ".\\LinkedOntology\\Restmarks.owl"}.
+	 * Links the static and the dynamic ontologies. The ontologies are read and combined in a new ontology.
 	 * 
 	 * @param args unused parameter.
 	 */
@@ -23,8 +20,8 @@ public class LinkedOntologyAPITest {
 		String projectName = "Restmarks";
 
 		// Load the two ontologies
-		StaticOntologyAPI staticOntology = new StaticOntologyAPI(projectName);
-		DynamicOntologyAPI dynamicOntology = new DynamicOntologyAPI(projectName);
+		StaticOntologyAPI staticOntology = new StaticOntologyAPI(projectName, false);
+		DynamicOntologyAPI dynamicOntology = new DynamicOntologyAPI(projectName, false);
 
 		// Create a new file for the linked ontology and instantiate it
 		LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(projectName);
