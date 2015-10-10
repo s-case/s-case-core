@@ -15,6 +15,8 @@
  */
 package eu.scasefp7.eclipse.services.nlp.consumer;
 
+import java.util.Arrays;
+
 import eu.scasefp7.eclipse.services.nlp.AnnotationFormat;
 import eu.scasefp7.eclipse.services.nlp.INLPService;
 import eu.scasefp7.eclipse.services.nlp.NLPException;
@@ -33,7 +35,10 @@ public class NLPConsumer {
         this.service = service;
         // I know I should not use the service here but just for demonstration
         try {
-            System.out.println(service.annotateSentence("First let me try some service invocation.", "", AnnotationFormat.ANN));
+//            System.out.println(service.annotateSentence("First let me try some service invocation.", "", AnnotationFormat.ANN));
+//            System.out.println(service.annotatePhrase("First let me try some service invocation.", "", AnnotationFormat.ANN));
+//            System.out.println(service.extractQueryTerms("First let me try some service invocation.", ""));
+            System.out.println(service.annotateProject("MyProject", Arrays.asList(new String[]{"First let me try some service invocation.", "First let me try another service invocation."}), "", AnnotationFormat.ANN));
         } catch (NLPException e) {
             // TODO Auto-generated catch block
             e.printStackTrace();

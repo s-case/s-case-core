@@ -1,14 +1,9 @@
 package eu.scasefp7.eclipse.services.nlp.internal.provider;
 
-import java.io.NotSerializableException;
-import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.Map;
+import java.util.List;
 
-import org.apache.http.HttpEntity;
-import org.apache.http.NameValuePair;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.client.methods.HttpRequestBase;
 import org.eclipse.ecf.core.ContainerConnectException;
 import org.eclipse.ecf.core.ContainerCreateException;
 import org.eclipse.ecf.core.ContainerTypeDescription;
@@ -16,27 +11,17 @@ import org.eclipse.ecf.core.IContainer;
 import org.eclipse.ecf.core.identity.ID;
 import org.eclipse.ecf.core.identity.Namespace;
 import org.eclipse.ecf.core.security.IConnectContext;
-import org.eclipse.ecf.remoteservice.IRemoteCall;
 import org.eclipse.ecf.remoteservice.IRemoteService;
 import org.eclipse.ecf.remoteservice.IRemoteServiceRegistration;
 import org.eclipse.ecf.remoteservice.client.IRemoteCallParameter;
 import org.eclipse.ecf.remoteservice.client.IRemoteCallable;
-import org.eclipse.ecf.remoteservice.client.IRemoteResponseDeserializer;
 import org.eclipse.ecf.remoteservice.client.RemoteCallParameter;
 import org.eclipse.ecf.remoteservice.client.RemoteCallable;
 import org.eclipse.ecf.remoteservice.client.RemoteServiceClientRegistration;
-import org.eclipse.ecf.remoteservice.client.StringParameterSerializer;
 import org.eclipse.ecf.remoteservice.rest.client.HttpPostRequestType;
 import org.eclipse.ecf.remoteservice.rest.client.RestClientContainer;
 import org.eclipse.ecf.remoteservice.rest.client.RestClientContainerInstantiator;
-import org.eclipse.ecf.remoteservice.rest.client.RestClientService;
-import org.json.JSONArray;
-import org.json.JSONException;
-import org.json.JSONObject;
-import org.json.JSONStringer;
 
-import eu.scasefp7.eclipse.services.nlp.Annotation;
-import eu.scasefp7.eclipse.services.nlp.AnnotationFormat;
 import eu.scasefp7.eclipse.services.nlp.INLPService;
 
 public class NLPServiceClientContainer extends RestClientContainer {
@@ -44,107 +29,6 @@ public class NLPServiceClientContainer extends RestClientContainer {
     public static final String CONTAINER_TYPE_NAME = "eu.scasefp7.eclipse.services.nlp";
 
     private IRemoteServiceRegistration serviceRegistration;
-
-    public class NLPServiceResponseDeserializer implements IRemoteResponseDeserializer {
-        @Override
-        public Object deserializeResponse(String endpoint, IRemoteCall call, IRemoteCallable callable,
-                @SuppressWarnings("rawtypes") Map responseHeaders, byte[] responseBody)
-                throws NotSerializableException {
-            try {
-                // Convert responseBody to String and parse using org.json
-                // lib
-                JSONObject jo = new JSONObject(new String(responseBody));
-
-                System.out.println("Response> " + jo.toString(4));
-                
-                if(callable.getMethod().equals("annotateSentence")) {
-                    Annotation result = new Annotation();
-                    /*
-                     * {
-                        "annotation_format": "ann",
-                        "annotations": [
-                            "R1 ActsOn Arg1:T2 Arg2:T3",
-                            "R2 HasProperty Arg1:T3 Arg2:T4",
-                            "T1 Action 6 9 let",
-                            "T2 Action 13 16 try",
-                            "T3 Theme 30 40 invocation",
-                            "T4 Property 22 29 service"
-                        ],
-                        "created_at": "2015-10-06T12:19Z",
-                        "sentence": "First let me try some service invocation."
-                    }
-                     */
-                    if(jo.has("annotation_format")) {
-                        result.setFormat(AnnotationFormat.fromString(jo.getString("annotation_format")));
-                    } else {
-                        throw new NotSerializableException("Annotation format not received.");
-                    }
-                 
-                    if(jo.has("annotations")) {
-                        JSONArray arr = jo.getJSONArray("annotations");
-                        String[] anns = new String[arr.length()];
-                        
-                        for(int ix = 0; ix < arr.length(); ix++) {
-                            anns[ix] = arr.getString(ix);
-                        }
-                        
-                        result.setAnnotations(anns);
-                    } else {
-                        throw new NotSerializableException("Annotations not received.");
-                    }
-                    
-                    if(jo.has("sentence")) {
-                        result.setText(jo.getString("sentence"));
-                    } else {
-                        throw new NotSerializableException("Sentence not received");
-                    }
-                    
-                    result.setId("FR1"); // Set some generic ID
-                    
-                    return result;
-                }
-                
-                // Check status for failure. Throws exception if
-                // error status
-                // if (jo.has("status")) {
-                // JSONObject status = jo.getJSONObject("status");
-                // throw new JSONException(status.getString("message")
-                // + ";code=" + status.getInt("value"));
-                // }
-                // No exception, so get each of the fields from the
-                // json object
-                // String countryCode = jo.getString("countryCode");
-                // String countryName = jo.getString("countryName");
-                // double lat = jo.getDouble("lat");
-                // double lng = jo.getDouble("lng");
-                // String timezoneId = jo.getString("timezoneId");
-                // double dstOffset = jo.getDouble("dstOffset");
-                // double gmtOffset = jo.getDouble("gmtOffset");
-                // double rawOffset = jo.getDouble("rawOffset");
-                // String time = jo.getString("time");
-                // String sunrise = jo.getString("sunrise");
-                // String sunset = jo.getString("sunset");
-                // // Now create and return Timezone instance with all the
-                // appropriate
-                // values of the fields
-
-                // String id = jo.getString("id");
-                // String text = jo.getString("text");
-
-                return new Annotation("1", "A", null, null);
-
-                // If some json parsing exception (badly formatted json and
-                // so on,
-                // throw an appropriate exception
-            } catch (Exception e) {
-                NotSerializableException ex = new NotSerializableException(
-                        "Problem in response from postal service endpoint=" + endpoint + " status message: "
-                                + e.getMessage());
-                ex.setStackTrace(e.getStackTrace());
-                throw ex;
-            }
-        }
-    }
 
     public static class Instantiator extends RestClientContainerInstantiator {
 
@@ -193,9 +77,9 @@ public class NLPServiceClientContainer extends RestClientContainer {
      * >example EDEF</a>
      */
     @Override
-    public void connect(ID targetID, IConnectContext connectContext1) throws ContainerConnectException {
+    public void connect(ID targetID, IConnectContext connectContext) throws ContainerConnectException {
         // Set the connectTargetID in the RestClientContainer super class
-        super.connect(targetID, connectContext1);
+        super.connect(targetID, connectContext);
 
         // we will use default parameters (for username see parameters below)
         setAlwaysSendDefaultParameters(false);
@@ -215,8 +99,8 @@ public class NLPServiceClientContainer extends RestClientContainer {
         serviceRegistration = registerCallables(INLPService.class, 
                 new IRemoteCallable[] { 
                     annotatePhrase,
-                    annotateProject,
                     annotateSentence,
+                    annotateProject,
                     extractQueryTerms
                 }, null);
 
@@ -274,12 +158,7 @@ public class NLPServiceClientContainer extends RestClientContainer {
          */
         RemoteCallable.Builder callableBuilder = new RemoteCallable.Builder("annotatePhrase", "/nlpserver/phrase")
             .setDefaultParameters(parameterBuilder.build())
-            .setRequestType(
-                new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json") {
-                    public HttpEntity generateRequestEntity(String uri, IRemoteCall call, IRemoteCallable callable, IRemoteCallParameter paramDefault, Object paramToSerialize) throws NotSerializableException {
-                        return super.generateRequestEntity(uri, call, callable, paramDefault, paramToSerialize);
-                    }
-                });
+            .setRequestType(new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json"));
         return callableBuilder.build();
     }
 
@@ -331,11 +210,12 @@ public class NLPServiceClientContainer extends RestClientContainer {
          * as the association between the proxy's method parameters and the remote service's parameters.
          * <p>
          */
-        RemoteCallParameter.Builder parameterBuilder = new RemoteCallParameter.Builder()
-            .addParameter("project_name")
-            .addParameter("project_requirements")
-            .addParameter("language")
-            .addParameter("annotation_format");
+
+        List<IRemoteCallParameter> params = new ArrayList<IRemoteCallParameter>();
+        params.add(new RemoteCallParameter("project_name"));
+        params.add(new RemoteCallParameter("project_requirements"));
+        params.add(new RemoteCallParameter("language"));
+        params.add(new RemoteCallParameter("annotation_format"));
         
         /**
          * Then we create a callableBuilder instance to associate the
@@ -344,13 +224,8 @@ public class NLPServiceClientContainer extends RestClientContainer {
          * parameterBuilder above, and we define the HTTP request type as 'POST'.
          */
         RemoteCallable.Builder callableBuilder = new RemoteCallable.Builder("annotateProject", "/nlpserver/project")
-            .setDefaultParameters(parameterBuilder.build())
-            .setRequestType(
-                new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json") {
-                    public HttpEntity generateRequestEntity(String uri, IRemoteCall call, IRemoteCallable callable, IRemoteCallParameter paramDefault, Object paramToSerialize) throws NotSerializableException {
-                            return super.generateRequestEntity(uri, call, callable, paramDefault, paramToSerialize);
-                    }
-                });
+            .setDefaultParameters(params.toArray(new IRemoteCallParameter[params.size()]))
+            .setRequestType(new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json"));
         
         return callableBuilder.build();
     }
@@ -370,10 +245,11 @@ public class NLPServiceClientContainer extends RestClientContainer {
          * as the association between the proxy's method parameters and the remote service's parameters.
          * <p>
          */
-        RemoteCallParameter.Builder parameterBuilder = new RemoteCallParameter.Builder()
-            .addParameter("question")
-            .addParameter("language");
-
+       
+        List<IRemoteCallParameter> params = new ArrayList<IRemoteCallParameter>();
+        params.add(new RemoteCallParameter("question"));
+        params.add(new RemoteCallParameter("language"));        
+        
         /**
          * Then we create a callableBuilder instance to associate the
          * annotatePhrase method to the path for this service. We also set the
@@ -381,12 +257,9 @@ public class NLPServiceClientContainer extends RestClientContainer {
          * parameterBuilder above, and we define the HTTP request type as 'POST'.
          */
         RemoteCallable.Builder callableBuilder = new RemoteCallable.Builder("extractQueryTerms", "/nlpserver/question")
-            .setDefaultParameters(parameterBuilder.build()).setRequestType(
-                new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json") {
-                    public HttpEntity generateRequestEntity(String uri, IRemoteCall call, IRemoteCallable callable, IRemoteCallParameter paramDefault, Object paramToSerialize) throws NotSerializableException {
-                        return super.generateRequestEntity(uri, call, callable, paramDefault, paramToSerialize);
-                    }
-                });
+            .setDefaultParameters(params.toArray(new IRemoteCallParameter[params.size()]))
+            .setRequestType(new HttpPostRequestType(HttpPostRequestType.STRING_REQUEST_ENTITY, "application/json"));
+        
         return callableBuilder.build();
     }
 
@@ -414,58 +287,7 @@ public class NLPServiceClientContainer extends RestClientContainer {
 
     @Override
     protected IRemoteService createRemoteService(RemoteServiceClientRegistration registration) {
-        return new RestClientService(this, registration) {
-            /**
-             * @throws UnsupportedEncodingException 
-             * @throws ECFException  
-             */
-            protected HttpRequestBase preparePostMethod(String uri, IRemoteCall call, IRemoteCallable callable) throws NotSerializableException, UnsupportedEncodingException {
-                HttpPost result = new HttpPost(uri);
-                HttpPostRequestType postRequestType = (HttpPostRequestType) callable.getRequestType();
-
-//                result.setHeader("Content-Language", language);
-
-                IRemoteCallParameter[] defaultParameters = callable.getDefaultParameters();
-                Object[] parameters = call.getParameters();
-                if (postRequestType.useRequestEntity()) {
-                    String payload = "";
-                    JSONStringer json = new JSONStringer();
-                    
-                    try { 
-                        json.object();
-                        for(int ix = 0; ix < parameters.length; ix++) {
-                            String key = defaultParameters[ix].getName();
-                            Object value = parameters[ix];
-                                
-                            json.key(key);
-                            json.value(value);
-                        }
-                        
-                        json.endObject();
-                        payload = json.toString();
-                        
-                    } catch (JSONException e) {
-                        // TODO Auto-generated catch block
-                        e.printStackTrace();
-                    }                
-                    
-                    HttpEntity requestEntity = postRequestType.generateRequestEntity(uri, call, callable, defaultParameters[0], payload);
-                    result.setEntity(requestEntity);
-
-//                    if (defaultParameters != null && defaultParameters.length > 0 && parameters != null && parameters.length > 0) {
-                        
-//                        result.setEntity(requestEntity);
-//                    }
-                } else {
-                    NameValuePair[] params = toNameValuePairs(uri, call, callable);
-                    if (params != null) {
-                        result.setEntity(getUrlEncodedFormEntity(Arrays.asList(params), postRequestType));
-                    }
-                }
-                return result;
-            }
-
-        };
+        return new NLPServiceRESTClientService(this, registration);
     }
 
 }

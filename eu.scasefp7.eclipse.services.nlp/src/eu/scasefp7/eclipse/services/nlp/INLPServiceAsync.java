@@ -129,7 +129,7 @@ public interface INLPServiceAsync {
      * JSONObject["..."] not found.
      * 
      */
-    public CompletableFuture<Annotation> annotatePhraseAsync(String phrase, String language, AnnotationFormat format);
+    public CompletableFuture<Annotation> annotatePhraseAsync(String phrase, String language, AnnotationFormat annotation_format);
         
     /**
     * Sentence [/nlpserver/sentence]
@@ -207,7 +207,7 @@ public interface INLPServiceAsync {
     * JSONObject["..."] not found.
     * 
     */
-    public CompletableFuture<Annotation> annotateSentenceAsync(String sentence, String language, AnnotationFormat format);
+    public CompletableFuture<Annotation> annotateSentenceAsync(String sentence, String language, AnnotationFormat annotation_format);
 
     /**
      * Project [/nlpserver/project]
@@ -296,7 +296,7 @@ public interface INLPServiceAsync {
      * 
      * JSONObject["..."] not found.
     */
-    public CompletableFuture<Annotation[]> annotateProjectAsync(String projectName, Collection<String> requirements, String language, AnnotationFormat format);
+    public CompletableFuture<Annotation[]> annotateProjectAsync(String project_name, Collection<String> project_requirements, String language, AnnotationFormat annotation_format);
     
     /**
      * Question [/nlpserver/question]
@@ -370,6 +370,6 @@ public interface INLPServiceAsync {
      * 
      * JSONObject["..."] not found.
      */
-     public CompletableFuture<Annotation[]> extractQueryTermsAsync(String question, String language);
+     public CompletableFuture<Terms> extractQueryTermsAsync(String question, String language);
     
 }

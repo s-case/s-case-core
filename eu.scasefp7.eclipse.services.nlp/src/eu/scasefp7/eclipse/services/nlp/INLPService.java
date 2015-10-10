@@ -133,7 +133,7 @@ public interface INLPService {
      * JSONObject["..."] not found.
      * 
      */
-    public Annotation annotatePhrase(String phrase, String language, AnnotationFormat format) throws NLPException;
+    public Annotation annotatePhrase(String phrase, String language, AnnotationFormat annotation_format) throws NLPException;
     // Do we need created_at? Is response code important?
     
     /**
@@ -227,7 +227,7 @@ public interface INLPService {
 //        return annotateSentenceImpl(payload.toString());    
 //    }
     
-    public Annotation annotateSentence(String sentence, String language, AnnotationFormat format) throws NLPException;
+    public Annotation annotateSentence(String sentence, String language, AnnotationFormat annotation_format) throws NLPException;
     
     /**
      * Project [/nlpserver/project]
@@ -316,7 +316,7 @@ public interface INLPService {
      * 
      * JSONObject["..."] not found.
     */
-    public Annotation[] annotateProject(String projectName, Collection<String> requirements, String language, AnnotationFormat format) throws NLPException;
+    public Annotation[] annotateProject(String project_name, Collection<String> project_requirements, String language, AnnotationFormat annotation_format) throws NLPException;
     
     /**
      * Question [/nlpserver/question]
@@ -390,6 +390,6 @@ public interface INLPService {
      * 
      * JSONObject["..."] not found.
      */
-     public Annotation[] extractQueryTerms(String question, String language) throws NLPException;
+     public Terms extractQueryTerms(String question, String language) throws NLPException;
     
 }
