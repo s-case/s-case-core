@@ -25,8 +25,11 @@ import eu.scasefp7.eclipse.services.nlp.INLPServiceAsync;
  */
 
 /**
- * @author emaorli
- *
+ * This class shows an example of invoking NLP service using explicit service tracking.
+ * OSGi declarative services are a preferred method, since no manual housekeeping is needed.
+ * 
+ * @see NLPConsumer
+ * @author Marin Orlic
  */
 public class InvokeNLPService extends AbstractHandler {
 
@@ -73,11 +76,11 @@ public class InvokeNLPService extends AbstractHandler {
 
     @Override
     public boolean isEnabled() {
-        return this.serviceExists;
+        return this.serviceExists; // not refreshed correctly
     }
 
     @Override
     public boolean isHandled() {
-        return this.serviceExists;
+        return this.serviceExists; // not refreshed correctly
     }
 }

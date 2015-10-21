@@ -1,17 +1,21 @@
-package eu.scasefp7.eclipse.services.nlp;
+package eu.scasefp7.eclipse.services.nlp.provider;
+
+
+import java.util.List;
 
 import org.eclipse.ecf.core.ContainerTypeDescription;
 import org.eclipse.ecf.core.identity.Namespace;
+//import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteServiceAdmin;
+//import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteServiceAdmin.ExportRegistration;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
 import org.osgi.framework.ServiceRegistration;
 
-import eu.scasefp7.eclipse.services.nlp.internal.provider.NLPServiceClientContainer;
-import eu.scasefp7.eclipse.services.nlp.internal.provider.NLPServiceNamespace;
+import eu.scasefp7.eclipse.services.nlp.INLPService;
 
 public class Activator implements BundleActivator {
 
-//    private ServiceRegistration<Namespace> namespaceRegistration = null;
+    private ServiceRegistration<INLPService> nlpRegistration = null;
 //    private ServiceRegistration<ContainerTypeDescription> containerRegistration = null;
     
 	@Override
@@ -20,6 +24,11 @@ public class Activator implements BundleActivator {
 //	    this.namespaceRegistration = bundleContext.registerService(Namespace.class, new NLPServiceNamespace(), null);
 //        // Register an instance of TimezoneContainerTypeDescription (see class below)
 //	    this.containerRegistration = bundleContext.registerService(ContainerTypeDescription.class, new NLPServiceContainerTypeDescription(), null);
+	    
+	    
+	    // this.nlpRegistration = bundleContext.registerService(INLPService.class.getName(), new INLPService(), properties)
+//	    RemoteServiceAdmin rsa = new RemoteServiceAdmin(bundleContext.getBundle());
+//	    List<ExportRegistration> srs = rsa.getExportedRegistrations();
 	}
 	
 	

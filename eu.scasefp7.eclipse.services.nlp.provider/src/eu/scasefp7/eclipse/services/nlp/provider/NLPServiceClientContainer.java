@@ -1,4 +1,4 @@
-package eu.scasefp7.eclipse.services.nlp.internal.provider;
+package eu.scasefp7.eclipse.services.nlp.provider;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -216,7 +216,7 @@ public class NLPServiceClientContainer extends RestClientContainer {
         params.add(new RemoteCallParameter("project_requirements"));
         params.add(new RemoteCallParameter("language"));
         params.add(new RemoteCallParameter("annotation_format"));
-        
+
         /**
          * Then we create a callableBuilder instance to associate the
          * annotatePhrase method to the path for this service. We also set the
@@ -266,7 +266,7 @@ public class NLPServiceClientContainer extends RestClientContainer {
     @Override
     public void disconnect() {
         super.disconnect();
-        // Unregister the nlpServiceRegistration upon 'disconnect'
+        // Unregister the serviceRegistration upon 'disconnect'
         if (serviceRegistration != null) {
             serviceRegistration.unregister();
             serviceRegistration = null;

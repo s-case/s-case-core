@@ -1,4 +1,4 @@
-package eu.scasefp7.eclipse.services.nlp.internal.provider;
+package eu.scasefp7.eclipse.services.nlp.provider;
 
 import java.net.URI;
 

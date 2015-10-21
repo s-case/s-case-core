@@ -2,8 +2,9 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: S-CASE NLP Service EDEF
 Bundle-SymbolicName: eu.scasefp7.eclipse.services.nlp.edef
-Bundle-Version: 1.0.0.qualifier
+Bundle-Version: 1.0.2.qualifier
 Bundle-Vendor: S-CASE Consortium
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Remote-Service: nlpserviceendpointdescription.xml
-Require-Capability: osgi.extender; filter:=(&(osgi.extender=osgi.remoteserviceadmin) (version>=1.1) (!(version>=2.0)))
+X-Require-Capability: osgi.extender; filter:=(&(osgi.extender=osgi.remoteserviceadmin) (version>=1.1) (!(version>=2.0)))
+X-Require-Bundle: org.eclipse.ecf.osgi.services.remoteserviceadmin;bundle-version="4.3.0"

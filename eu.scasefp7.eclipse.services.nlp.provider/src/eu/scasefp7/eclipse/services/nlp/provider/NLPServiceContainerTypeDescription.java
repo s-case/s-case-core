@@ -13,7 +13,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package eu.scasefp7.eclipse.services.nlp.internal.provider;
+package eu.scasefp7.eclipse.services.nlp.provider;
 
 import org.eclipse.ecf.core.ContainerTypeDescription;
 
