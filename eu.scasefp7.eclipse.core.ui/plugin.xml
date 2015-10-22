@@ -95,7 +95,9 @@
            name="Project setup">
         <command
               commandId="eu.scasefp7.eclipse.core.commands.testSetup"
-              label="Configure project">
+              error="Project configuration failed"
+              label="Configure project"
+              notification="Project successfully configured">
         </command>
      </group>
      <group
@@ -131,27 +133,48 @@
      <group
            name="Requirements compilation">
         <command
+              commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
+              error="Requrements compilation failed."
+              label="Compile"
+              notification="Requrements compiled successfully."
+              tooltip="Compile requirements in text or storyboards">
+        </command>
+        <command
               commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
-              label="Compile requirements">
+              error="Requrements compilation failed."
+              label="Compile requirements"
+              notification="Requrements compiled successfully."
+              tooltip="Compile textual requirements">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.storyboards.commands.exportToOntology"
-              label="Compile storyboards">
+              error="Requrements compilation failed."
+              label="Compile storyboards"
+              notification="Requrements compiled successfully."
+              tooltip="Compile storyboard requirements">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
-              label="Link ontologies">
+              label="Link ontologies"
+              notification="Ontologies linked successfully."
+              tooltip="Ontologies linked successfully."
+              error="Ontologies linking failed.">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
-              label="Export to YAML">
+              label="Export to YAML"
+              notification="YAML export complete."
+              error="YAML export failed."
+              tooltip="Create a YAML description of the system.">
         </command>
      </group>
      <group
            name="Model-driven engineering">
         <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              label="Generate code">
+              error="Code generation failed."
+              label="Generate code"
+              notification="Code generation complete.">
         </command>
      </group>
      <group

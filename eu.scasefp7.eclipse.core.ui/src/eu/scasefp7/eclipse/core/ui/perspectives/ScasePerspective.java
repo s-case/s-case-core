@@ -37,6 +37,7 @@ public class ScasePerspective implements IPerspectiveFactory {
 	}
 
 	public void createInitialLayout(IPageLayout layout) {
+	    
 		String editorArea = layout.getEditorArea();
 
 		IFolderLayout folder = layout.createFolder(
@@ -54,7 +55,9 @@ public class ScasePerspective implements IPerspectiveFactory {
 //		outputfolder.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
 		outputfolder.addPlaceholder("org.eclipse.ui.console.ConsoleView"); //$NON-NLS-1$
 //		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
-		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET);
+		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET); //$NON-NLS-1$
+		outputfolder.addView(ScaseUiConstants.DASHBOARD_VIEW); //$NON-NLS-1$
+		outputfolder.addView("eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView");
 
 		IFolderLayout outlineFolder = layout.createFolder(
 				"right", IPageLayout.RIGHT, (float) 0.75, editorArea); //$NON-NLS-1$
@@ -74,18 +77,18 @@ public class ScasePerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(JavaUI.ID_JAVADOC_VIEW);
 */
 		// views - search
-//		layout.addShowViewShortcut(NewSearchUI.SEARCH_VIEW_ID);
+//        layout.addShowViewShortcut(NewSearchUI.SEARCH_VIEW_ID);
 
 		// views - debugging
 //		layout.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
 
 		// views - standard workbench
-		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE);
-		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW);
+		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE); //$NON-NLS-1$
+		layout.addShowViewShortcut(IPageLayout.ID_PROBLEM_VIEW); //$NON-NLS-1$
 //		layout.addShowViewShortcut(JavaPlugin.ID_RES_NAV);
-		layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST);
-		layout.addShowViewShortcut(IProgressConstants.PROGRESS_VIEW_ID);
-		layout.addShowViewShortcut(IPageLayout.ID_PROJECT_EXPLORER);
+		layout.addShowViewShortcut(IPageLayout.ID_TASK_LIST); //$NON-NLS-1$
+		layout.addShowViewShortcut(IProgressConstants.PROGRESS_VIEW_ID); //$NON-NLS-1$
+		layout.addShowViewShortcut(IPageLayout.ID_PROJECT_EXPLORER); //$NON-NLS-N$
 //		layout.addShowViewShortcut(TemplatesView.ID);
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView"); //$NON-NLS-1$
 
@@ -102,10 +105,13 @@ public class ScasePerspective implements IPerspectiveFactory {
 */		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");//$NON-NLS-1$
+		layout.addNewWizardShortcut(ScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);//$NON-NLS-1$
+        layout.addNewWizardShortcut(ScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);//$NON-NLS-1$
+        
 
 		// 'Window' > 'Open Perspective' contributions
-//		layout.addPerspectiveShortcut(JavaUI.ID_BROWSING_PERSPECTIVE);
-//		layout.addPerspectiveShortcut(IDebugUIConstants.ID_DEBUG_PERSPECTIVE);
+        layout.addPerspectiveShortcut("eu.scasefp7.eclipse.core.ui.ScasePerspective");
+        layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");
 
 	}
 }

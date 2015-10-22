@@ -103,6 +103,26 @@
                </appinfo>
             </annotation>
          </attribute>
+         <attribute name="notification" type="string">
+            <annotation>
+               <documentation>
+                  Notification text to display to user in a popup if the command succeeds.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
+         <attribute name="error" type="string">
+            <annotation>
+               <documentation>
+                  Notification text to display to user in a popup if the command fails.
+               </documentation>
+               <appinfo>
+                  <meta.attribute translatable="true"/>
+               </appinfo>
+            </annotation>
+         </attribute>
       </complexType>
    </element>
 

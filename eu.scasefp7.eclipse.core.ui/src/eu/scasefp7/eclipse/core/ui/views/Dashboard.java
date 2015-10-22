@@ -16,7 +16,9 @@
 package eu.scasefp7.eclipse.core.ui.views;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.Command;
@@ -28,6 +30,7 @@ import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.CommandException;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
@@ -36,18 +39,23 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
+import eu.scasefp7.eclipse.core.ui.SharedImages;
 
 /**
  * Creates a dashboard viewpart composed of multiple groups and buttons with commands attached.
@@ -76,11 +84,12 @@ public class Dashboard extends ViewPart {
     private static final String CONTRIBUTION_COMMAND_PARAM = "parameter";
     private static final String CONTRIBUTION_COMMAND_PARAM_NAME = "name";
     private static final String CONTRIBUTION_COMMAND_PARAM_VALUE = "value";
+    private static final String CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS = "notification";
+    private static final String CONTRIBUTION_COMMAND_NOTIFICATION_FAIL = "error";
 
-    
-	protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>(); 
-	
-	/**
+    protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
+
+    /**
 	 * The constructor.
 	 */
 	public Dashboard() {
@@ -195,7 +204,9 @@ public class Dashboard extends ViewPart {
         String name = elem.getAttribute(CONTRIBUTION_COMMAND_LABEL);
         String tooltip = elem.getAttribute(CONTRIBUTION_COMMAND_TOOLTIP);
         final String commandId = elem.getAttribute(CONTRIBUTION_COMMAND_ID);
-
+        final String notificationSuccess = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS);
+        final String notificationFail = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_FAIL);
+        
         Button btn = new Button(parent, SWT.NONE);
         
         if(name != null) {
@@ -217,7 +228,13 @@ public class Dashboard extends ViewPart {
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                        executeCommand(commandId);
+                        try {
+                            executeCommand(commandId);
+                            notifyUser(commandId, notificationSuccess);     
+                        } catch (CommandException ex) {
+                            notifyUser(commandId, notificationFail, ex);     
+                            ex.printStackTrace();
+                        }
                     }
                 });
             } else {
@@ -225,7 +242,13 @@ public class Dashboard extends ViewPart {
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                        executeCommand(commandId, params);
+                        try {
+                            executeCommand(commandId, params);
+                            notifyUser(commandId, notificationSuccess);     
+                        } catch (CommandException ex) {
+                            notifyUser(commandId, notificationFail, ex);     
+                            ex.printStackTrace();
+                        }
                     }
                 });   
             }
@@ -281,8 +304,12 @@ public class Dashboard extends ViewPart {
 	    ICommandListener listener = new ICommandListener() {
 			@Override
 			public void commandChanged(CommandEvent cmdEvent) {
-				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged()) {
-					control.setEnabled(command.isDefined() && command.isEnabled());
+				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged() || cmdEvent.isHandledChanged()) {
+					control.setEnabled(command.isDefined() && command.isEnabled() && command.isHandled());
+				}
+				if(command.getId().equals("eu.scasefp7.eclipse.core.commands.compileToOntology")) {
+				    System.out.println("cmdEvent def " + cmdEvent.isDefinedChanged() + " en " + cmdEvent.isEnabledChanged() + " hand " + cmdEvent.isHandledChanged());
+				    System.out.println("command " + command.getId() + " def " + command.isDefined() + " en " + command.isEnabled() + " hand " + command.isHandled());
 				}
 			}
 		}; 
@@ -296,8 +323,9 @@ public class Dashboard extends ViewPart {
 	 * 
 	 * @param commandId ID of the command to execute
 	 * @param parameters map of command parameters in form (parameterId, value)
+	 * @throws CommandException 
 	 */
-	protected void executeCommand(String commandId, Map<String, String> parameters) {
+	protected void executeCommand(String commandId, Map<String, String> parameters) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
@@ -322,12 +350,11 @@ public class Dashboard extends ViewPart {
 		    }
 			ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params.toArray(new Parameterization[params.size()]));
 		    handlerService.executeCommand(parametrizedCommand, null);
-		        
+		    
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
 		    
-		    // Replace with real-world exception handling
-		    ex.printStackTrace();
+		   throw ex;
 		}
 	}
 
@@ -336,8 +363,9 @@ public class Dashboard extends ViewPart {
 	 * Convenience method to call a command with no parameters.
 	 * 
 	 * @param commandId ID of the command to execute
+	 * @throws CommandException 
 	 */
-	protected void executeCommand(String commandId) {
+	protected void executeCommand(String commandId) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
@@ -345,12 +373,13 @@ public class Dashboard extends ViewPart {
 
 		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
 		try  { 
-		    // Execute commmand via its ID
-			handlerService.executeCommand(commandId, null);        
+		    // Execute command via its ID
+			handlerService.executeCommand(commandId, null);
+
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-		    // Replace with real-world exception handling
-		    ex.printStackTrace();
+		    
+		    throw ex;
 		}
 	}
 
@@ -373,6 +402,30 @@ public class Dashboard extends ViewPart {
             }
         }
         return map;
+    }
+
+    protected void notifyUser(String commandId, String message) {
+        
+        List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
+        
+        NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
+        
+        notifications.add(new DashboardNotification(commandId, getTitle(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK))); 
+                
+        popup.setContents(notifications);
+        popup.open();
+    }
+
+    protected void notifyUser(String commandId, String message, CommandException ex) {
+        List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
+        
+        NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
+        
+        notifications.add(new DashboardNotification(commandId, getTitle(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
+        notifications.add(new DashboardNotification(commandId, getTitle(), ex.getLocalizedMessage(), PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
+                
+        popup.setContents(notifications);
+        popup.open();
     }
 
 }
