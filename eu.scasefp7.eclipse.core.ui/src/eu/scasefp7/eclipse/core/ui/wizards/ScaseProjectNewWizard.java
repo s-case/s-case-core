@@ -1,36 +1,33 @@
 package eu.scasefp7.eclipse.core.ui.wizards;
 
-import java.awt.Label;
-import java.net.URI;
 
+import java.net.URI;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-import eu.scasefp7.eclipse.core.ui.preferences.ProjectDomainPropertyPage;
+import eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
-import eu.scasefp7.eclipse.core.ui.wizards.ProjectDomainWizardPage;
+
+
 
 public class ScaseProjectNewWizard extends Wizard implements INewWizard, IExecutableExtension {
 	
 	private WizardNewProjectCreationPage _pageOne;
-	private ProjectDomainWizardPage _pageTwo;
+	private PropertyWizardPage _pageTwo;
 	private static final String PAGE_NAME = "Custom Plug-in Project Wizard";
 	private static final String WIZARD_NAME = "New S-Case Project"; 
-	//private static final String WIZARD_NAME = "New Custom Plug-in Project"; 
 
 	public ScaseProjectNewWizard() {
 		setWindowTitle(WIZARD_NAME);
 	}
-	
 	
 
 	@Override
@@ -46,7 +43,7 @@ public class ScaseProjectNewWizard extends Wizard implements INewWizard, IExecut
 	    _pageOne.setTitle("Create a S-Case Project");
 	    _pageOne.setDescription("Enter project name.");
 	    
-	    _pageTwo = new ProjectDomainWizardPage("S-Case project domain");
+	    _pageTwo = new PropertyWizardPage("S-Case project domain");
 	    _pageTwo.setTitle("Select project domain");
 	    
 	    addPage(_pageOne);
@@ -80,8 +77,6 @@ public class ScaseProjectNewWizard extends Wizard implements INewWizard, IExecut
 		return true;
 	}
 	
-
-
 
 	@Override
 	public void setInitializationData(IConfigurationElement config,

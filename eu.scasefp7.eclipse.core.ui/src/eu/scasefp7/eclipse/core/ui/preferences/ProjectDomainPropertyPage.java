@@ -150,7 +150,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	
-	private void createDomainLabel(Composite parent, Object data) {
+	protected void createDomainLabel(Composite parent, Object data) {
 		cmpLabels = new Composite(parent, SWT.NONE);
 		GridLayout gl_cmpLabels = new GridLayout(2, false);
 		gl_cmpLabels.marginWidth = 0;
@@ -218,7 +218,11 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		//super.addListeners(tree);
 		return tree;
 	}
-	
+	public Label getDomainLabel(){
+		
+		return domainLabel;
+		
+	}
 	protected DomainEntry getSingleSelection(ISelection selection)
 	{
 	  if (!selection.isEmpty()) {
