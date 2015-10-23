@@ -63,6 +63,7 @@ public class StaticOntologyAPI {
 	 * Similar to the other constructors, used only for testing reasons.
 	 * 
 	 * @param projectName the name of the project.
+	 * @param forceDelete delete any existing ontology file.
 	 */
 	public StaticOntologyAPI(String projectName, boolean forceDelete) {
 		staticOntology = new OntologyJenaAPI(null, OntologyType.STATIC,

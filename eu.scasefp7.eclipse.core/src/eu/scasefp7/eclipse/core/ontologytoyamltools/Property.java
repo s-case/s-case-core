@@ -23,7 +23,7 @@ public class Property {
 	public boolean NamingProperty;
 
 	/**
-	 * Empty constructor. This is required for instatiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
+	 * Empty constructor. This is required for instantiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
 	 */
 	public Property() {
 
@@ -75,7 +75,7 @@ public class Property {
 	}
 
 	/**
-	 * Used to check if two properties are the same in sets, maps, etc. This function must be overriden because the
+	 * Used to check if two properties are the same in sets, maps, etc. This function must be overridden because the
 	 * {@code contains} function uses this to check for equal objects.
 	 * 
 	 * @return an integer hashcode.
