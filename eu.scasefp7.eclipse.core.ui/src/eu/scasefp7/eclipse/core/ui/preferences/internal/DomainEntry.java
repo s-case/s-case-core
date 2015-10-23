@@ -28,9 +28,9 @@ public class DomainEntry {
 	/**
 	 * Create the object using supplied values.
 	 * 
-	 * @param id
-	 * @param name
-	 * @param children
+	 * @param id for the domain
+	 * @param name of the domain
+	 * @param children of the domain
 	 */
 	public DomainEntry (int id, String name, DomainEntry[] children) {
 		setId(id);
@@ -41,8 +41,8 @@ public class DomainEntry {
 	/**
 	 * Create the object using supplied values.
 	 * 
-	 * @param id
-	 * @param name
+	 * @param id of the domain
+	 * @param name of the domain
 	 */
 	public DomainEntry (int id, String name) {
 		setId(id);

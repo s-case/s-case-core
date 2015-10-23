@@ -18,8 +18,8 @@ public class AbstractWorkbenchNotificationPopup extends AbstractNotificationPopu
 
 	/**
 	 * TODO
-	 * @param display
-	 * @param style
+	 * @param display to use
+	 * @param style of the window
 	 */
 	public AbstractWorkbenchNotificationPopup(Display display, int style) {
 		super(display, style);
@@ -27,7 +27,7 @@ public class AbstractWorkbenchNotificationPopup extends AbstractNotificationPopu
 
 	/**
 	 * TODO
-	 * @param display
+	 * @param display to use
 	 */
 	public AbstractWorkbenchNotificationPopup(Display display) {
 		super(display);
@@ -104,7 +104,7 @@ public class AbstractWorkbenchNotificationPopup extends AbstractNotificationPopu
 
     
 	/**
-	 * @param maximumHeight
+	 * @param maximumHeight of the image to load
 	 * @return image
 	 */
 	public static Image getWorkbenchShellImage(int maximumHeight) {

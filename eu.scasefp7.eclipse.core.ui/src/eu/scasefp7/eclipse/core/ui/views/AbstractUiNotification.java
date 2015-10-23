@@ -10,7 +10,7 @@ import org.eclipse.swt.graphics.Image;
 public abstract class AbstractUiNotification extends AbstractNotification {
 
 	/**
-	 * @param eventId
+	 * @param eventId that caused the notification
 	 */
 	public AbstractUiNotification(String eventId) {
 		super(eventId);

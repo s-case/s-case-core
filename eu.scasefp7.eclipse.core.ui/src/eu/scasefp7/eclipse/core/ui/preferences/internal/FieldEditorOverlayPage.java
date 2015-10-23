@@ -71,7 +71,6 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
      * Constructor
      * 
      * @param style - layout style
-     * @wbp.parser.constructor
      */
     public FieldEditorOverlayPage(int style) {
         super(style);

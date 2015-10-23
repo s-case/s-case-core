@@ -41,7 +41,7 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 	private List<AbstractNotification> notifications;
 
 	/**
-	 * @param parent
+	 * @param parent of the popup
 	 */
 	public NotificationPopup(Shell parent) {
 		super(parent.getDisplay());

@@ -119,7 +119,9 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
      * Tries to open an URL wit the web browser configured in the Eclipse preferences (General &gt; Web Browser). By
      * default, this will open a new editor to display the URL within the Eclipse IDE.
      * 
-     * @see org.eclipse.recommenders.rcp.utils.BrowserUtils#openInDefaultBrowser(String)
+     * See org.eclipse.recommenders.rcp.utils.BrowserUtils#openInDefaultBrowser(String)
+     * 
+     * @param url to open
      */
     protected static void openInDefaultBrowser(String url) {
         try {
@@ -135,7 +137,9 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
      * Web Browser) it will prefer that over the operating system's default browser. If either way to open an external
      * browser does not succeed, this method will this will open a new editor to display the URL within the Eclipse IDE.
      * 
-     * @see org.eclipse.recommenders.rcp.utils.BrowserUtils#openInExternalBrowser(String)
+     * See org.eclipse.recommenders.rcp.utils.BrowserUtils#openInExternalBrowser(String)
+     * 
+     * @param url to open
      */
     protected static void openInExternalBrowser(String url) {
         try {
@@ -149,7 +153,9 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
     }
 
     /**
-     * @see org.eclipse.recommenders.rcp.utils.BrowserUtils#openInExternalBrowser(URL)
+     * See org.eclipse.recommenders.rcp.utils.BrowserUtils#openInExternalBrowser(URL).
+     * 
+     * @param url to open
      */
     protected static void openInExternalBrowser(URL url) {
       openInExternalBrowser(url.toExternalForm());
@@ -157,9 +163,9 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
     
     /**
      * Augments the supplied link to open it in a web browser when clicked on.
+     * See org.eclipse.recommenders.rcp.utils.BrowserUtils#addOpenBrowserAction(Link).
      * 
      * @param link to add the handler to
-     * @see org.eclipse.recommenders.rcp.utils.BrowserUtils#addOpenBrowserAction(Link)
      */
     protected static void addOpenBrowserAction(Link link) {
         link.addSelectionListener(new SelectionAdapter() {

@@ -58,7 +58,7 @@ import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
  * Configuration data is read from contributions to an extension point.
  * 
  * @see ScaseUiConstants#DASHBOARD_EXTENSION
- * @author Marin Orlic <marin.orlic@ericsson.com>
+ * @author Marin Orlic
  */
 
 public class Dashboard extends ViewPart {
@@ -319,7 +319,7 @@ public class Dashboard extends ViewPart {
 	 * 
 	 * @param commandId ID of the command to execute
 	 * @param parameters map of command parameters in form (parameterId, value)
-	 * @throws CommandException 
+	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId, Map<String, String> parameters) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
@@ -359,7 +359,7 @@ public class Dashboard extends ViewPart {
 	 * Convenience method to call a command with no parameters.
 	 * 
 	 * @param commandId ID of the command to execute
-	 * @throws CommandException 
+	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():

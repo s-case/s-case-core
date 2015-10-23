@@ -21,7 +21,7 @@ import org.eclipse.ui.services.IDisposable;
  * Registry for images shared over several plugins. It's worth mentioning that this registry supports lazy
  * loading of {@link ImageResource}s, and thus, can be used by other plugins to share their images too.
  *
- * @see {@link ImageResource}
+ * @see ImageResource
  */
 public final class SharedImages implements IDisposable {
 
@@ -188,7 +188,7 @@ public final class SharedImages implements IDisposable {
     private ImageRegistry registry = new ImageRegistry();
 
     /**
-     * @param resource
+     * @param resource to load
      * @return image descriptor
      */
     public synchronized ImageDescriptor getDescriptor(ImageResource resource) {
@@ -200,7 +200,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
-     * @param resource
+     * @param resource to load
      * @return SWT image 
      */
     public synchronized Image getImage(ImageResource resource) {
