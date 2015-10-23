@@ -26,25 +26,35 @@ public final class ScaseUiConstants {
 	/** Used to store constants, cannot be instantiated */
 	private ScaseUiConstants() {};
 	
+	/** Category for views */
 	public static final String VIEW_CATEGORY = "eu.scasefp7.eclipse.category"; //$NON-NLS-1$
+	
+	/** S-CASE Perspective ID */
 	public static final String PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective"; //$NON-NLS-1$
+	
+	/** S-CASE Dashboard view ID */
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
 
+	/** Extension point used to contribute dashboard items */
 	public static final String DASHBOARD_EXTENSION = "eu.scasefp7.eclipse.core.ui.dashboardItem"; //$NON-NLS-1$
 	
-	/* Commands */
+	/** Link ontologies command ID*/
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
 	
 	/* These are external, included here for convenience */
 	
-	/* UML recognizer */
+	/** UML recognizer wizard ID */
 	public static final String UML_RECOGNIZER_NEWWIZARDID = "eu.scasefp7.eclipse.umlrec.importWizard"; //$NON-NLS-1$
 
-	/* Requirements editor */
+	/** Requirements editor wizard ID*/
 	public static final String REQUIREMENTS_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard"; //$NON-NLS-1$
+	
+	/** Requirements editor ontology export command */
 	public static final String REQUIREMENTS_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"; //$NON-NLS-1$
 
-	/* Storyboards editor */
+	/** Storyboards editor wizard ID*/
 	public static final String STORYBOARD_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID"; //$NON-NLS-1$
+	
+	/** Storyboard editor ontology export command */
 	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportToOntology"; //$NON-NLS-1$
 }

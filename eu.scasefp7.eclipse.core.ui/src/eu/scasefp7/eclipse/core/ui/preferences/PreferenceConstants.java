@@ -8,6 +8,7 @@ public final class PreferenceConstants {
     /** Used to store constants, cannot be instantiated */
     private PreferenceConstants() {};
     
+    /** Use project prefs to override global ones */
     public static final String P_USE_PROJECT_PREFS = "useProjectPreferences"; //$NON-NLS-1$
    
 	

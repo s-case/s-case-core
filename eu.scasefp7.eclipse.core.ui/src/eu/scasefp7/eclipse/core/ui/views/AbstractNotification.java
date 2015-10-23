@@ -17,6 +17,10 @@ public abstract class AbstractNotification implements Comparable<AbstractNotific
 
 	private final String eventId;
 
+	/**
+	 * Constructor, takes the event ID to use as token.
+	 * @param eventId
+	 */
 	public AbstractNotification(String eventId) {
 		Assert.isNotNull(eventId);
 		this.eventId = eventId;
@@ -29,14 +33,26 @@ public abstract class AbstractNotification implements Comparable<AbstractNotific
 		return compare(getDate(), o.getDate());
 	}
 
+	/**
+	 * @return event id
+	 */
 	public String getEventId() {
 		return eventId;
 	}
 
+	/**
+	 * @return date
+	 */
 	public abstract Date getDate();
 
+	/**
+	 * @return description
+	 */
 	public abstract String getDescription();
 
+	/**
+	 * @return label
+	 */
 	public abstract String getLabel();
 
 	/**
@@ -51,6 +67,8 @@ public abstract class AbstractNotification implements Comparable<AbstractNotific
 
 	/**
      * Compares <code>o1</code> and <code>o2</code>.
+	 * @param o1 object to compare
+	 * @param o2 object to compare
      * 
      * @since 3.7
      * @return a negative integer, 0, or a positive, if o1 is less than o2, o1 equals o2 or o1 is more than o2; null is

@@ -45,6 +45,8 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * Returns an image lookup key.
+     * @param image file name
      * @return resource name for a <strong>d</strong>isabled <strong>l</strong>o<strong>c</strong>a<strong>l</strong>
      *         toolbar
      */
@@ -53,6 +55,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for an <strong>e</strong>nabled <strong>l</strong>o<strong>c</strong>a<strong>l</strong>
      *         toolbar
      */
@@ -61,6 +64,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for a model <strong>obj</strong>ect
      */
     public static String obj16(String image) {
@@ -68,6 +72,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for an object <strong>ov</strong>e<strong>r</strong>lay
      */
     public static String ovr16(String image) {
@@ -75,6 +80,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for a <strong>view</strong>
      */
     public static String view16(String image) {
@@ -82,6 +88,7 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for a <strong>view</strong>
      */
     public static String view32(String image) {
@@ -89,12 +96,18 @@ public final class SharedImages implements IDisposable {
     }
 
     /**
+     * @param image file name
      * @return resource name for a <strong>wiz</strong>ard <strong>ban</strong>ner graphic
      */
     public static String wizban(String image) {
         return "/icons/wizban/" + image; //$NON-NLS-1$
     }
 
+    /**
+     * Enumeration containing all images in the image registry 
+     * @author Marin Orlic
+     *
+     */
     public static enum Images implements ImageResource {
         // @formatter:off
 //        ELCL_ADD_REPOSITORY(elcl16("add_repository.png")), //$NON-NLS-1$
@@ -115,9 +128,24 @@ public final class SharedImages implements IDisposable {
 //        ELCL_REMOVE_SNIPPET(elcl16("remove_snippet.png")), //$NON-NLS-1$
 //        ELCL_SHARE_SNIPPET(elcl16("share_snippet.png")), //$NON-NLS-1$
 //        ELCL_SYNCED(elcl16("synced.gif")), //$NON-NLS-1$
+        /**
+         * Twitter logo
+         */
         OBJ_TWITTER(obj16("bird_blue_16.png")), //$NON-NLS-1$
+        
+        /**
+         * LinkedIn logo 
+         */
         OBJ_LINKEDIN(obj16("In-2C-16px.png")), //$NON-NLS-1$
+        
+        /**
+         * Facebook logo
+         */
         OBJ_FACEBOOK(obj16("FB-f-Logo__blue_16.png")), //$NON-NLS-1$
+        
+        /**
+         * Github logo
+         */
         OBJ_GITHUB(obj16("GitHub-Mark-16px.png")), //$NON-NLS-1$
 //        OBJ_BULLET_BLUE(obj16("bullet_blue.png")), //$NON-NLS-1$
 //        OBJ_BULLET_GREEN(obj16("bullet_green.png")), //$NON-NLS-1$
@@ -137,6 +165,10 @@ public final class SharedImages implements IDisposable {
 //        OBJ_REPOSITORY(obj16("repository.gif")), //$NON-NLS-1$
 //        OVR_STAR(ovr16("star.png")), //$NON-NLS-1$
 //        VIEW_SLICE(view16("slice.gif")); //$NON-NLS-1$
+        
+        /**
+         * S-CASE logo
+         */
         VIEW_SCASE(view16("s-case_16.png")); //$NON-NLS-1$
         // @formatter:on
 
@@ -155,6 +187,10 @@ public final class SharedImages implements IDisposable {
 
     private ImageRegistry registry = new ImageRegistry();
 
+    /**
+     * @param resource
+     * @return image descriptor
+     */
     public synchronized ImageDescriptor getDescriptor(ImageResource resource) {
         ImageDescriptor desc = registry.getDescriptor(toKey(resource));
         if (desc == null) {
@@ -163,6 +199,10 @@ public final class SharedImages implements IDisposable {
         return desc;
     }
 
+    /**
+     * @param resource
+     * @return SWT image 
+     */
     public synchronized Image getImage(ImageResource resource) {
         String key = toKey(resource);
         Image img = registry.get(key);

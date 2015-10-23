@@ -26,6 +26,10 @@ import org.eclipse.ui.dialogs.PropertyPage;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
+/**
+ * @author Marin Orlic
+ *
+ */
 public class ProjectDomainPropertyPage extends PropertyPage {
 
 	private static final String DOMAIN_PROPERTY = "eu.scasefp7.eclipse.core.projectDomain";

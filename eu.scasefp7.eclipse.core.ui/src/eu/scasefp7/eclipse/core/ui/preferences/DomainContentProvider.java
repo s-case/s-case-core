@@ -21,6 +21,9 @@ import org.eclipse.jface.viewers.Viewer;
 
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 
+/**
+ * @author Marin Orlic
+ */
 public class DomainContentProvider implements ITreeContentProvider {
 
     private DomainEntry[] domains;

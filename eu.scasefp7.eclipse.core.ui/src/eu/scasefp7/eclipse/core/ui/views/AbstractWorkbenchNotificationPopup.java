@@ -16,10 +16,19 @@ import org.eclipse.ui.PlatformUI;
  */
 public class AbstractWorkbenchNotificationPopup extends AbstractNotificationPopup {
 
+	/**
+	 * TODO
+	 * @param display
+	 * @param style
+	 */
 	public AbstractWorkbenchNotificationPopup(Display display, int style) {
 		super(display, style);
 	}
 
+	/**
+	 * TODO
+	 * @param display
+	 */
 	public AbstractWorkbenchNotificationPopup(Display display) {
 		super(display);
 	}
@@ -94,6 +103,10 @@ public class AbstractWorkbenchNotificationPopup extends AbstractNotificationPopu
     }
 
     
+	/**
+	 * @param maximumHeight
+	 * @return image
+	 */
 	public static Image getWorkbenchShellImage(int maximumHeight) {
         // always use the launching workbench window
         IWorkbenchWindow[] windows = PlatformUI.getWorkbench().getWorkbenchWindows();

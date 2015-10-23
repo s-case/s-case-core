@@ -5,6 +5,9 @@ import org.eclipse.swt.graphics.Font;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 
+/**
+ * @author Marin Orlic
+ */
 public class DomainBoldLabelProvider extends DomainLabelProvider implements IFontProvider {
 	private FilteredTree filterTree;
 	private PatternFilter filterForBoldElements;

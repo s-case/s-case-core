@@ -40,6 +40,9 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 
 	private List<AbstractNotification> notifications;
 
+	/**
+	 * @param parent
+	 */
 	public NotificationPopup(Shell parent) {
 		super(parent.getDisplay());
 	}
@@ -191,6 +194,9 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 		super.createTitleArea(parent);
 	}
 
+	/**
+	 * @return list of notifications
+	 */
 	public List<AbstractNotification> getNotifications() {
 		return new ArrayList<AbstractNotification>(notifications);
 	}
@@ -201,6 +207,9 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 
 	}
 
+	/**
+	 * @param notifications to show
+	 */
 	public void setContents(List<AbstractNotification> notifications) {
 		this.notifications = notifications;
 	}

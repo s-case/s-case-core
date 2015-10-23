@@ -9,12 +9,21 @@ import org.eclipse.swt.graphics.Image;
  */
 public abstract class AbstractUiNotification extends AbstractNotification {
 
+	/**
+	 * @param eventId
+	 */
 	public AbstractUiNotification(String eventId) {
 		super(eventId);
 	}
 
+	/**
+	 * @return image
+	 */
 	public abstract Image getNotificationImage();
 
+	/**
+	 * @return image
+	 */
 	public abstract Image getNotificationKindImage();
 
 	/**

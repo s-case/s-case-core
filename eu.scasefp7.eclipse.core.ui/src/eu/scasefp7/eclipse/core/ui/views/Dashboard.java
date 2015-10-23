@@ -16,7 +16,6 @@
 package eu.scasefp7.eclipse.core.ui.views;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -39,7 +38,6 @@ import org.eclipse.core.runtime.Platform;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
-import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
@@ -53,9 +51,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
-import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
-import eu.scasefp7.eclipse.core.ui.SharedImages;
 
 /**
  * Creates a dashboard viewpart composed of multiple groups and buttons with commands attached.
@@ -391,6 +387,7 @@ public class Dashboard extends ViewPart {
      * @return map with parameter names and values
      * @see org.eclipse.ui.internal.menus.MenuHelper#getParameters(IConfigurationElement)
      */
+    @SuppressWarnings("restriction")
     private static Map<String, String> getParameters(IConfigurationElement element) {
         HashMap<String, String> map = new HashMap<String, String>();
         IConfigurationElement[] parameters = element.getChildren(CONTRIBUTION_COMMAND_PARAM);

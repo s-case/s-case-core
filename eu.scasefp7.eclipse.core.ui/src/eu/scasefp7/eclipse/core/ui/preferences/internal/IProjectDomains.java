@@ -20,6 +20,9 @@ package eu.scasefp7.eclipse.core.ui.preferences.internal;
  *
  */
 public interface IProjectDomains {
+	/**
+	 * Project domains from Google Verticals
+	 */
 	public static final DomainEntry[] PROJECT_DOMAINS = {
 		
 		// Generated in a spreadsheet

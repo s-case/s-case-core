@@ -30,8 +30,9 @@ import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
  */
 public class ScasePerspective implements IPerspectiveFactory {
 
-	public static final String ID_PERSPECTIVE = ScaseUiConstants.PERSPECTIVE;
-
+	/**
+	 * Construct the perspective object.
+	 */
 	public ScasePerspective() {
 		super();
 	}

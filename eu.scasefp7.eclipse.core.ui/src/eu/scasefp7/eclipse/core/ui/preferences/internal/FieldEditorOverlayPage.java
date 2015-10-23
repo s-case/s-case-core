@@ -127,6 +127,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
     /**
      * Delivers the project that owns the properties shown in this property page.
+     * @return adapted to IProject
      */
     public IProject getProject() {
         IAdaptable element = getElement();
