@@ -19,8 +19,20 @@ import org.eclipse.ecf.remoteservice.rest.client.RestClientService;
 import org.json.JSONException;
 import org.json.JSONStringer;
 
+/**
+ * Extension of the REST client service provided by the framework, supports sending multiple parameters with HTTP POST and JSON enconding 
+ * (instead of application/x-www-form-urlencoded data).
+ * 
+ * @author Marin Orlić
+ */
 public class NLPServiceRESTClientService extends RestClientService 
 {
+        /**
+         * Constructs the service in the container.
+         * 
+         * @param container to hold the service
+         * @param registration in the container
+         */
         public NLPServiceRESTClientService(RestClientContainer container, RemoteServiceClientRegistration registration) {
             super(container, registration);
         }

@@ -17,7 +17,14 @@ package eu.scasefp7.eclipse.services.nlp.provider;
 
 import org.eclipse.ecf.core.ContainerTypeDescription;
 
+/**
+ * Container type definition linked with client container.
+ * @author Marin Orlić
+ */
 public class NLPServiceContainerTypeDescription extends ContainerTypeDescription {
+    /**
+     * Construct the type definition.
+     */
     public NLPServiceContainerTypeDescription() {
         super(NLPServiceClientContainer.CONTAINER_TYPE_NAME, new NLPServiceClientContainer.Instantiator(),
                 "S-CASE NLP service client container");

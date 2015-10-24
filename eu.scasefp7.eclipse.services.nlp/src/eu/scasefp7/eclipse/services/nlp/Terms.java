@@ -25,10 +25,19 @@ public class Terms {
     String text;
     String[] terms;
     
+    /**
+     * Construct the terms
+     */
     public Terms() {
         
     }
     
+    /**
+     * Construct the terms object, fill in the data
+     * 
+     * @param text that was analyzed
+     * @param terms extracted from the text
+     */
     public Terms(String text, String[] terms) {
         this.text = text;
         this.terms = terms;

@@ -22,12 +22,7 @@ import java.util.Collection;
  *
  */
 public interface INLPService {
-    
-    
-    
-    
-
-    
+  
     /**
      * NLP Server API Root [/nlpserver]
      * This is the NLP Server API entry point. It contains a description of the service and links to the main resources.
@@ -132,9 +127,13 @@ public interface INLPService {
      * 
      * JSONObject["..."] not found.
      * 
+     * @param phrase to annotate
+     * @param language of the phrase
+     * @param annotation_format for the result
+     * @return analyzed annotations
+     * @throws NLPException never
      */
     public Annotation annotatePhrase(String phrase, String language, AnnotationFormat annotation_format) throws NLPException;
-    // Do we need created_at? Is response code important?
     
     /**
     * Sentence [/nlpserver/sentence]
@@ -211,22 +210,12 @@ public interface INLPService {
     * 
     * JSONObject["..."] not found.
     * 
+    * @param sentence to annotate
+    * @param language of the sentence
+    * @param annotation_format for the result
+    * @return analyzed annotations
+    * @throws NLPException never
     */
-    
-    
-//    
-//    public default Annotation annotateSentence(String sentence, String language, AnnotationFormat format) throws NLPException {
-//        StringBuffer payload = new StringBuffer();
-//        
-//        payload.append("{\"sentence\":\"");
-//        payload.append(sentence);
-//        payload.append("\",\"annotation_format\":\"");
-//        payload.append(AnnotationFormat.toFormatCode(format));
-//        payload.append("\"}");
-//        
-//        return annotateSentenceImpl(payload.toString());    
-//    }
-    
     public Annotation annotateSentence(String sentence, String language, AnnotationFormat annotation_format) throws NLPException;
     
     /**
@@ -315,6 +304,13 @@ public interface INLPService {
      * Body
      * 
      * JSONObject["..."] not found.
+     * 
+     * @param project_name to annotate
+     * @param project_requirements describing the project
+     * @param language of the requirements
+     * @param annotation_format for the result
+     * @return analyzed annotations
+     * @throws NLPException never
     */
     public Annotation[] annotateProject(String project_name, Collection<String> project_requirements, String language, AnnotationFormat annotation_format) throws NLPException;
     
@@ -389,6 +385,11 @@ public interface INLPService {
      * Body
      * 
      * JSONObject["..."] not found.
+     * 
+     * @param question to analyze
+     * @param language of the question
+     * @return extracted keywords
+     * @throws NLPException never
      */
      public Terms extractQueryTerms(String question, String language) throws NLPException;
     

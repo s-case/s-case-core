@@ -16,6 +16,11 @@ import eu.scasefp7.eclipse.services.nlp.Annotation;
 import eu.scasefp7.eclipse.services.nlp.AnnotationFormat;
 import eu.scasefp7.eclipse.services.nlp.Terms;
 
+/**
+ * Response deserializer, parses JSON service response into POJOs.
+ * 
+ * @author Marin Orlić
+ */
 public class NLPServiceResponseDeserializer implements IRemoteResponseDeserializer {
    
     /**

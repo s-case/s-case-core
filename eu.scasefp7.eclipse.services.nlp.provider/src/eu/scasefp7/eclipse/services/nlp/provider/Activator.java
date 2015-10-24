@@ -1,10 +1,6 @@
 package eu.scasefp7.eclipse.services.nlp.provider;
 
 
-import java.util.List;
-
-import org.eclipse.ecf.core.ContainerTypeDescription;
-import org.eclipse.ecf.core.identity.Namespace;
 //import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteServiceAdmin;
 //import org.eclipse.ecf.osgi.services.remoteserviceadmin.RemoteServiceAdmin.ExportRegistration;
 import org.osgi.framework.BundleActivator;
@@ -13,6 +9,10 @@ import org.osgi.framework.ServiceRegistration;
 
 import eu.scasefp7.eclipse.services.nlp.INLPService;
 
+/**
+ * @author emaorli
+ *
+ */
 public class Activator implements BundleActivator {
 
     private ServiceRegistration<INLPService> nlpRegistration = null;

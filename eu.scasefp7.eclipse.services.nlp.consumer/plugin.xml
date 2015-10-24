@@ -8,7 +8,8 @@
             locationURI="menu:org.eclipse.ui.main.menu?after=additions">
          <menu
                id="eu.scasefp7.eclipse.menu.main"
-               label="S-CASE">
+               label="S-CASE"
+               mnemonic="S">
             <command
                   commandId="eu.scasefp7.eclipse.services.nlp.consumer.invoke"
                   style="push">

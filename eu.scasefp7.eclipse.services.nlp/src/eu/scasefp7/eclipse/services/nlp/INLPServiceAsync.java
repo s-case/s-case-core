@@ -128,6 +128,11 @@ public interface INLPServiceAsync {
      * 
      * JSONObject["..."] not found.
      * 
+     * 
+     * @param phrase to annotate
+     * @param language of the phrase
+     * @param annotation_format for the result
+     * @return analyzed annotations
      */
     public CompletableFuture<Annotation> annotatePhraseAsync(String phrase, String language, AnnotationFormat annotation_format);
         
@@ -206,6 +211,10 @@ public interface INLPServiceAsync {
     * 
     * JSONObject["..."] not found.
     * 
+    * @param sentence to annotate
+    * @param language of the sentence
+    * @param annotation_format for the result
+    * @return analyzed annotations
     */
     public CompletableFuture<Annotation> annotateSentenceAsync(String sentence, String language, AnnotationFormat annotation_format);
 
@@ -295,6 +304,12 @@ public interface INLPServiceAsync {
      * Body
      * 
      * JSONObject["..."] not found.
+     * 
+     * @param project_name to annotate
+     * @param project_requirements describing the project
+     * @param language of the requirements
+     * @param annotation_format for the result
+     * @return analyzed annotations
     */
     public CompletableFuture<Annotation[]> annotateProjectAsync(String project_name, Collection<String> project_requirements, String language, AnnotationFormat annotation_format);
     
@@ -369,6 +384,10 @@ public interface INLPServiceAsync {
      * Body
      * 
      * JSONObject["..."] not found.
+     * 
+     * @param question to analyze
+     * @param language of the question
+     * @return extracted keywords
      */
      public CompletableFuture<Terms> extractQueryTermsAsync(String question, String language);
     

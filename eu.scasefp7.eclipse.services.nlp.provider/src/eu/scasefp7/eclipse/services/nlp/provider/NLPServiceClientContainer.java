@@ -24,12 +24,23 @@ import org.eclipse.ecf.remoteservice.rest.client.RestClientContainerInstantiator
 
 import eu.scasefp7.eclipse.services.nlp.INLPService;
 
+/**
+ * Client container for the NLP service.
+ * 
+ * @author Marin Orlić
+ */
 public class NLPServiceClientContainer extends RestClientContainer {
 
+    /**
+     * ID of the container
+     */
     public static final String CONTAINER_TYPE_NAME = "eu.scasefp7.eclipse.services.nlp";
 
     private IRemoteServiceRegistration serviceRegistration;
 
+    /**
+     * Container instantiator
+     */
     public static class Instantiator extends RestClientContainerInstantiator {
 
         /**
@@ -81,7 +92,7 @@ public class NLPServiceClientContainer extends RestClientContainer {
         // Set the connectTargetID in the RestClientContainer super class
         super.connect(targetID, connectContext);
 
-        // we will use default parameters (for username see parameters below)
+        // we will use default parameters (for user name see parameters below)
         setAlwaysSendDefaultParameters(false);
 
         IRemoteCallable annotatePhrase = createCallableAnnotatePhrase();

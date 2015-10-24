@@ -27,14 +27,17 @@ import eu.scasefp7.eclipse.services.nlp.NLPException;
  * No manual housekeeping is needed, everything is handled by OSGi.
  * Service reference will be provided by OSGi, as declared in OSGI-INF/nlp.xml descriptor.
  * 
- * @see OSGI-INF/nlp.xml
- * @author Marin Orlic
+ * @author Marin Orlić
  */
 public class NLPConsumer {
 
     private INLPService service;
     
-    // Method will be used by DS to set the quote service
+    /**
+     * OSGi DS will use this method to set the NLP service reference.
+     * 
+     * @param service resolved service
+     */
     public synchronized void setNLPService(INLPService service) {
         System.out.println("Service was set. Thank you DS!");
         this.service = service;
@@ -50,7 +53,11 @@ public class NLPConsumer {
         }
     }
 
-    // Method will be used by DS to unset the quote service
+    /**
+     * OSGi DS will use this method to unset the NLP service reference.
+     * 
+     * @param service removed service
+     */
     public synchronized void unsetNLPService(INLPService service) {
         System.out.println("Service was unset. Why did you do this to me?");
         if (this.service == service) {

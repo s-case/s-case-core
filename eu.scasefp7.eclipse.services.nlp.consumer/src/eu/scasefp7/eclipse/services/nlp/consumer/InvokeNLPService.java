@@ -36,6 +36,9 @@ public class InvokeNLPService extends AbstractHandler {
     private ServiceTracker<INLPServiceAsync, INLPServiceAsync> tracker = null;
     private boolean serviceExists = true;
     
+    /**
+     * Constructor
+     */
     public InvokeNLPService() {
         BundleContext context = Activator.getContext();
 

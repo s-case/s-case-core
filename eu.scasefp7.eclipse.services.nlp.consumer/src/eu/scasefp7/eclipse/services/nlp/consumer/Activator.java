@@ -9,6 +9,10 @@ import org.osgi.util.tracker.ServiceTrackerCustomizer;
 import eu.scasefp7.eclipse.services.nlp.AnnotationFormat;
 import eu.scasefp7.eclipse.services.nlp.INLPServiceAsync;
 
+/**
+ * @author emaorli
+ *
+ */
 public class Activator implements BundleActivator, ServiceTrackerCustomizer<INLPServiceAsync, INLPServiceAsync>  {
 
 	private static BundleContext context;

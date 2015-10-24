@@ -5,7 +5,10 @@ package eu.scasefp7.eclipse.services.nlp;
  * @author Marin Orlic
  */
 public enum AnnotationFormat {
+    
+    /** ANN format */
     ANN("ann"),
+    /** TTL format */
     TTL("ttl");
 
     private String textValue;
@@ -18,6 +21,12 @@ public enum AnnotationFormat {
         return this.textValue;
     }
     
+    /**
+     * Creates the annotation from format string (ann/ttl).
+     * 
+     * @param text format string
+     * @return annotation
+     */
     public static AnnotationFormat fromString(String text) {
         if (text != null) {
             for (AnnotationFormat a : AnnotationFormat.values()) {

@@ -27,10 +27,21 @@ public class Annotation {
     String[] annotations;
     AnnotationFormat format;
     
+    /**
+     * Constructs the annotation
+     */
     public Annotation() {
         
     }
     
+    /**
+     * Constructs the annotation and fills in the data
+     * 
+     * @param id identifier
+     * @param text annotation text
+     * @param annotations for the text
+     * @param format of the annotation
+     */
     public Annotation(String id, String text, String[] annotations, AnnotationFormat format) {
         this.id = id;
         this.text = text;
