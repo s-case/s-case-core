@@ -38,8 +38,8 @@ public class NLPServiceRESTClientService extends RestClientService
         }
 
         /**
-         * @throws UnsupportedEncodingException 
-         * @throws ECFException  
+         * @throws UnsupportedEncodingException if the encoding is not supported
+         * @throws NotSerializableException if the data cannot be serialized
          */
         protected HttpRequestBase preparePostMethod(String uri, IRemoteCall call, IRemoteCallable callable) throws NotSerializableException, UnsupportedEncodingException {
             HttpPost result = new HttpPost(uri);
