@@ -5,7 +5,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintWriter;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
 import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
@@ -21,6 +20,7 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Property;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Resource;
+import eu.scasefp7.eclipse.core.ontologytoyamltools.Resources;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Stemmer;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.VerbTypeFinder;
 
@@ -43,7 +43,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 
 			// Load the ontology
 			LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(project);
-			ArrayList<Resource> resources = createResources(linkedOntology);
+			Resources resources = createResources(linkedOntology);
 			writeYamlFile(project, resources);
 		}
 		return null;
@@ -53,56 +53,48 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 * Creates the resources for the YAML file given the linked ontology.
 	 * 
 	 * @param linkedOntology the linked ontology that contains all the elements.
-	 * @return an {@link ArrayList} of resources.
+	 * @return a list of resources.
 	 */
-	private ArrayList<Resource> createResources(LinkedOntologyAPI linkedOntology) throws ExecutionException {
+	private Resources createResources(LinkedOntologyAPI linkedOntology) throws ExecutionException {
 		// Verb type finder determining whether a verb is CRUD
 		VerbTypeFinder verbTypeFinder = new VerbTypeFinder();
 
 		// Iterate over all resources
-		ArrayList<Resource> resources = new ArrayList<Resource>();
+		Resources resources = new Resources();
 		for (String resourceName : linkedOntology.getResources()) {
 
-			Resource resource = new Resource(Stemmer.stem(resourceName));
-			if (!resources.contains(resource)) {
-
-				// Iterate over each activity of this resource
-				for (String activity : linkedOntology.getActivitiesOfResource(resourceName)) {
-					String action = linkedOntology.getActionOfActivity(activity);
-					String actiontype = linkedOntology.getActivityTypeOfActivity(activity);
-					if (actiontype == null || actiontype.equals("Other")) {
-						// Use automatic verb type finder
-						String verbtype = verbTypeFinder.getVerbType(action);
-						if (verbTypeFinder.getVerbType(action).equals("Other")) {
-							// Verb is of type Other
-							String stemmedAction = Stemmer.stem(action);
-							String algorithmicResourceName = Stemmer.stem(resourceName)
-									+ stemmedAction.substring(0, 1).toUpperCase() + stemmedAction.substring(1);
-							Resource algoresource = new Resource(algorithmicResourceName, true);
-							if (!resources.contains(algoresource)) {
-								resource.addRelatedResource(algorithmicResourceName);
-								resources.add(algoresource);
-							}
-						} else
-							// Verb is CRUD
-							resource.addCRUDActivity(verbtype);
+			Resource resource = resources.getResourceByName(Stemmer.stem(resourceName));
+			// Iterate over each activity of this resource
+			for (String activity : linkedOntology.getActivitiesOfResource(resourceName)) {
+				String action = linkedOntology.getActionOfActivity(activity);
+				String actiontype = linkedOntology.getActivityTypeOfActivity(activity);
+				if (actiontype == null || actiontype.equals("Other")) {
+					// Use automatic verb type finder
+					String verbtype = verbTypeFinder.getVerbType(action);
+					if (verbTypeFinder.getVerbType(action).equals("Other")) {
+						// Verb is of type Other
+						String stemmedAction = Stemmer.stem(action);
+						String algorithmicResourceName = Stemmer.stem(resourceName)
+								+ stemmedAction.substring(0, 1).toUpperCase() + stemmedAction.substring(1);
+						resources.addResourceIfItDoesNotExist(algorithmicResourceName, true);
+						resource.addRelatedResource(algorithmicResourceName);
 					} else
 						// Verb is CRUD
-						resource.addCRUDActivity(actiontype);
+						resource.addCRUDActivity(verbtype);
+				} else
+					// Verb is CRUD
+					resource.addCRUDActivity(actiontype);
 
-					// Iterate over next activities
-					for (String next_activity : linkedOntology.getNextActivitiesOfActivity(activity)) {
-						String relatedResource = linkedOntology.getResourceOfActivity(next_activity);
-						resource.addRelatedResource(Stemmer.stem(relatedResource));
-					}
+				// Iterate over next activities
+				for (String next_activity : linkedOntology.getNextActivitiesOfActivity(activity)) {
+					String relatedResource = linkedOntology.getResourceOfActivity(next_activity);
+					resource.addRelatedResource(Stemmer.stem(relatedResource));
 				}
 
 				// Iterate over each property of this resource
 				for (String property : linkedOntology.getPropertiesOfResource(resourceName)) {
 					resource.addProperty(new Property(Stemmer.stem(property)));
 				}
-
-				resources.add(resource);
 			}
 		}
 		return resources;
@@ -114,7 +106,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 * @param project the project in which the YAML file is written.
 	 * @param resources the resources to be written in the YAML file.
 	 */
-	private void writeYamlFile(IProject project, ArrayList<Resource> resources) throws ExecutionException {
+	private void writeYamlFile(IProject project, Resources resources) throws ExecutionException {
 		// Open a new YAML file in the project
 		IFile file = project.getFile("service.yml");
 		if (file.exists()) {
@@ -146,7 +138,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	public static void main(String[] args) {
 		LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI("Restmarks", false);
 		try {
-			ArrayList<Resource> resources = new OntologyToYamlHandler().createResources(linkedOntology);
+			Resources resources = new OntologyToYamlHandler().createResources(linkedOntology);
 			String ymlContents = "";
 			for (Resource resource : resources) {
 				ymlContents += resource.toYAMLString() + "\n\n";
