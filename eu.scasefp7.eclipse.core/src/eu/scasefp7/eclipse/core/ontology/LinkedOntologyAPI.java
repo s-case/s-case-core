@@ -60,6 +60,19 @@ public class LinkedOntologyAPI {
 	}
 
 	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
+	 * @param forceDelete delete any existing ontology file.
+	 */
+	public LinkedOntologyAPI(String projectName, boolean forceDelete) {
+		linkedOntology = new OntologyJenaAPI(null, OntologyType.LINKED,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
+		this.projectName = projectName;
+		linkedOntology.addIndividual("Project", projectName);
+	}
+
+	/**
 	 * Connects the project to an element of the ontology.
 	 * 
 	 * @param elementName the element to be connected to the project.
