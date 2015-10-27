@@ -33,26 +33,26 @@ public class VerbTypeFinder {
 		ArrayList<String> createverbs = new ArrayList<String>(Arrays.asList(new String[] { "create", "add", "produce",
 				"make", "put", "write", "pay", "create", "send", "build", "raise", "develop", "produce", "register" }));
 		for (String verb : createverbs)
-			CREATE_VERBS.add(Stemmer.stem(verb));
+			CREATE_VERBS.add(Stemmer.stemVerb(verb));
 
 		READ_VERBS = new HashSet<String>();
 		ArrayList<String> readverbs = new ArrayList<String>(Arrays.asList(new String[] { "retrieve", "check", "choose",
 				"return", "search", "provide", "contact", "get", "take", "see", "find", "ask", "show", "watch", "read",
 				"open", "reach", "return", "receive", "view" }));
 		for (String verb : readverbs)
-			READ_VERBS.add(Stemmer.stem(verb));
+			READ_VERBS.add(Stemmer.stemVerb(verb));
 
 		UPDATE_VERBS = new HashSet<String>();
 		ArrayList<String> updateverbs = new ArrayList<String>(Arrays.asList(new String[] { "perform", "mark",
 				"evaluate", "update", "set", "change" }));
 		for (String verb : updateverbs)
-			UPDATE_VERBS.add(Stemmer.stem(verb));
+			UPDATE_VERBS.add(Stemmer.stemVerb(verb));
 
 		DELETE_VERBS = new HashSet<String>();
 		ArrayList<String> deleteverbs = new ArrayList<String>(
 				Arrays.asList(new String[] { "delete", "destroy", "kill" }));
 		for (String verb : deleteverbs)
-			DELETE_VERBS.add(Stemmer.stem(verb));
+			DELETE_VERBS.add(Stemmer.stemVerb(verb));
 	}
 
 	/**
@@ -64,7 +64,7 @@ public class VerbTypeFinder {
 	 *         {@code "Delete"} or {@code "Other"}
 	 */
 	public String getVerbType(String verb) {
-		verb = Stemmer.stem(verb);
+		verb = Stemmer.stemVerb(verb);
 		if (CREATE_VERBS.contains(verb)) {
 			return "Create";
 		} else if (READ_VERBS.contains(verb)) {

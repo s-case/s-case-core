@@ -63,7 +63,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		Resources resources = new Resources();
 		for (String resourceName : linkedOntology.getResources()) {
 
-			Resource resource = resources.getResourceByName(Stemmer.stem(resourceName));
+			Resource resource = resources.getResourceByName(Stemmer.stemNoun(resourceName));
 			// Iterate over each activity of this resource
 			for (String activity : linkedOntology.getActivitiesOfResource(resourceName)) {
 				String action = linkedOntology.getActionOfActivity(activity);
@@ -73,8 +73,8 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 					String verbtype = verbTypeFinder.getVerbType(action);
 					if (verbTypeFinder.getVerbType(action).equals("Other")) {
 						// Verb is of type Other
-						String stemmedAction = Stemmer.stem(action);
-						String algorithmicResourceName = Stemmer.stem(resourceName)
+						String stemmedAction = Stemmer.stemVerb(action);
+						String algorithmicResourceName = Stemmer.stemNoun(resourceName)
 								+ stemmedAction.substring(0, 1).toUpperCase() + stemmedAction.substring(1);
 						resources.addResourceIfItDoesNotExist(algorithmicResourceName, true);
 						resource.addRelatedResource(algorithmicResourceName);
@@ -88,12 +88,12 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 				// Iterate over next activities
 				for (String next_activity : linkedOntology.getNextActivitiesOfActivity(activity)) {
 					String relatedResource = linkedOntology.getResourceOfActivity(next_activity);
-					resource.addRelatedResource(Stemmer.stem(relatedResource));
+					resource.addRelatedResource(Stemmer.stemNoun(relatedResource));
 				}
 
 				// Iterate over each property of this resource
 				for (String property : linkedOntology.getPropertiesOfResource(resourceName)) {
-					resource.addProperty(new Property(Stemmer.stem(property)));
+					resource.addProperty(new Property(Stemmer.stemNoun(property)));
 				}
 			}
 		}
