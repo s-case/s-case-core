@@ -62,8 +62,13 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		// Iterate over all resources
 		Resources resources = new Resources();
 		for (String resourceName : linkedOntology.getResources()) {
-
 			Resource resource = resources.getResourceByName(Stemmer.stemNoun(resourceName));
+
+			// Iterate over each related resource of this resource
+			for (String relatedResourceName : linkedOntology.getRelatedResourcesOfResource(resourceName)) {
+				resource.addRelatedResource(Stemmer.stemNoun(relatedResourceName));
+			}
+
 			// Iterate over each activity of this resource
 			for (String activity : linkedOntology.getActivitiesOfResource(resourceName)) {
 				String action = linkedOntology.getActionOfActivity(activity);
