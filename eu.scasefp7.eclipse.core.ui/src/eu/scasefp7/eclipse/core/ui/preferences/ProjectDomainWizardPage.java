@@ -1,9 +1,5 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IProject;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
@@ -12,6 +8,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.wizard.IWizardPage;
+import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -21,18 +19,17 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
-import org.eclipse.ui.dialogs.PropertyPage;
 
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
 /**
- * @author emaorli
+ * @author Marin Orlic
  *
  */
-public class ProjectDomainPropertyPage extends PropertyPage {
+public class ProjectDomainWizardPage extends WizardPage implements IWizardPage {
 
-	private static final String DOMAIN_PROPERTY = "eu.scasefp7.eclipse.core.projectDomain";
+//	private static final String DOMAIN_PROPERTY = "eu.scasefp7.eclipse.core.projectDomain";
 	private static final int DOMAIN_DEFAULT = -1;
 	
 	private Label domainLabel;
@@ -81,8 +78,9 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * Constructor for ProjectDomainPropertyPage.
 	 * Sets the message and description.
 	 */
-	public ProjectDomainPropertyPage() {
-		super();
+	public ProjectDomainWizardPage() {
+		//super();
+	    super("Project domain");
 		setMessage("Project domain");
 		setDescription("Configures project semantical domain");
 	}
@@ -99,17 +97,18 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * @return domain code
 	 */
 	private int loadProperties() {
-		// Populate domain label
-		try {
-			IResource project = ((IProject) getElement().getAdapter(IResource.class));
-			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
-			if(domain != null) {
-				return Integer.parseInt(domain);
-			}
-		} catch (CoreException | NumberFormatException e) {
-			return DOMAIN_DEFAULT;
+		if(false) {
+    	    // Populate domain label
+//    		try {
+//    			IResource project = ((IProject) getElement().getAdapter(IResource.class));
+//    			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
+//    			if(domain != null) {
+//    				return Integer.parseInt(domain);
+//    			}
+//    		} catch (CoreException | NumberFormatException e) {
+//    			return DOMAIN_DEFAULT;
+//    		}
 		}
-		
 		return DOMAIN_DEFAULT;
 	}
 
@@ -154,7 +153,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	
-	protected void createDomainLabel(Composite parent, Object data) {
+	private void createDomainLabel(Composite parent, Object data) {
 		cmpLabels = new Composite(parent, SWT.NONE);
 		GridLayout gl_cmpLabels = new GridLayout(2, false);
 		gl_cmpLabels.marginWidth = 0;
@@ -222,11 +221,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		//super.addListeners(tree);
 		return tree;
 	}
-	public Label getDomainLabel(){
-		
-		return domainLabel;
-		
-	}
+	
 	protected DomainEntry getSingleSelection(ISelection selection)
 	{
 	  if (!selection.isEmpty()) {
@@ -244,21 +239,24 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 
 	protected void performDefaults() {
-		super.performDefaults();
+		//super.performDefaults();
 		// Populate the owner text field with the default value
 //		ownerText.setText(DEFAULT_OWNER);
 	}
 	
+	/**
+	 * @return true
+	 */
 	public boolean performOk() {
 		// Store the value in properties
-		try {
-			DomainEntry de = (DomainEntry) domainLabel.getData();
-			if(de != null) {
-				((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
-			}
-		} catch (CoreException e) {
-			return false;
-		}
+//		try {
+//			DomainEntry de = (DomainEntry) domainLabel.getData();
+//			if(de != null) {
+//				((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+//			}
+//		} catch (CoreException e) {
+//			return false;
+//		}
 		return true;
 	}
 
@@ -266,12 +264,12 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * {@inheritDoc}
 	 * @see org.eclipse.jface.preference.PreferencePage#isValid()
 	 */
-	@Override
+	/*@Override
 	public boolean isValid() {
 		// TODO Auto-generated method stub
 		return super.isValid();
 	}
-
+*/
 	/**
 	 * @param selection
 	 */
@@ -289,5 +287,11 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 			domainLabel.setData(domain);
 		}
 	}
+
+    @Override
+    public void createControl(Composite parent) {
+        createContents(parent);
+        setControl(parent);
+    }
 
 }

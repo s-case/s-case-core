@@ -10,6 +10,10 @@ public final class PreferenceConstants {
     
     /** Use project prefs to override global ones */
     public static final String P_USE_PROJECT_PREFS = "useProjectPreferences"; //$NON-NLS-1$
+    
+    /** Endpoint for the NLP service */
+    public static final String P_NLP_ENDPOINT = "nlpServiceURI"; //$NON-NLS-1$
    
-	
+    /** Project semantic domain */
+    public static final String P_PROJECT_DOMAIN = "projectDomain"; //$NON-NLS-1$
 }

@@ -2,9 +2,11 @@ package eu.scasefp7.eclipse.core.ui.preferences;
 
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.Assert;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -12,6 +14,8 @@ import org.eclipse.jface.viewers.SelectionChangedEvent;
 import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.jface.viewers.TreeViewer;
 import org.eclipse.jface.viewers.ViewerFilter;
+import org.eclipse.jface.wizard.IWizard;
+import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
@@ -27,10 +31,10 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
 /**
- * @author emaorli
+ * @author Marin Orlic
  *
  */
-public class ProjectDomainPropertyPage extends PropertyPage {
+public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements IWizardPage {
 
 	private static final String DOMAIN_PROPERTY = "eu.scasefp7.eclipse.core.projectDomain";
 	private static final int DOMAIN_DEFAULT = -1;
@@ -44,6 +48,29 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	
 	protected DomainFilteredTree filteredTree;
 	protected TreeViewer treeViewer;
+	
+	/**
+     * This page's name.
+     */
+    private String name;
+
+    /**
+     * The wizard to which this page belongs; <code>null</code>
+     * if this page has yet to be added to a wizard.
+     */
+    private IWizard wizard = null;
+
+    /**
+     * Indicates whether this page is complete.
+     */
+    private boolean isPageComplete = true;
+
+    /**
+     * The page that was shown right before this page became visible;
+     * <code>null</code> if none.
+     */
+    private IWizardPage previousPage = null;
+
 	
 	protected class DomainFilteredTree extends FilteredTree {
 		private ViewerFilter viewerFilter;
@@ -81,11 +108,39 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * Constructor for ProjectDomainPropertyPage.
 	 * Sets the message and description.
 	 */
-	public ProjectDomainPropertyPage() {
+	public ProjectDomainPropertyAndWizardPage() {
 		super();
 		setMessage("Project domain");
 		setDescription("Configures project semantical domain");
 	}
+	
+    /**
+     * Creates a new wizard page with the given name, and
+     * with no title or image.
+     *
+     * @param pageName the name of the page
+     */
+    protected ProjectDomainPropertyAndWizardPage(String pageName) {
+        this(pageName, null, (ImageDescriptor) null);
+    }
+
+    /**
+     * Creates a new wizard page with the given name, title, and image.
+     *
+     * @param pageName the name of the page
+     * @param title the title for this wizard page,
+     *   or <code>null</code> if none
+     * @param titleImage the image descriptor for the title of this wizard page,
+     *   or <code>null</code> if none
+     */
+    protected ProjectDomainPropertyAndWizardPage(String pageName, String title,
+            ImageDescriptor titleImage) {
+        super();
+        this.setTitle(title);
+        this.setImageDescriptor(titleImage);
+        Assert.isNotNull(pageName); // page name must not be null
+        name = pageName;
+    }
 	
 	protected void setContentAndLabelProviders(TreeViewer treeViewer)
 	{
@@ -100,6 +155,9 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 */
 	private int loadProperties() {
 		// Populate domain label
+	    if (getElement() == null)
+	        return DOMAIN_DEFAULT;
+	    
 		try {
 			IResource project = ((IProject) getElement().getAdapter(IResource.class));
 			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
@@ -154,7 +212,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	
-	protected void createDomainLabel(Composite parent, Object data) {
+	private void createDomainLabel(Composite parent, Object data) {
 		cmpLabels = new Composite(parent, SWT.NONE);
 		GridLayout gl_cmpLabels = new GridLayout(2, false);
 		gl_cmpLabels.marginWidth = 0;
@@ -222,11 +280,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		//super.addListeners(tree);
 		return tree;
 	}
-	public Label getDomainLabel(){
-		
-		return domainLabel;
-		
-	}
+	
 	protected DomainEntry getSingleSelection(ISelection selection)
 	{
 	  if (!selection.isEmpty()) {
@@ -263,16 +317,6 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 
 	/**
-	 * {@inheritDoc}
-	 * @see org.eclipse.jface.preference.PreferencePage#isValid()
-	 */
-	@Override
-	public boolean isValid() {
-		// TODO Auto-generated method stub
-		return super.isValid();
-	}
-
-	/**
 	 * @param selection
 	 */
 	private void updateDomainLabel(DomainEntry domain) {
@@ -289,5 +333,102 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 			domainLabel.setData(domain);
 		}
 	}
+
+    @Override
+    public void createControl(Composite parent) {
+        super.createControl(parent);
+//        createContents(parent);
+        setControl(parent);
+    }
+	
+    @Override
+    public boolean canFlipToNextPage() {
+        return isPageComplete() && getNextPage() != null;
+    }
+
+    @Override
+    public String getName() {
+        return name;
+    }
+
+    @Override
+    public IWizardPage getNextPage() {
+        if (wizard == null) {
+            return null;
+        }
+        return wizard.getNextPage(this);
+    }
+
+    @Override
+    public IWizardPage getPreviousPage() {
+        if (previousPage != null) {
+            return previousPage;
+        }
+
+        if (wizard == null) {
+            return null;
+        }
+
+        return wizard.getPreviousPage(this);
+    }
+
+    @Override
+    public IWizard getWizard() {
+        return wizard;
+    }
+
+    @Override
+    public boolean isPageComplete() {
+        return isPageComplete;
+    }
+
+    @Override
+    public void setPreviousPage(IWizardPage page) {
+        previousPage = page;
+    }
+
+    /**
+     * Returns whether this page is the current one in the wizard's container.
+     *
+     * @return <code>true</code> if the page is active,
+     *  and <code>false</code> otherwise
+     */
+    protected boolean isCurrentPage() {
+        return (getContainer() != null 
+                && getContainer() == wizard.getContainer()
+                && this == wizard.getContainer().getCurrentPage());
+    }
+
+    
+    /**
+     * The <code>WizardPage</code> implementation of this method 
+     * declared on <code>DialogPage</code> updates the container
+     * if this is the current page.
+     */
+    @Override
+    public void setMessage(String newMessage, int newType) {
+        super.setMessage(newMessage, newType);
+        if (isCurrentPage()) { // TODO
+            getContainer().updateMessage();
+        }
+    }
+    
+    /**
+     * The <code>WizardPage</code> implementation of this <code>IDialogPage</code>
+     * method extends the <code>DialogPage</code> implementation to update
+     * the wizard container title bar. Subclasses may extend.
+     */
+    @Override
+    public void setDescription(String description) {
+        super.setDescription(description);
+        if (wizard != null) {
+            wizard.getContainer().updateTitleBar();
+        }
+    }
+    
+    @Override
+    public void setWizard(IWizard newWizard) {
+        wizard = newWizard;
+    }
 
 }
