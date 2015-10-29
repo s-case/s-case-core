@@ -7,6 +7,11 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.Platform;
 
+/**
+ * Abstract handler with a convenience method to get the project out of selection list.
+ * 
+ * @author themis
+ */
 public abstract class ProjectAwareHandler extends AbstractHandler {
 
 	/**

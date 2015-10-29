@@ -15,6 +15,12 @@
             id="eu.scasefp7.eclipse.core.commands.exportToYaml"
             name="Export ontology to YAML">
       </command>
+      <command
+            categoryId="eu.scasefp7.eclipse.core.commands.category"
+            id="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
+            name="Add/remove S-CASE project nature">
+      </command>
+
    </extension>
 
    <extension point="org.eclipse.ui.handlers">
@@ -32,9 +38,6 @@
 		 </enabledWhen>
 		 -->
       </handler>
-   </extension>
-   
-   <extension point="org.eclipse.ui.handlers">
       <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.testSetup">
       	 <enabledWhen>
       	 	<with variable="selection">
@@ -49,10 +52,42 @@
 		    </with>         
 		 </enabledWhen>
       </handler>
-   </extension>
-   
-   <extension point="org.eclipse.ui.handlers">
       <handler class="eu.scasefp7.eclipse.core.handlers.OntologyToYamlHandler" commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"/>
+      <handler class="eu.scasefp7.eclipse.core.handlers.AddRemoveScaseNatureHandler" commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"/>
    </extension>
   
+   <extension
+        id="scaseNature"
+        name="S-CASE project nature"
+        point="org.eclipse.core.resources.natures">
+     <runtime>
+        <run class="eu.scasefp7.eclipse.core.builder.ScaseNature"/>
+     </runtime>
+     <builder
+           id="eu.scasefp7.eclipse.core.scaseBuilder">
+     </builder>
+  </extension>
+  <extension
+        id="scaseBuilder"
+        name="S-CASE project builder"
+        point="org.eclipse.core.resources.builders">
+     <builder
+           hasNature="true">
+        <run
+              class="eu.scasefp7.eclipse.core.builder.ScaseProjectBuilder">
+        </run>
+     </builder>
+  </extension>
+  
+  <extension
+        id="problemMarker"
+        name="Requirements problem"
+        point="org.eclipse.core.resources.markers">
+     <persistent
+           value="true">
+     </persistent>
+     <super
+           type="org.eclipse.core.resources.problemmarker">
+     </super>
+  </extension>
 </plugin>
