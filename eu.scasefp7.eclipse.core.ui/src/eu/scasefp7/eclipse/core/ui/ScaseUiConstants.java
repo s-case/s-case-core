@@ -32,6 +32,9 @@ public final class ScaseUiConstants {
 	/** S-CASE Perspective ID */
 	public static final String PERSPECTIVE = "eu.scasefp7.eclipse.core.ui.ScasePerspective"; //$NON-NLS-1$
 	
+	/** New S-CASE project wizard ID */
+	public static final String NEW_PROJECT_WIZARD = "eu.scasefp7.eclipse.core.ui.newProjectWizard"; //$NON-NLS-1$
+	
 	/** S-CASE Dashboard view ID */
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
 
@@ -40,6 +43,7 @@ public final class ScaseUiConstants {
 	
 	/** Link ontologies command ID*/
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
+	
 	
 	/* These are external, included here for convenience */
 	
