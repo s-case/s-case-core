@@ -11,7 +11,13 @@ public class OntologySource {
 	 * Enumeration for the three types of ontologies.
 	 */
 	public enum OntologyType {
-		STATIC, DYNAMIC, LINKED
+		
+	    /** Static ontology */
+	    STATIC, 
+		/** Dynamic ontology */
+		DYNAMIC, 
+		/** Linked ontology */
+		LINKED
 	}
 
 	/**
