@@ -76,11 +76,15 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
 //                executeCommand("eu.scasefp7.eclipse.storyboards.commands.exportToOntology", resource.getFullPath()
 //                        .toString());
 
-            if (resource instanceof IFile && (
-                    resource.getName().equals("StaticOntology.owl")
-                    || resource.getName().equals("DynamicOntology.owl"))) {
-                executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
-            }
+            
+//            if (resource instanceof IFile && (
+//                    resource.getName().equals("StaticOntology.owl")
+//                    || resource.getName().equals("DynamicOntology.owl"))) {
+//                executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
+//            }
+            
+            
+            
 //            
 //            if (fileExsists && other) {
 //                if (fileCount < 2)
