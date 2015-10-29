@@ -95,11 +95,11 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 					String relatedResource = linkedOntology.getResourceOfActivity(next_activity);
 					resource.addRelatedResource(Stemmer.stemNoun(relatedResource));
 				}
+			}
 
-				// Iterate over each property of this resource
-				for (String property : linkedOntology.getPropertiesOfResource(resourceName)) {
-					resource.addProperty(new Property(Stemmer.stemNoun(property)));
-				}
+			// Iterate over each property of this resource
+			for (String property : linkedOntology.getPropertiesOfResource(resourceName)) {
+				resource.addProperty(new Property(Stemmer.stemNoun(property)));
 			}
 		}
 		return resources;
