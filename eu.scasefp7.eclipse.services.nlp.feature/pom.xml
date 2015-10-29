@@ -6,7 +6,7 @@ xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xs
   <parent>
     <groupId>eu.scasefp7.eclipse</groupId>
     <artifactId>s-case-core</artifactId>
-    <version>1.1.0</version>
+    <version>1.1.1-SNAPSHOT</version>
   </parent>
 
   <artifactId>eu.scasefp7.eclipse.services.nlp.feature</artifactId>
