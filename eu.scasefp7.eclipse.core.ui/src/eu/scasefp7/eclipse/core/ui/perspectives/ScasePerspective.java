@@ -93,7 +93,8 @@ public class ScasePerspective implements IPerspectiveFactory {
 //		layout.addShowViewShortcut(TemplatesView.ID);
 		layout.addShowViewShortcut("org.eclipse.pde.runtime.LogView"); //$NON-NLS-1$
 
-		// new actions - Java project creation wizard
+		// new actions - project creation wizard
+        layout.addNewWizardShortcut(ScaseUiConstants.NEW_PROJECT_WIZARD);//$NON-NLS-1$
 /*		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.JavaProjectWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"); //$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewClassCreationWizard"); //$NON-NLS-1$

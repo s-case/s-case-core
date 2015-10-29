@@ -128,7 +128,7 @@
   <!-- Dashboard commands -->
   <extension
         point="eu.scasefp7.eclipse.core.ui.dashboardItem">
-     <group
+ <!--    <group
            name="Project setup">
         <command
               commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
@@ -136,7 +136,7 @@
               label="Configure project"
               notification="Project successfully configured">
         </command>
-     </group>
+     </group> -->
      <group
            name="Static modeling">
         <command
@@ -167,15 +167,15 @@
               <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
      </group>
-     <group
+      <group
            name="Requirements compilation">
-        <command
+ <!--       <command
               commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
               error="Requrements compilation failed."
               label="Compile"
               notification="Requrements compiled successfully."
               tooltip="Compile requirements in text or storyboards">
-        </command>
+        </command>-->
         <command
               commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
               error="Requrements compilation failed."
@@ -197,6 +197,9 @@
               tooltip="Ontologies linked successfully."
               error="Ontologies linking failed.">
         </command>
+     </group>
+     <group
+           name="Model-driven engineering">
         <command
               commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
               label="Export to YAML"
@@ -204,9 +207,6 @@
               error="YAML export failed."
               tooltip="Create a YAML description of the system.">
         </command>
-     </group>
-     <group
-           name="Model-driven engineering">
         <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
               error="Code generation failed."

@@ -61,4 +61,10 @@ public final class ScaseUiConstants {
 	
 	/** Storyboard editor ontology export command */
 	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology"; //$NON-NLS-1$
+
+	/** Property for project domain */ //TODO-move to prefs
+    public static final String PROP_PROJECT_DOMAIN = "eu.scasefp7.eclipse.core.projectDomain"; //$NON-NLS-1$
+    
+    /** Default project domain (unset) */
+    public static final int PROP_PROJECT_DOMAIN_DEFAULT = -1;
 }
