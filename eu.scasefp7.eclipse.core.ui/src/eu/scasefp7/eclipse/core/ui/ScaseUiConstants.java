@@ -60,5 +60,5 @@ public final class ScaseUiConstants {
 	public static final String STORYBOARD_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID"; //$NON-NLS-1$
 	
 	/** Storyboard editor ontology export command */
-	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportToOntology"; //$NON-NLS-1$
+	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology"; //$NON-NLS-1$
 }

@@ -30,12 +30,13 @@ public class Property {
 	}
 
 	/**
-	 * Initializes this object as a propertu given its name.
+	 * Initializes this object as a property given its name.
 	 * 
 	 * @param name the name of this property.
 	 */
 	public Property(String name) {
 		this.Name = name;
+		this.Type = "String";
 	}
 
 	/**

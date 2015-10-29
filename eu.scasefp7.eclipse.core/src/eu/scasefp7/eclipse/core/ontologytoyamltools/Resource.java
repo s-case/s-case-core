@@ -52,6 +52,8 @@ public class Resource {
 		CRUDActivities = new ArrayList<String>();
 		RelatedResources = new ArrayList<String>();
 		Properties = new ArrayList<Property>();
+		InputRepresentation = "JSON";
+		OutputRepresentation = "JSON";
 	}
 
 	/**

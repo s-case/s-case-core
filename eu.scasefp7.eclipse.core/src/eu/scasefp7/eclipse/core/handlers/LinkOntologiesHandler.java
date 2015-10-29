@@ -42,6 +42,16 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				// Add the object as a resource in the linked ontology
 				linkedOntology.addResource(object);
 
+				// Iterate over all related objects of the object and add them to the linked ontology
+				for (String relatedObject : staticOntology.getRelatedObjectsOfObject(object)) {
+					linkedOntology.addResource(relatedObject);
+					linkedOntology.addRelatedResourceToResource(object, relatedObject);
+					for (String requirement : staticOntology.getRequirementsOfConcept(relatedObject)) {
+						linkedOntology.addRequirement(requirement);
+						linkedOntology.connectRequirementToElement(requirement, relatedObject);
+					}
+				}
+
 				// Iterate over all properties of the object and add them to the linked ontology
 				for (String property : staticOntology.getPropertiesOfObject(object)) {
 					linkedOntology.addPropertyToResource(object, property);

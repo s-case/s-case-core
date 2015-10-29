@@ -203,6 +203,16 @@ public class LinkedOntologyAPI {
 	}
 
 	/**
+	 * Adds a related resource to a resource.
+	 * 
+	 * @param resourceName the name of the resource to relate the related resource to.
+	 * @param relatedResourceName the name of the related resource to be added.
+	 */
+	public void addRelatedResourceToResource(String resourceName, String relatedResourceName) {
+		linkedOntology.addPropertyAndReverseBetweenIndividuals(resourceName, "has_related_resource", relatedResourceName);
+	}
+
+	/**
 	 * Returns the resources of the ontology for the current project.
 	 * 
 	 * @return an {@link ArrayList} containing the names of the resources.
@@ -225,10 +235,20 @@ public class LinkedOntologyAPI {
 	 * Returns the properties of a specific resource.
 	 * 
 	 * @param resourceName the name of the resource of which the properties are returned.
-	 * @return an {@link ArrayList} containing the name of the properties.
+	 * @return an {@link ArrayList} containing the names of the properties.
 	 */
 	public ArrayList<String> getPropertiesOfResource(String resourceName) {
 		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(resourceName, "has_property");
+	}
+
+	/**
+	 * Returns the related resources of a specific resource.
+	 * 
+	 * @param resourceName the name of the resource of which the related resources are returned.
+	 * @return an {@link ArrayList} containing the names of the related resources.
+	 */
+	public ArrayList<String> getRelatedResourcesOfResource(String resourceName) {
+		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(resourceName, "has_related_resource");
 	}
 
 	/**
@@ -245,7 +265,7 @@ public class LinkedOntologyAPI {
 	 * Returns the forthcoming activities of a specific activity.
 	 * 
 	 * @param activityName the name of the activity of which the next activities are returned.
-	 * @return an {@link ArrayList} containing the name of the next activities.
+	 * @return an {@link ArrayList} containing the names of the next activities.
 	 */
 	public ArrayList<String> getNextActivitiesOfActivity(String activityName) {
 		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(activityName, "has_next_activity");

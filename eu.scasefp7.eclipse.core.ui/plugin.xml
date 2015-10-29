@@ -184,7 +184,7 @@
               tooltip="Compile textual requirements">
         </command>
         <command
-              commandId="eu.scasefp7.eclipse.storyboards.commands.exportToOntology"
+              commandId="eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology"
               error="Requrements compilation failed."
               label="Compile storyboards"
               notification="Requrements compiled successfully."
