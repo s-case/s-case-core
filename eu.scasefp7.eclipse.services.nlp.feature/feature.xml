@@ -2,7 +2,7 @@
 <feature
       id="eu.scasefp7.eclipse.services.nlp.feature"
       label="S-CASE NLP service client"
-      version="1.0.2.qualifier"
+      version="1.1.1.qualifier"
       provider-name="S-CASE Consortium"
       plugin="eu.scasefp7.eclipse.core.ui">
 

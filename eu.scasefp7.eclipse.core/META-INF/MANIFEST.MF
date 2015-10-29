@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Bundle-ManifestVersion: 2
 Bundle-Name: S-CASE Core
 Bundle-SymbolicName: eu.scasefp7.eclipse.core;singleton:=true
-Bundle-Version: 1.0.2.qualifier
+Bundle-Version: 1.1.1.qualifier
 Require-Bundle: org.eclipse.ui.workbench,
  org.eclipse.osgi,
  org.eclipse.core.runtime,
