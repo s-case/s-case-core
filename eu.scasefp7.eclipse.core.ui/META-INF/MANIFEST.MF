@@ -18,3 +18,4 @@ Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
 Bundle-Activator: eu.scasefp7.eclipse.core.ui.Activator
 Bundle-ActivationPolicy: lazy
+Import-Package: eu.scasefp7.eclipse.core.builder
