@@ -13,7 +13,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.mylyn.commons.workbench,
  org.eclipse.ui.forms
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Export-Package: eu.scasefp7.eclipse.core.ui;version="1.0.2.qualifier"
+Export-Package: eu.scasefp7.eclipse.core.ui
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
 Bundle-Activator: eu.scasefp7.eclipse.core.ui.Activator
