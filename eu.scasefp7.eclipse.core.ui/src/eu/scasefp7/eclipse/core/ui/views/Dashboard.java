@@ -44,6 +44,11 @@ import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
@@ -58,15 +63,19 @@ import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
 import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
 import org.eclipse.ui.IWorkbenchPage;
 import org.eclipse.ui.IWorkbenchPart;
 import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.menus.CommandContributionItem;
+import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
@@ -149,6 +158,10 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		parent.setLayout(rl_parent);
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
+		// Add menu and toolbar
+		hookContextMenu();
+        contributeToActionBars();
+		
 		// Read the configuration of the dashboard
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
         IConfigurationElement[] contributions = registry.getConfigurationElementsFor(ScaseUiConstants.DASHBOARD_EXTENSION);
@@ -227,6 +240,46 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
    
     }
 
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager("#PopupMenu");
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+            public void menuAboutToShow(IMenuManager manager) {
+                Dashboard.this.fillContextMenu(manager);
+            }
+        });
+    }
+
+    private void contributeToActionBars() {
+        IActionBars bars = getViewSite().getActionBars();
+        fillLocalPullDown(bars.getMenuManager());
+        fillLocalToolBar(bars.getToolBarManager());
+    }
+
+    private void fillLocalPullDown(IMenuManager manager) {
+//      manager.add(action1);
+        manager.add(new Separator());
+//      manager.add(action2);
+    }
+
+    private void fillContextMenu(IMenuManager manager) {
+//      manager.add(action1);
+//      manager.add(action2);
+        // Other plug-ins can contribute there actions here
+        manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+    }
+    
+    private void fillLocalToolBar(IToolBarManager manager) {
+//      manager.add(action1);
+//      manager.add(action2);
+        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
+            "eu", new HashMap(), null, null, null, "MENUUU", "C", 
+            "Shows the project properties pages", 
+            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
+        manager.add(new CommandContributionItem(param)); 
+    }
+
+    
     /**
      * Create a group and it's children based on the configuration element.
      * 
@@ -461,15 +514,16 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     }
 
     protected void notifyUser(String commandId, String message) {
-        
-        List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
-        
-        NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
-        
-        notifications.add(new DashboardNotification(commandId, getTitle(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK))); 
-                
-        popup.setContents(notifications);
-        popup.open();
+        if(message != null) {
+            List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
+            
+            NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
+            
+            notifications.add(new DashboardNotification(commandId, getPartName(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK))); 
+                    
+            popup.setContents(notifications);
+            popup.open();
+        }
     }
 
     protected void notifyUser(String commandId, String message, CommandException ex) {
@@ -477,8 +531,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         
         NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
         
-        notifications.add(new DashboardNotification(commandId, getTitle(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
-        notifications.add(new DashboardNotification(commandId, getTitle(), ex.getLocalizedMessage(), PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
+        notifications.add(new DashboardNotification(commandId, getPartName(), ((message != null) ? message + ": " : "") + ex.getLocalizedMessage(), PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
                 
         popup.setContents(notifications);
         popup.open();

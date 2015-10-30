@@ -25,6 +25,14 @@
          <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
          <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
       </perspectiveExtension>
+      
+      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+         <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
+      </perspectiveExtension>
+      
       <perspectiveExtension
             targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
          <view
@@ -33,7 +41,8 @@
                relationship="bottom">
          </view>
       </perspectiveExtension>
-  </extension>
+     </extension>
+  
   <extension
         point="org.eclipse.ui.views">
      <category
@@ -62,23 +71,26 @@
            natureId="eu.scasefp7.eclipse.core.scaseNature">
      </image>
   </extension>
-   <extension
+  
+  <extension
          point="org.eclipse.ui.newWizards">
       <category
             id="eu.scasefp7.eclipse.category"
             name="S-CASE">
       </category>
       <wizard
+            name="S-CASE Project"
+            icon="icons/view16/s-case_16.png"
             category="eu.scasefp7.eclipse.category"
             class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard"
             finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
             hasPages="true"
-            icon="icons/view16/s-case_16.png"
             id="eu.scasefp7.eclipse.core.ui.newProjectWizard"
-            name="S-CASE Project"
             project="true">
+      	<description>Create a new S-CASE project to specify requirements for web services</description>
       </wizard>
-      </extension>
+  </extension>
+  
   <extension
         point="org.eclipse.ui.propertyPages">
      <page

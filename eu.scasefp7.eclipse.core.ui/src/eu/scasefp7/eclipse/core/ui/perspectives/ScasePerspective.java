@@ -1,9 +1,13 @@
 package eu.scasefp7.eclipse.core.ui.perspectives;
 
+import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.progress.IProgressConstants;
+
+
+
 
 //import org.eclipse.ui.console.IConsoleConstants;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
@@ -43,20 +47,17 @@ public class ScasePerspective implements IPerspectiveFactory {
 
 		IFolderLayout folder = layout.createFolder(
 				"left", IPageLayout.LEFT, (float) 0.25, editorArea); //$NON-NLS-1$
-/*		folder.addView(JavaUI.ID_PACKAGES);
-		folder.addPlaceholder(JavaUI.ID_TYPE_HIERARCHY);
-		folder.addPlaceholder(JavaPlugin.ID_RES_NAV);
-*/		folder.addView(IPageLayout.ID_PROJECT_EXPLORER);
+		folder.addView("org.eclipse.jdt.ui.PackageExplorer"); //$NON-NLS-1$
+		folder.addView(IPageLayout.ID_PROJECT_EXPLORER);
 
 		IFolderLayout outputfolder = layout.createFolder(
 				"bottom", IPageLayout.BOTTOM, (float) 0.75, editorArea); //$NON-NLS-1$
+		
 		outputfolder.addView(IPageLayout.ID_PROBLEM_VIEW);
-//		outputfolder.addView(JavaUI.ID_JAVADOC_VIEW);
-//		outputfolder.addView(JavaUI.ID_SOURCE_VIEW);
-//		outputfolder.addPlaceholder(NewSearchUI.SEARCH_VIEW_ID);
+		outputfolder.addPlaceholder("org.eclipse.search.ui.views.SearchView"); //$NON-NLS-1$
 		outputfolder.addPlaceholder("org.eclipse.ui.console.ConsoleView"); //$NON-NLS-1$
-//		outputfolder.addPlaceholder(IPageLayout.ID_BOOKMARKS);
 		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET); //$NON-NLS-1$
+		
 		outputfolder.addView(ScaseUiConstants.DASHBOARD_VIEW); //$NON-NLS-1$
 		outputfolder.addView("eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView");
 
@@ -66,10 +67,11 @@ public class ScasePerspective implements IPerspectiveFactory {
 
 //		outlineFolder.addPlaceholder(TemplatesView.ID);
 
-/*		layout.addActionSet(IDebugUIConstants.LAUNCH_ACTION_SET);
-		layout.addActionSet(JavaUI.ID_ACTION_SET);
-		layout.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
-*/		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
+		layout.addActionSet("org.eclipse.debug.ui.launchActionSet"); //$NON-NLS-1$
+//		layout.addActionSet(JavaUI.ID_ACTION_SET);
+//		layout.addActionSet(JavaUI.ID_ELEMENT_CREATION_ACTION_SET);
+		layout.addActionSet("org.eclipse.search.searchActionSet"); //$NON-NLS-1$
+		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
 		// views - java
 /*		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
@@ -78,10 +80,10 @@ public class ScasePerspective implements IPerspectiveFactory {
 		layout.addShowViewShortcut(JavaUI.ID_JAVADOC_VIEW);
 */
 		// views - search
-//        layout.addShowViewShortcut(NewSearchUI.SEARCH_VIEW_ID);
-
+        layout.addShowViewShortcut("org.eclipse.search.ui.views.SearchView"); //$NON-NLS-1$
+      
 		// views - debugging
-//		layout.addShowViewShortcut(IConsoleConstants.ID_CONSOLE_VIEW);
+		layout.addShowViewShortcut("org.eclipse.ui.console.ConsoleView"); //$NON-NLS-1$
 
 		// views - standard workbench
 		layout.addShowViewShortcut(IPageLayout.ID_OUTLINE); //$NON-NLS-1$
@@ -95,25 +97,17 @@ public class ScasePerspective implements IPerspectiveFactory {
 
 		// new actions - project creation wizard
         layout.addNewWizardShortcut(ScaseUiConstants.NEW_PROJECT_WIZARD);//$NON-NLS-1$
-/*		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.JavaProjectWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewPackageCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewClassCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewInterfaceCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewEnumCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewAnnotationCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewSourceFolderCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewSnippetFileCreationWizard"); //$NON-NLS-1$
-		layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.NewJavaWorkingSetWizard"); //$NON-NLS-1$
-*/		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//$NON-NLS-1$
+        layout.addNewWizardShortcut("org.eclipse.jdt.ui.wizards.JavaProjectWizard"); //$NON-NLS-1$
+        //----
+        layout.addNewWizardShortcut(ScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);//$NON-NLS-1$
+        layout.addNewWizardShortcut(ScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);//$NON-NLS-1$
+		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");//$NON-NLS-1$
-		layout.addNewWizardShortcut(ScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);//$NON-NLS-1$
-        layout.addNewWizardShortcut(ScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);//$NON-NLS-1$
         
-
 		// 'Window' > 'Open Perspective' contributions
-        layout.addPerspectiveShortcut("eu.scasefp7.eclipse.core.ui.ScasePerspective");
-        layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");
+        layout.addPerspectiveShortcut("eu.scasefp7.eclipse.core.ui.ScasePerspective");//$NON-NLS-1$
+        layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");//$NON-NLS-1$
 
 	}
 }
