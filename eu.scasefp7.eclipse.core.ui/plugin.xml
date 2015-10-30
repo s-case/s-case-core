@@ -154,7 +154,7 @@
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create requirements"
-              tooltip="Create new textual requirements collection">
+              tooltip="Create a new textual requirements collection">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
         </command>
         <command
@@ -169,7 +169,7 @@
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create storyboards"
-              >
+              tooltip="Create a new storyboard to describe system behaviour">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
         </command>
         <command
@@ -206,7 +206,7 @@
               commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
               label="Link ontologies"
               notification="Ontologies linked successfully."
-              tooltip="Ontologies linked successfully."
+              tooltip="Link compiled requirements and storyboards"
               error="Ontologies linking failed.">
         </command>
      </group>
@@ -217,13 +217,13 @@
               label="Export to YAML"
               notification="YAML export complete."
               error="YAML export failed."
-              tooltip="Create a YAML description of the system.">
+              tooltip="Create a YAML description of the service resources">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
               error="Code generation failed."
               label="Generate code"
-              notification="Code generation complete.">
+              tooltip="Generate code for the web service">
         </command>
      </group>
      <group
