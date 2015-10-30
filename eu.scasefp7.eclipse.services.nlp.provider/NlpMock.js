@@ -32,6 +32,24 @@ module.exports = function(app) {
         return result;
     };
 
+    var getQuestionAnnotation = function() {
+        var result = {
+            "annotation_format": "ann",
+            "query_terms": [
+                "R1 ActsOn Arg1:T2 Arg2:T3",
+                "R2 HasProperty Arg1:T3 Arg2:T4",
+                "T1 Action 6 9 let",
+                "T2 Action 13 16 try",
+                "T3 Theme 30 40 invocation",
+                "T4 Property 22 29 service"
+            ],
+            "created_at": "2015-10-06T12:19Z",
+            "question": "First let me try some service invocation."
+        };
+
+        return result;
+    };
+
 
 
     app.get('/nlpserver', function(req, res) {
@@ -42,5 +60,8 @@ module.exports = function(app) {
         res.status(200).send(JSON.stringify(getSentenceAnnotation()));
     });
 
+    app.post('/nlpserver/question', function(req, res) {
+        res.status(200).send(JSON.stringify(getQuestionAnnotation()));
+    });
 
 };
