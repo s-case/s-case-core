@@ -1,5 +1,6 @@
 package eu.scasefp7.eclipse.core.ui;
 
+import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
@@ -61,4 +62,5 @@ public class Activator extends AbstractUIPlugin {
 	    }
 	    return images;
 	}
+	
 }

@@ -29,7 +29,6 @@ import org.eclipse.ui.services.IServiceLocator;
 
 public class SCaseBuilder extends IncrementalProjectBuilder {
 	
-	
 	class SampleDeltaVisitor implements IResourceDeltaVisitor {
 
 		public boolean visit(IResourceDelta delta) throws CoreException {
@@ -45,10 +44,9 @@ public class SCaseBuilder extends IncrementalProjectBuilder {
 			
 			return true;
 		}
-}
+	}
 
 
-	
 	class SampleResourceVisitor implements IResourceVisitor {
 		boolean fileExsists = false;
 		int fileCount = 0;
@@ -90,9 +88,7 @@ public class SCaseBuilder extends IncrementalProjectBuilder {
 		return false;
 	}
 	
-	
-	
-	
+
 	
 	protected void executeCommand(String commandId) {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
@@ -138,12 +134,6 @@ public class SCaseBuilder extends IncrementalProjectBuilder {
 		
 	}
 	
-	void linkOnthologies(){
-		
-		
-		
-	}
-
 
 	public static final String BUILDER_ID = "eu.scasefp7.eclipse.core.ui.scaseBuilder";
 
@@ -208,7 +198,7 @@ public class SCaseBuilder extends IncrementalProjectBuilder {
 		try {
 			clean(monitor);
 			getProject().accept(new SampleResourceVisitor());
-			executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
+			//executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
 			
 		} catch (CoreException e) {
 		}
@@ -222,7 +212,7 @@ public class SCaseBuilder extends IncrementalProjectBuilder {
 			 clean(monitor);
 			 //delta.accept(new SampleDeltaVisitor());
 			 getProject().accept(new SampleResourceVisitor());
-			 executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
+			// executeCommand("eu.scasefp7.eclipse.core.commands.linkOntologies");
 		} catch (CoreException e) {
 			System.out.println(e);
 		}
