@@ -33,7 +33,6 @@ import org.eclipse.core.commands.common.CommandException;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -214,7 +213,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     	}
     	
     	// Get the command service
-    	ICommandService commandService = (ICommandService) getSite().getService(ICommandService.class);
+    	ICommandService commandService = (ICommandService)getSite().getService(ICommandService.class);
     	
     	// Clear out the listeners
     	for(Map.Entry<ICommandListener, String> entry : this.registeredCommandListeners.entrySet()) {
@@ -273,7 +272,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 //      manager.add(action1);
 //      manager.add(action2);
         CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
-            "eu", new HashMap(), null, null, null, "MENUUU", "C", 
+            "eu", new HashMap<Object, Object>(), null, null, null, "MENUUU", "C", 
             "Shows the project properties pages", 
             CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
         manager.add(new CommandContributionItem(param)); 
@@ -400,7 +399,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		// IServiceLocator serviceLocator = getSite();
 
 		// Get CommandService
-		ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
+		ICommandService commandService = (ICommandService)serviceLocator.getService(ICommandService.class);
 		
 	    // Lookup commmand with its ID
 	    final Command command = commandService.getCommand(commandId);
@@ -439,8 +438,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
 
-		ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
-		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
+		ICommandService commandService = (ICommandService)serviceLocator.getService(ICommandService.class);
+		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		
 		try  { 
 		    // Lookup command with its ID
@@ -479,7 +478,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
 
-		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
+		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		try  { 
 		    // Execute command via its ID
 			handlerService.executeCommand(commandId, null);
@@ -556,12 +555,12 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     protected IProject getProjectOfSelectionList(List<Object> selectionList) {
         IProject project = null;
         for (Object object : selectionList) {
-            IFile file = (IFile) Platform.getAdapterManager().getAdapter(object, IFile.class);
+            IFile file = (IFile)Platform.getAdapterManager().getAdapter(object, IFile.class);
             IProject theproject = null;
             if (file != null) {
                 theproject = file.getProject();
             } else {
-                theproject = (IProject) Platform.getAdapterManager().getAdapter(object, IProject.class);
+                theproject = (IProject)Platform.getAdapterManager().getAdapter(object, IProject.class);
             }
             if (theproject != null) {
                 if (project == null) {
@@ -580,6 +579,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         if(selection instanceof IStructuredSelection) {
             IStructuredSelection sel = (IStructuredSelection) selection;
         
+            @SuppressWarnings("unchecked")
             IProject project = getProjectOfSelectionList(sel.toList());
             if (project != null) {
                 this.currentProject = project;

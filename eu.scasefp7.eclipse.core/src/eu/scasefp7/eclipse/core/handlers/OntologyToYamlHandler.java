@@ -4,6 +4,7 @@ import java.io.ByteArrayInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 
@@ -148,10 +149,10 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 			for (Resource resource : resources) {
 				ymlContents += resource.toYAMLString() + "\n\n";
 			}
-			PrintWriter out = new PrintWriter("Restmarks.yaml");
+			PrintWriter out = new PrintWriter("Restmarks.yaml", StandardCharsets.UTF_8.name());
 			out.print(ymlContents);
 			out.close();
-		} catch (ExecutionException | FileNotFoundException e) {
+		} catch (ExecutionException | FileNotFoundException | UnsupportedEncodingException e) {
 			e.printStackTrace();
 		}
 	}
