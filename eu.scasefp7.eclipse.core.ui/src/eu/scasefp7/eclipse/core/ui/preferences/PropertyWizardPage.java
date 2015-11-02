@@ -9,12 +9,19 @@ import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Label;
 
 
+/**
+ * @author emaorli
+ *
+ */
 public class PropertyWizardPage extends WizardPage  {
 	ProjectDomainPropertyPage propPage;
 	Composite composite;
 	private static final int DOMAIN_DEFAULT = -1;
 	
 	
+	/**
+	 * @param pageName
+	 */
 	public PropertyWizardPage(String pageName) {
 		super(pageName);
 		propPage = new ProjectDomainPropertyPage();
@@ -44,6 +51,9 @@ public class PropertyWizardPage extends WizardPage  {
 	}
 
 
+	/**
+	 * @return
+	 */
 	public Label getDomainLabel(){
 		return propPage.getDomainLabel();
 	}

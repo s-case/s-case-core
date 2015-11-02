@@ -71,7 +71,6 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
      * Constructor
      * 
      * @param style - layout style
-     * @wbp.parser.constructor
      */
     public FieldEditorOverlayPage(int style) {
         super(style);
@@ -127,6 +126,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
 
     /**
      * Delivers the project that owns the properties shown in this property page.
+     * @return adapted to IProject
      */
     public IProject getProject() {
         IAdaptable element = getElement();

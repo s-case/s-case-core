@@ -25,6 +25,14 @@
          <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
          <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
       </perspectiveExtension>
+      
+      <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+         <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
+      </perspectiveExtension>
+      
       <perspectiveExtension
             targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
          <view
@@ -33,7 +41,8 @@
                relationship="bottom">
          </view>
       </perspectiveExtension>
-  </extension>
+     </extension>
+  
   <extension
         point="org.eclipse.ui.views">
      <category
@@ -47,10 +56,6 @@
            id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
            name="%dashboard.name">
      </view>
-     <category
-           id="eu.scasefp7.eclipse.core.ui.customnavigator.category"
-           name="Custom projects">
-     </category>
   </extension>
   <extension
         point="org.eclipse.help.contexts">
@@ -59,11 +64,45 @@
      </contexts>
   </extension>
   <extension
+        point="org.eclipse.ui.ide.projectNatureImages">
+     <image
+           icon="icons/view16/s-case_16.png"
+           id="eu.scasefp7.eclipse.core.ui.natureImage"
+           natureId="eu.scasefp7.eclipse.core.scaseNature">
+     </image>
+  </extension>
+  
+  <extension
+         point="org.eclipse.ui.newWizards">
+      <category
+            id="eu.scasefp7.eclipse.category"
+            name="S-CASE">
+      </category>
+      <wizard
+            name="S-CASE Project"
+            icon="icons/view16/s-case_16.png"
+            category="eu.scasefp7.eclipse.category"
+            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard"
+            finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
+            hasPages="true"
+            id="eu.scasefp7.eclipse.core.ui.newProjectWizard"
+            project="true">
+      	<description>Create a new S-CASE project to specify requirements for web services</description>
+      </wizard>
+  </extension>
+  
+  <extension
         point="org.eclipse.ui.propertyPages">
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.GlobalPreferencePage"
            id="eu.scasefp7.eclipse.core.ui.preferences.global"
-           name="%category.name" />
+           name="%category.name">
+         <enabledWhen>
+		     <adapt type="org.eclipse.core.resources.IProject">
+		          <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.scaseNature"/>
+		     </adapt>         
+         </enabledWhen>
+     </page>
      <page
            category="eu.scasefp7.eclipse.core.ui.preferences.global"
            class="eu.scasefp7.eclipse.core.ui.preferences.ProjectDomainPropertyPage"
@@ -71,7 +110,7 @@
            name="%projectDomain.page">
 		 <enabledWhen>
 		     <adapt type="org.eclipse.core.resources.IProject">
-		          <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.ui.scaseNature"/>
+		          <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.scaseNature"/>
 		     </adapt>         
          </enabledWhen>     
      </page>
@@ -90,24 +129,32 @@
            class="eu.scasefp7.eclipse.core.ui.preferences.GlobalPreferencePage"
            id="eu.scasefp7.eclipse.core.ui.preferences.global"
            name="%category.name" />
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.preferences.InfrastructureServicesPreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.preferencePages.InfrastructureServicesPreferencePage"
+           name="%infrastructureServices.page">
+     </page>
   </extension>
   
   <!-- Dashboard commands -->
   <extension
         point="eu.scasefp7.eclipse.core.ui.dashboardItem">
-     <group
+ <!--    <group
            name="Project setup">
         <command
-              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
-              label="Configure project">
+              commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
+              error="Project configuration failed"
+              label="Configure project"
+              notification="Project successfully configured">
         </command>
-     </group>
+     </group> -->
      <group
            name="Static modeling">
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create requirements"
-              tooltip="Create new textual requirements collection">
+              tooltip="Create a new textual requirements collection">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
         </command>
         <command
@@ -122,7 +169,7 @@
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create storyboards"
-              >
+              tooltip="Create a new storyboard to describe system behaviour">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
         </command>
         <command
@@ -132,34 +179,51 @@
               <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
      </group>
-     <group
+      <group
            name="Requirements compilation">
-        <command
+ <!--       <command
               commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
-              label="Compile">
-        </command>
+              error="Requrements compilation failed."
+              label="Compile"
+              notification="Requrements compiled successfully."
+              tooltip="Compile requirements in text or storyboards">
+        </command>-->
         <command
               commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
-              label="Compile requirements">
+              error="Requrements compilation failed."
+              label="Compile requirements"
+              notification="Requrements compiled successfully."
+              tooltip="Compile textual requirements">
         </command>
         <command
-              commandId="eu.scasefp7.eclipse.storyboards.commands.exportToOntology"
-              label="Compile storyboards">
+              commandId="eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology"
+              error="Requrements compilation failed."
+              label="Compile storyboards"
+              notification="Requrements compiled successfully."
+              tooltip="Compile storyboard requirements">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
-              label="Link ontologies">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
-              label="Export to YAML">
+              label="Link ontologies"
+              notification="Ontologies linked successfully."
+              tooltip="Link compiled requirements and storyboards"
+              error="Ontologies linking failed.">
         </command>
      </group>
      <group
            name="Model-driven engineering">
         <command
+              commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
+              label="Export to YAML"
+              notification="YAML export complete."
+              error="YAML export failed."
+              tooltip="Create a YAML description of the service resources">
+        </command>
+        <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              label="Generate code">
+              error="Code generation failed."
+              label="Generate code"
+              tooltip="Generate code for the web service">
         </command>
      </group>
      <group
@@ -170,137 +234,89 @@
         </command>
      </group>
   </extension>
+  
   <extension
-        id="scaseNature"
-        name="S-Case Nature commands"
-        point="org.eclipse.core.resources.natures">
-     <runtime>
-        <run
-              class="eu.scasefp7.eclipse.core.ui.builder.SCaseNature">
-        </run>
-     </runtime>
-     <builder
-           id="eu.scasefp7.eclipse.core.ui.scaseBuilder">
-     </builder>
-  </extension>
+         point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.linkOntologies" id="eu.scasefp7.eclipse.core.menus.linkOntologies">
+                  <visibleWhen>
+				           <with variable="activeMenuSelection">
+				            <iterate ifEmpty="false">
+				             <adapt type="org.eclipse.core.resources.IResource">
+				               <test property="org.eclipse.core.resources.name" value="*" />
+				             </adapt>
+				            </iterate>
+				           </with>
+                  </visibleWhen>
+            </command>
+      </menuContribution>
+   </extension>
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
+      </menuContribution>
+   </extension>
+  
   <extension
-        id="scaseBuilder"
-        point="org.eclipse.core.resources.builders">
-     <builder
-           hasNature="true">
-        <run
-              class="eu.scasefp7.eclipse.core.ui.builder.SCaseBuilder">
-        </run>
-     </builder>
-  </extension>
-  <extension
-        point="org.eclipse.ui.commands">
-     <category
-           id="eu.scasefp7.eclipse.core.ui.category"
-           name="S-Case Nature commands">
-     </category>
-     <command
-           id="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
-           name="Add/Remove S-Case Project Nature">
-     </command>
-  </extension>
-  <extension
-        point="org.eclipse.ui.menus">
-     <menuContribution
-           allPopups="false"
-           locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
-        <command
-              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
-              label="Convert to S-Case project"
-              style="push">
-           <visibleWhen
-                 checkEnabled="false">
-              <with
-                    variable="selection">
-                 <count
-                       value="1">
-                 </count>
-                 <iterate>
-                    <adapt
-                          type="org.eclipse.core.resources.IProject">
-                       <not>
-                          <test
-                                property="org.eclipse.core.resources.projectNature"
-                                value="eu.scasefp7.eclipse.core.ui.scaseNature">
-                          </test>
-                       </not>
-                    </adapt>
-                 </iterate>
-              </with>
-           </visibleWhen>
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature"
-              label="Disable S-Case builder"
-              style="push">
-           <visibleWhen
-                 checkEnabled="false">
-              <with
-                    variable="selection">
-                 <count
-                       value="1">
-                 </count>
-                 <iterate>
-                    <adapt
-                          type="org.eclipse.core.resources.IProject">
-                       <test
-                             property="org.eclipse.core.resources.projectNature"
-                             value="eu.scasefp7.eclipse.core.ui.scaseNature">
-                       </test>
-                    </adapt>
-                 </iterate>
-              </with>
-           </visibleWhen>
-        </command>
-     </menuContribution>
-  </extension>
-  <extension
-        id="rqsProblem"
-        point="org.eclipse.core.resources.markers">
-     <persistent
-           value="true">
-     </persistent>
-     <super
-           type="org.eclipse.core.resources.problemmarker">
-     </super>
-  </extension>
-  <extension
-        point="org.eclipse.ui.handlers">
-     <handler
-           class="eu.scasefp7.eclipse.core.ui.builder.AddRemoveSCaseNatureHandler"
-           commandId="eu.scasefp7.eclipse.core.ui.addRemoveSCaseNature">
-     </handler>
-  </extension>
-  <extension
-        point="org.eclipse.ui.ide.projectNatureImages">
-     <image
-           icon="icons/s-case_16x16.png"
-           id="eu.scasefp7.eclipse.core.ui.image"
-           natureId="eu.scasefp7.eclipse.core.ui.scaseNature">
-     </image>
-  </extension>
-  <extension
-        point="org.eclipse.ui.newWizards">
-     <category
-           id="eu.scasefp7.eclipse.core.ui.category"
-           name="S-Case">
-     </category>
-     <wizard
-           category=" eu.scasefp7.eclipse.core.ui.category"
-           class="eu.scasefp7.eclipse.core.ui.wizards.ScaseProjectNewWizard"
-           finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
-           icon="icons/s-case_16x16.png"
-           id="eu.scasefp7.eclipse.core.ui.wizard2"
-           name="S-Case Project"
-           project="true">
-     </wizard>
-  </extension>
-  <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.projectConfigure?after=additions">
+         <command
+               commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
+               icon="icons/view16/s-case_16.png"
+               label="Convert to S-CASE project"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <not>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="eu.scasefp7.eclipse.core.scaseNature">
+                           </test>
+                        </not>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+         <command
+               commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
+               icon="icons/view16/s-case_16.png"
+               label="Remove S-CASE nature"
+               style="push">
+            <visibleWhen
+                  checkEnabled="false">
+               <with
+                     variable="selection">
+                  <count
+                        value="1">
+                  </count>
+                  <iterate>
+                     <adapt
+                           type="org.eclipse.core.resources.IProject">
+                        <test
+                              property="org.eclipse.core.resources.projectNature"
+                              value="eu.scasefp7.eclipse.core.scaseNature">
+                        </test>
+                     </adapt>
+                  </iterate>
+               </with>
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+   <extension
         point="org.eclipse.ui.navigator.viewer">
      <viewerContentBinding
            viewerId="org.eclipse.jdt.ui.PackageExplorer">
@@ -396,5 +412,4 @@
         </commonSorter>
      </navigatorContent>
   </extension>
-  
 </plugin>

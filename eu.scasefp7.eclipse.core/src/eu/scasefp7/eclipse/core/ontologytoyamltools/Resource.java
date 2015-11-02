@@ -35,14 +35,14 @@ public class Resource {
 	public String OutputRepresentation;
 
 	/**
-	 * Empty constructor. This is required for instatiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
+	 * Empty constructor. This is required for instantiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
 	 */
 	public Resource() {
 
 	}
 
 	/**
-	 * Initializes this object as a non-algorithmic resource by receiving its name and instatiating the lists.
+	 * Initializes this object as a non-algorithmic resource by receiving its name and instantiating the lists.
 	 * 
 	 * @param name the name of this resource.
 	 */
@@ -52,10 +52,12 @@ public class Resource {
 		CRUDActivities = new ArrayList<String>();
 		RelatedResources = new ArrayList<String>();
 		Properties = new ArrayList<Property>();
+		InputRepresentation = "JSON";
+		OutputRepresentation = "JSON";
 	}
 
 	/**
-	 * Initializes this object as a resource by receiving its name and whether it is algorithmic and instatiating the
+	 * Initializes this object as a resource by receiving its name and whether it is algorithmic and instantiating the
 	 * lists.
 	 * 
 	 * @param name the name of this resource.
@@ -67,6 +69,8 @@ public class Resource {
 		CRUDActivities = new ArrayList<String>();
 		RelatedResources = new ArrayList<String>();
 		Properties = new ArrayList<Property>();
+		InputRepresentation = "JSON";
+		OutputRepresentation = "JSON";
 	}
 
 	/**
@@ -153,7 +157,7 @@ public class Resource {
 	}
 
 	/**
-	 * Used to check if two resources are the same in sets, maps, etc. This function must be overriden because the
+	 * Used to check if two resources are the same in sets, maps, etc. This function must be overridden because the
 	 * {@code contains} function uses this to check for equal objects.
 	 * 
 	 * @return an integer hashcode.

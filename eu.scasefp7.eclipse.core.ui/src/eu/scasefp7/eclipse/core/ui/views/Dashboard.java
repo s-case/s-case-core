@@ -17,6 +17,7 @@ package eu.scasefp7.eclipse.core.ui.views;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.eclipse.core.commands.Command;
@@ -28,36 +29,69 @@ import org.eclipse.core.commands.NotEnabledException;
 import org.eclipse.core.commands.NotHandledException;
 import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
+import org.eclipse.core.commands.common.CommandException;
 import org.eclipse.core.commands.common.NotDefinedException;
+import org.eclipse.core.resources.IFile;
+import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
+import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
+import org.eclipse.core.runtime.IExtension;
+import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.IRegistryEventListener;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.QualifiedName;
+import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.jface.action.IMenuListener;
+import org.eclipse.jface.action.IMenuManager;
+import org.eclipse.jface.action.IToolBarManager;
+import org.eclipse.jface.action.MenuManager;
+import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.events.ControlAdapter;
+import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
+import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.ui.IActionBars;
+import org.eclipse.ui.ISelectionListener;
+import org.eclipse.ui.ISharedImages;
+import org.eclipse.ui.IViewSite;
+import org.eclipse.ui.IWorkbenchActionConstants;
+import org.eclipse.ui.IWorkbenchPage;
+import org.eclipse.ui.IWorkbenchPart;
+import org.eclipse.ui.PartInitException;
+import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.menus.CommandContributionItem;
+import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
+import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
+import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
 /**
  * Creates a dashboard viewpart composed of multiple groups and buttons with commands attached.
  * Configuration data is read from contributions to an extension point.
  * 
  * @see ScaseUiConstants#DASHBOARD_EXTENSION
- * @author Marin Orlic <marin.orlic@ericsson.com>
+ * @author Marin Orlic
  */
 
-public class Dashboard extends ViewPart {
+public class Dashboard extends ViewPart implements ISelectionListener, IRegistryEventListener {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -76,22 +110,44 @@ public class Dashboard extends ViewPart {
     private static final String CONTRIBUTION_COMMAND_PARAM = "parameter";
     private static final String CONTRIBUTION_COMMAND_PARAM_NAME = "name";
     private static final String CONTRIBUTION_COMMAND_PARAM_VALUE = "value";
+    private static final String CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS = "notification";
+    private static final String CONTRIBUTION_COMMAND_NOTIFICATION_FAIL = "error";
 
+    protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
+      
+    /**
+     * The currently selected project
+     */
+    private IProject currentProject;
+
+    /**
+     * The current selection
+     */
+    private ISelection currentSelection;
     
-	protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>(); 
-	
-	/**
+    /**
 	 * The constructor.
 	 */
 	public Dashboard() {
+	    RegistryFactory.getRegistry().addListener(this, ScaseUiConstants.DASHBOARD_EXTENSION);
 	}
 
-	/**
+	@Override
+	public void init(IViewSite site) throws PartInitException {
+	    IWorkbenchPage page = site.getPage();
+        if (page != null) {
+            updateSelection(page.getSelection());
+            updateContentDescription();
+        }
+        site.getPage().addPostSelectionListener(this);
+        super.init(site);
+    }
+
+    /**
 	 * This is a callback that will allow us
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
-		
 	    // Set the main layout
 		RowLayout rl_parent = new RowLayout(SWT.HORIZONTAL);
 		rl_parent.pack = false;
@@ -100,6 +156,11 @@ public class Dashboard extends ViewPart {
 		rl_parent.marginHeight = 10;
 		rl_parent.spacing = 10;
 		parent.setLayout(rl_parent);
+		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		
+		// Add menu and toolbar
+		hookContextMenu();
+        contributeToActionBars();
 		
 		// Read the configuration of the dashboard
 		IExtensionRegistry registry = Platform.getExtensionRegistry();
@@ -115,6 +176,15 @@ public class Dashboard extends ViewPart {
             }
         }
 		
+        parent.addControlListener(new ControlAdapter() {
+            @Override
+            public void controlResized(ControlEvent e) {
+                parent.getShell().layout();
+                System.out.println("RESIZED");
+            }
+        });
+        
+        
 		// Project setup
         /*int startR = 95,
         stopR = 0,
@@ -151,6 +221,13 @@ public class Dashboard extends ViewPart {
     		Command command = commandService.getCommand(entry.getValue());
     		command.removeCommandListener(entry.getKey());
     	}
+
+        // Remove selection and registry listener registrations
+        getSite().getPage().removePostSelectionListener(this);
+        RegistryFactory.getRegistry().removeListener(this);
+        
+        currentProject = null;
+        currentSelection = null;
     }
 
     /**
@@ -163,6 +240,46 @@ public class Dashboard extends ViewPart {
    
     }
 
+    private void hookContextMenu() {
+        MenuManager menuMgr = new MenuManager("#PopupMenu");
+        menuMgr.setRemoveAllWhenShown(true);
+        menuMgr.addMenuListener(new IMenuListener() {
+            public void menuAboutToShow(IMenuManager manager) {
+                Dashboard.this.fillContextMenu(manager);
+            }
+        });
+    }
+
+    private void contributeToActionBars() {
+        IActionBars bars = getViewSite().getActionBars();
+        fillLocalPullDown(bars.getMenuManager());
+        fillLocalToolBar(bars.getToolBarManager());
+    }
+
+    private void fillLocalPullDown(IMenuManager manager) {
+//      manager.add(action1);
+        manager.add(new Separator());
+//      manager.add(action2);
+    }
+
+    private void fillContextMenu(IMenuManager manager) {
+//      manager.add(action1);
+//      manager.add(action2);
+        // Other plug-ins can contribute there actions here
+        manager.add(new Separator(IWorkbenchActionConstants.MB_ADDITIONS));
+    }
+    
+    private void fillLocalToolBar(IToolBarManager manager) {
+//      manager.add(action1);
+//      manager.add(action2);
+        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
+            "eu", new HashMap(), null, null, null, "MENUUU", "C", 
+            "Shows the project properties pages", 
+            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
+        manager.add(new CommandContributionItem(param)); 
+    }
+
+    
     /**
      * Create a group and it's children based on the configuration element.
      * 
@@ -195,7 +312,9 @@ public class Dashboard extends ViewPart {
         String name = elem.getAttribute(CONTRIBUTION_COMMAND_LABEL);
         String tooltip = elem.getAttribute(CONTRIBUTION_COMMAND_TOOLTIP);
         final String commandId = elem.getAttribute(CONTRIBUTION_COMMAND_ID);
-
+        final String notificationSuccess = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS);
+        final String notificationFail = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_FAIL);
+        
         Button btn = new Button(parent, SWT.NONE);
         
         if(name != null) {
@@ -217,7 +336,13 @@ public class Dashboard extends ViewPart {
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                        executeCommand(commandId);
+                        try {
+                            executeCommand(commandId);
+                            notifyUser(commandId, notificationSuccess);     
+                        } catch (CommandException ex) {
+                            notifyUser(commandId, notificationFail, ex);     
+                            ex.printStackTrace();
+                        }
                     }
                 });
             } else {
@@ -225,7 +350,13 @@ public class Dashboard extends ViewPart {
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                        executeCommand(commandId, params);
+                        try {
+                            executeCommand(commandId, params);
+                            notifyUser(commandId, notificationSuccess);     
+                        } catch (CommandException ex) {
+                            notifyUser(commandId, notificationFail, ex);     
+                            ex.printStackTrace();
+                        }
                     }
                 });   
             }
@@ -282,20 +413,11 @@ public class Dashboard extends ViewPart {
 			@Override
 			public void commandChanged(CommandEvent cmdEvent) {
 				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged() || cmdEvent.isHandledChanged()) {
-					Object handler = command.getHandler();
-					boolean defined = command.isDefined();
-					boolean enabled = command.isEnabled();
-					boolean handled = command.isHandled();
 					control.setEnabled(command.isDefined() && command.isEnabled() && command.isHandled());
-					
-					System.out.println(">>>>>>>>>>> IN LISTENER");
-					System.out.println(cmdEvent);
-					System.out.println("commandId " + command.getId());
-					System.out.println("defined " + defined);
-					System.out.println("enabled " + enabled);
-					System.out.println("handled " + handled);
-					System.out.println("control on " + control.isEnabled());
-					System.out.println(">>>>>>>>>>> OUT LISTENER");
+				}
+				if(command.getId().equals("eu.scasefp7.eclipse.core.commands.compileToOntology")) {
+				    System.out.println("cmdEvent def " + cmdEvent.isDefinedChanged() + " en " + cmdEvent.isEnabledChanged() + " hand " + cmdEvent.isHandledChanged());
+				    System.out.println("command " + command.getId() + " def " + command.isDefined() + " en " + command.isEnabled() + " hand " + command.isHandled());
 				}
 			}
 		}; 
@@ -309,8 +431,9 @@ public class Dashboard extends ViewPart {
 	 * 
 	 * @param commandId ID of the command to execute
 	 * @param parameters map of command parameters in form (parameterId, value)
+	 * @throws CommandException if the command execution fails
 	 */
-	protected void executeCommand(String commandId, Map<String, String> parameters) {
+	protected void executeCommand(String commandId, Map<String, String> parameters) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
@@ -335,12 +458,11 @@ public class Dashboard extends ViewPart {
 		    }
 			ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params.toArray(new Parameterization[params.size()]));
 		    handlerService.executeCommand(parametrizedCommand, null);
-		        
+		    
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
 		    
-		    // Replace with real-world exception handling
-		    ex.printStackTrace();
+		   throw ex;
 		}
 	}
 
@@ -349,8 +471,9 @@ public class Dashboard extends ViewPart {
 	 * Convenience method to call a command with no parameters.
 	 * 
 	 * @param commandId ID of the command to execute
+	 * @throws CommandException if the command execution fails
 	 */
-	protected void executeCommand(String commandId) {
+	protected void executeCommand(String commandId) throws CommandException {
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
@@ -358,12 +481,13 @@ public class Dashboard extends ViewPart {
 
 		IHandlerService handlerService = (IHandlerService) serviceLocator.getService(IHandlerService.class);
 		try  { 
-		    // Execute commmand via its ID
-			handlerService.executeCommand(commandId, null);        
+		    // Execute command via its ID
+			handlerService.executeCommand(commandId, null);
+
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-		    // Replace with real-world exception handling
-		    ex.printStackTrace();
+		    
+		    throw ex;
 		}
 	}
 
@@ -375,6 +499,7 @@ public class Dashboard extends ViewPart {
      * @return map with parameter names and values
      * @see org.eclipse.ui.internal.menus.MenuHelper#getParameters(IConfigurationElement)
      */
+    @SuppressWarnings("restriction")
     private static Map<String, String> getParameters(IConfigurationElement element) {
         HashMap<String, String> map = new HashMap<String, String>();
         IConfigurationElement[] parameters = element.getChildren(CONTRIBUTION_COMMAND_PARAM);
@@ -386,6 +511,147 @@ public class Dashboard extends ViewPart {
             }
         }
         return map;
+    }
+
+    protected void notifyUser(String commandId, String message) {
+        if(message != null) {
+            List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
+            
+            NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
+            
+            notifications.add(new DashboardNotification(commandId, getPartName(), message, PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_INFO_TSK))); 
+                    
+            popup.setContents(notifications);
+            popup.open();
+        }
+    }
+
+    protected void notifyUser(String commandId, String message, CommandException ex) {
+        List<AbstractNotification> notifications = new ArrayList<AbstractNotification>();
+        
+        NotificationPopup popup = new NotificationPopup(this.getViewSite().getShell());
+        
+        notifications.add(new DashboardNotification(commandId, getPartName(), ((message != null) ? message + ": " : "") + ex.getLocalizedMessage(), PlatformUI.getWorkbench().getSharedImages().getImage(ISharedImages.IMG_OBJS_ERROR_TSK))); 
+                
+        popup.setContents(notifications);
+        popup.open();
+    }
+
+    @Override
+    public void selectionChanged(IWorkbenchPart part, ISelection sel) {
+     // we ignore null selection, or if we are pinned, or our own selection or same selection
+        if (sel == null || sel.equals(currentSelection)) {
+            return;
+        }
+        
+        // we ignore selection if we are hidden OR selection is coming from another source as the last one
+//        if(part == null || !part.equals(currentPart)){
+//            return;
+//        }
+        
+        updateSelection(sel);
+        updateContentDescription();
+    }
+
+    protected IProject getProjectOfSelectionList(List<Object> selectionList) {
+        IProject project = null;
+        for (Object object : selectionList) {
+            IFile file = (IFile) Platform.getAdapterManager().getAdapter(object, IFile.class);
+            IProject theproject = null;
+            if (file != null) {
+                theproject = file.getProject();
+            } else {
+                theproject = (IProject) Platform.getAdapterManager().getAdapter(object, IProject.class);
+            }
+            if (theproject != null) {
+                if (project == null) {
+                    project = theproject;
+                } else {
+                    if (!project.equals(theproject)) {
+                        return null;
+                    }
+                }
+            }
+        }
+        return project;
+    }
+    
+    private void updateSelection(ISelection selection) {
+        if(selection instanceof IStructuredSelection) {
+            IStructuredSelection sel = (IStructuredSelection) selection;
+        
+            IProject project = getProjectOfSelectionList(sel.toList());
+            if (project != null) {
+                this.currentProject = project;
+            }    
+        }
+    }
+    
+    private void updateContentDescription() {
+        if (this.currentProject != null) {
+            int projectDomain = getProjectDomainId(this.currentProject);
+            DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, projectDomain);
+            
+            if(de != null) {
+                setContentDescription("Active project: " + this.currentProject.getName() + " (" + de.getName() + ")");
+            } else {
+                setContentDescription("Active project: " + this.currentProject.getName() + " (domain unset)");                
+            }
+        } else {
+            setContentDescription("Please select a project");
+        }   
+    }
+
+    private DomainEntry findDomainById(DomainEntry[] domains, int domainId) {
+        for (DomainEntry de : domains) {
+            if (de.getId() == domainId) {
+                return de;
+            }
+            if(de.hasChildren()) {
+                for (DomainEntry child : de.getChildren()) {
+                    if(child.getId() == domainId) {
+                        return child;
+                    }
+                }
+            }
+        }
+        return null;
+    }
+    
+    private static int getProjectDomainId(IProject project) {
+        try {
+            String domain = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN));
+            if(domain != null) {
+                return Integer.parseInt(domain);
+            }
+        } catch (CoreException | NumberFormatException e) {
+            
+        }
+        return ScaseUiConstants.PROP_PROJECT_DOMAIN_DEFAULT;
+    }
+    
+    @Override
+    public void added(IExtension[] extensions) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void removed(IExtension[] extensions) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void added(IExtensionPoint[] extensionPoints) {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void removed(IExtensionPoint[] extensionPoints) {
+        // TODO Auto-generated method stub
+        
     }
 
 }

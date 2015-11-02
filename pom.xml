@@ -4,7 +4,7 @@
 	<modelVersion>4.0.0</modelVersion>
 	<groupId>eu.scasefp7.eclipse</groupId>
 	<artifactId>s-case-core</artifactId>
-	<version>1.0.2-SNAPSHOT</version>
+	<version>1.1.1-SNAPSHOT</version>
 	<packaging>pom</packaging>
 
 	<modules>
@@ -14,12 +14,17 @@
 		<module>eu.scasefp7.eclipse.core.dependencies.feature</module>
  		<module>s-case-core-update-site</module>
 		<module>target-platform</module>
+		<module>eu.scasefp7.eclipse.services.nlp</module>
+		<module>eu.scasefp7.eclipse.services.nlp.consumer</module>
+		<module>eu.scasefp7.eclipse.services.nlp.edef</module>
+		<module>eu.scasefp7.eclipse.services.nlp.feature</module>
+		<module>eu.scasefp7.eclipse.services.nlp.provider</module>
 	</modules>
 
 	<parent>
 		<groupId>eu.scasefp7</groupId>
 		<artifactId>scase-parent</artifactId>
-                <version>1.0.21</version>
+                <version>1.0.23</version>
 	</parent>
 
 	<repositories>
@@ -105,6 +110,16 @@
 	        </plugins>
 		</pluginManagement>
 		<plugins>
+
+			<plugin>
+			  <groupId>org.apache.maven.plugins</groupId>
+			  <artifactId>maven-compiler-plugin</artifactId>
+			  <configuration>
+			    <source>1.8</source>
+			    <target>1.8</target>
+			  </configuration>
+			</plugin>
+
 			<plugin>
 				<groupId>org.eclipse.tycho</groupId>
 				<artifactId>tycho-maven-plugin</artifactId>
@@ -117,11 +132,12 @@
 				<artifactId>target-platform-configuration</artifactId>
 				<version>${tycho.version}</version>
 				<configuration>
+                                        <pomDependencies>consider</pomDependencies>
 					<target>
 						<artifact>
 							<groupId>eu.scasefp7.eclipse</groupId>
 							<artifactId>target-platform</artifactId>
-							<version>1.0.2-SNAPSHOT</version>
+							<version>1.1.1-SNAPSHOT</version>
 						</artifact>
 					</target>
 					<environments>

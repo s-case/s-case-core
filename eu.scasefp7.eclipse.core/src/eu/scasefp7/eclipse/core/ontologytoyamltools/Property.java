@@ -23,19 +23,20 @@ public class Property {
 	public boolean NamingProperty;
 
 	/**
-	 * Empty constructor. This is required for instatiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
+	 * Empty constructor. This is required for instantiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
 	 */
 	public Property() {
 
 	}
 
 	/**
-	 * Initializes this object as a propertu given its name.
+	 * Initializes this object as a property given its name.
 	 * 
 	 * @param name the name of this property.
 	 */
 	public Property(String name) {
 		this.Name = name;
+		this.Type = "String";
 	}
 
 	/**
@@ -75,7 +76,7 @@ public class Property {
 	}
 
 	/**
-	 * Used to check if two properties are the same in sets, maps, etc. This function must be overriden because the
+	 * Used to check if two properties are the same in sets, maps, etc. This function must be overridden because the
 	 * {@code contains} function uses this to check for equal objects.
 	 * 
 	 * @return an integer hashcode.

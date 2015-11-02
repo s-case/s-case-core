@@ -60,6 +60,19 @@ public class StaticOntologyAPI {
 	}
 
 	/**
+	 * Similar to the other constructors, used only for testing reasons.
+	 * 
+	 * @param projectName the name of the project.
+	 * @param forceDelete delete any existing ontology file.
+	 */
+	public StaticOntologyAPI(String projectName, boolean forceDelete) {
+		staticOntology = new OntologyJenaAPI(null, OntologyType.STATIC,
+				"http://www.owl-ontologies.com/Ontology1273059028.owl", forceDelete);
+		this.projectName = projectName;
+		staticOntology.addIndividual("Project", projectName);
+	}
+
+	/**
 	 * Adds a requirement in the ontology and connects it to the project.
 	 * 
 	 * @param requirementName the requirement to be added.
@@ -128,6 +141,16 @@ public class StaticOntologyAPI {
 	}
 
 	/**
+	 * Returns the related objects of a specific object.
+	 * 
+	 * @param object the name of the object of which the related objects are returned.
+	 * @return an {@link ArrayList} containing the names of the related objects.
+	 */
+	public ArrayList<String> getRelatedObjectsOfObject(String object) {
+		return staticOntology.getIndividualNamesGivenIndividualAndProperty(object, "relates_to");
+	}
+
+	/**
 	 * Returns the requirements of a specific concept.
 	 * 
 	 * @param concept the name of the concept of which the requirements are returned.
@@ -192,6 +215,16 @@ public class StaticOntologyAPI {
 	 */
 	public void connectActionToObject(String action, String object) {
 		staticOntology.addPropertyAndReverseBetweenIndividuals(action, "acts_on", object);
+	}
+
+	/**
+	 * Relates the two objects to each other.
+	 * 
+	 * @param object1 the first object that relates to the second.
+	 * @param object2 the second object that is related to the first.
+	 */
+	public void connectObjectToObject(String object1, String object2) {
+		staticOntology.addPropertyAndReverseBetweenIndividuals(object1, "relates_to", object2);
 	}
 
 	/**

@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<<<<<<< HEAD
 <?pde version="3.8"?><target name="Development platform" sequenceNumber="73">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
@@ -9,6 +10,12 @@
 <unit id="org.apache.servicemix.bundles.jung-graph-impl" version="2.0.1.2"/>
 <unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20150909140529"/>
 <unit id="org.yaml.snakeyaml" version="1.16.0"/>
+=======
+<?pde version="3.8"?><target name="Development platform" sequenceNumber="88">
+<locations>
+<location path="${eclipse_home}" type="Profile"/>
+<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
+>>>>>>> upstream/master
 <repository location="http://s-case.github.io/s-case_dev_site/"/>
 </location>
 </locations>
