@@ -10,7 +10,6 @@ import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.NotDefinedException;
 import org.eclipse.core.resources.IFile;
-import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
@@ -66,7 +65,7 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
         IFile firstXmlFile;
 
         public boolean visit(IResource resource) {
-            boolean other = checkXML(resource);
+//            boolean other = checkXML(resource);
 
 //            if (resource instanceof IFile && resource.getName().endsWith(".rqs"))
 //                executeCommand("eu.scasefp7.eclipse.reqeditor.commands.exportToOntology", resource.getFullPath()
@@ -152,18 +151,18 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
     }
 
 
-    private void addMarker(IFile file, String message, int lineNumber, int severity) {
-        try {
-            IMarker marker = file.createMarker(MARKER_TYPE);
-            marker.setAttribute(IMarker.MESSAGE, message);
-            marker.setAttribute(IMarker.SEVERITY, severity);
-            if (lineNumber == -1) {
-                lineNumber = 1;
-            }
-            marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
-        } catch (CoreException e) {
-        }
-    }
+//    private void addMarker(IFile file, String message, int lineNumber, int severity) {
+//        try {
+//            IMarker marker = file.createMarker(MARKER_TYPE);
+//            marker.setAttribute(IMarker.MESSAGE, message);
+//            marker.setAttribute(IMarker.SEVERITY, severity);
+//            if (lineNumber == -1) {
+//                lineNumber = 1;
+//            }
+//            marker.setAttribute(IMarker.LINE_NUMBER, lineNumber);
+//        } catch (CoreException e) {
+//        }
+//    }
 
     /*
      * (non-Javadoc)

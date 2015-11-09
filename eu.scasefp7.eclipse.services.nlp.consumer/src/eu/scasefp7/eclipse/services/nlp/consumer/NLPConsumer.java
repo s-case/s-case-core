@@ -17,8 +17,13 @@ package eu.scasefp7.eclipse.services.nlp.consumer;
 
 import java.util.Arrays;
 
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
+
 import eu.scasefp7.eclipse.services.nlp.AnnotationFormat;
 import eu.scasefp7.eclipse.services.nlp.INLPService;
+import eu.scasefp7.eclipse.services.nlp.INLPServiceAsync;
 import eu.scasefp7.eclipse.services.nlp.NLPException;
 
 
@@ -32,6 +37,8 @@ import eu.scasefp7.eclipse.services.nlp.NLPException;
 public class NLPConsumer {
 
     private INLPService service;
+    private INLPServiceAsync serviceAsync;
+    private IEclipseContext context;
     
     /**
      * OSGi DS will use this method to set the NLP service reference.
@@ -40,7 +47,11 @@ public class NLPConsumer {
      */
     public synchronized void setNLPService(INLPService service) {
         System.out.println("Service was set. Thank you DS!");
+
         this.service = service;
+        IEclipseContext ctx = EclipseContextFactory.getServiceContext(Activator.getContext());
+        ContextInjectionFactory.inject(service, ctx);
+        
         // I know I should not use the service here but just for demonstration
         try {
             System.out.println(service.annotateSentence("First let me try some service invocation.", "", AnnotationFormat.ANN));
@@ -54,6 +65,19 @@ public class NLPConsumer {
     }
 
     /**
+     * OSGi DS will use this method to set the NLP service reference.
+     * 
+     * @param service resolved service
+     */
+    public synchronized void setNLPService(INLPServiceAsync service) {
+        System.out.println("Service was set. Thank you DS!");
+
+        this.serviceAsync = service;
+        IEclipseContext ctx = EclipseContextFactory.getServiceContext(Activator.getContext());
+        ContextInjectionFactory.inject(service, ctx);
+    }
+    
+    /**
      * OSGi DS will use this method to unset the NLP service reference.
      * 
      * @param service removed service
@@ -62,6 +86,24 @@ public class NLPConsumer {
         System.out.println("Service was unset. Why did you do this to me?");
         if (this.service == service) {
             this.service = null;
+            
+            IEclipseContext ctx = EclipseContextFactory.getServiceContext(Activator.getContext());
+            ContextInjectionFactory.uninject(service, ctx);
+        }
+    } 
+    
+    /**
+     * OSGi DS will use this method to unset the NLP service reference.
+     * 
+     * @param service removed service
+     */
+    public synchronized void unsetNLPService(INLPServiceAsync service) {
+        System.out.println("Service was unset. Why did you do this to me?");
+        if (this.serviceAsync == service) {
+            this.serviceAsync = null;
+            
+            IEclipseContext ctx = EclipseContextFactory.getServiceContext(Activator.getContext());
+            ContextInjectionFactory.uninject(service, ctx);
         }
     } 
     

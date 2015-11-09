@@ -8,9 +8,11 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.InputStream;
 import java.io.PrintWriter;
+import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -92,10 +94,10 @@ public class OntologyJenaAPI {
 				try {
 					testfile.delete();
 					String ontologyContents = OntologySource.getOntology(ontologyType);
-					PrintWriter writer = new PrintWriter(testfile);
+					PrintWriter writer = new PrintWriter(testfile, StandardCharsets.UTF_8.name());
 					writer.println(ontologyContents);
 					writer.close();
-				} catch (FileNotFoundException e) {
+				} catch (FileNotFoundException | UnsupportedEncodingException e) {
 					e.printStackTrace();
 				}
 			}

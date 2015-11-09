@@ -2,6 +2,9 @@ package eu.scasefp7.eclipse.services.nlp.consumer;
 import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.e4.core.contexts.ContextInjectionFactory;
+import org.eclipse.e4.core.contexts.EclipseContextFactory;
+import org.eclipse.e4.core.contexts.IEclipseContext;
 import org.osgi.framework.BundleContext;
 import org.osgi.util.tracker.ServiceTracker;
 
@@ -55,8 +58,13 @@ public class InvokeNLPService extends AbstractHandler {
         this.serviceExists = false;
     }
 
+    
     @Override
     public Object execute(ExecutionEvent event) throws ExecutionException {
+        IEclipseContext ctx = EclipseContextFactory.getServiceContext(Activator.getContext());
+        InjectionTest test = ContextInjectionFactory.make(InjectionTest.class, ctx);
+        test = test;
+        
         INLPServiceAsync service = tracker.getService();
         
         if(service == null) {

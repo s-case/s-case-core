@@ -9,9 +9,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 import org.osgi.framework.BundleActivator;
 import org.osgi.framework.BundleContext;
-import org.osgi.framework.ServiceRegistration;
 
-import eu.scasefp7.eclipse.services.nlp.INLPService;
 import eu.scasefp7.eclipse.services.nlp.provider.config.NLPServiceConfigurator;
 
 /**
@@ -20,7 +18,7 @@ import eu.scasefp7.eclipse.services.nlp.provider.config.NLPServiceConfigurator;
  */
 public class Activator implements BundleActivator {
 
-    private ServiceRegistration<INLPService> nlpRegistration = null;
+    //private ServiceRegistration<INLPService> nlpRegistration = null;
     private IPreferenceChangeListener listener = null;
 //    private ServiceRegistration<ContainerTypeDescription> containerRegistration = null;
     
