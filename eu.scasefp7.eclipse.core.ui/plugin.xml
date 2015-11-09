@@ -236,6 +236,27 @@
   </extension>
   
   <extension
+        point="org.eclipse.ui.commands">
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+           name="Open browser">
+        <commandParameter
+              id="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+              name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+              optional="true">
+        </commandParameter>
+     </command>
+  </extension>
+
+  <extension
+        point="org.eclipse.ui.handlers">
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.OpenBrowserHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser">
+     </handler>
+  </extension>
+  
+  <extension
          point="org.eclipse.ui.menus">
       <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
             <command commandId="eu.scasefp7.eclipse.core.commands.linkOntologies" id="eu.scasefp7.eclipse.core.menus.linkOntologies">
@@ -250,13 +271,46 @@
                   </visibleWhen>
             </command>
       </menuContribution>
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
+      </menuContribution>
    </extension>
    
    <extension
          point="org.eclipse.ui.menus">
-      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
-      </menuContribution>
+      <menuContribution
+           allPopups="false"
+           locationURI="toolbar:org.eclipse.ui.main.toolbar">
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE project website"
+                 style="push"
+                 tooltip="S-CASE project website">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="http://www.scasefp7.eu/">
+              </parameter>
+           </command>
+        </toolbar>
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE Github">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE Github"
+                 style="push"
+                 tooltip="S-CASE Github">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="https://github.com/s-case">
+              </parameter>
+           </command>
+        </toolbar>
+     </menuContribution>
    </extension>
   
   <extension

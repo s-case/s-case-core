@@ -67,4 +67,30 @@ public final class ScaseUiConstants {
     
     /** Default project domain (unset) */
     public static final int PROP_PROJECT_DOMAIN_DEFAULT = -1;
+    
+    /* Links */
+    /**
+     * URL for the project homepage (http://www.scasefp7.eu/)
+     */
+    public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/";
+
+    /**
+     * URL for the project github (https://github.com/s-case)
+     */
+    public static final String PROJECT_GITHUB = "https://github.com/s-case";
+
+    /**
+     * URL for the project Facebook page
+     */
+    public static final String PROJECT_FACEBOOK = "http://bit.ly/SCasefb";
+
+    /**
+     * URL for the project LinkedIn page
+     */
+    public static final String PROJECT_LINKEDIN = "http://bit.ly/SCasegrp";
+
+    /**
+     * URL for the project Twitter
+     */
+    public static final String PROJECT_TWITTER = "http://www.twitter.com/scasefp7";
 }

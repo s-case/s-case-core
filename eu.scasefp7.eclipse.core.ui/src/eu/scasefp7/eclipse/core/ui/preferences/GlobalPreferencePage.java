@@ -37,6 +37,7 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
+import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.SharedImages;
 
 /**
@@ -88,20 +89,15 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
       GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
       GridLayoutFactory.swtDefaults().numColumns(2).applyTo(group);
       
-      addOpenBrowserAction(createLink(group, SharedImages.Images.VIEW_SCASE, "Visit the <a href=\"{0}\">Project Homepage</a>", 
-        "http://www.scasefp7.eu/"));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.VIEW_SCASE, "Visit the <a href=\"{0}\">Project Homepage</a>", ScaseUiConstants.PROJECT_HOMEPAGE));
       
-      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_GITHUB, "View the <a href=\"{0}\">Project source code</a>", 
-        "https://github.com/s-case"));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_GITHUB, "View the <a href=\"{0}\">Project source code</a>", ScaseUiConstants.PROJECT_GITHUB));
 
-      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_FACEBOOK, "<a href=\"{0}\">Like us</a> on Facebook", 
-        "http://bit.ly/SCasefb"));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_FACEBOOK, "<a href=\"{0}\">Like us</a> on Facebook", ScaseUiConstants.PROJECT_FACEBOOK));
       
-      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_LINKEDIN, "<a href=\"{0}\">Join us</a> on LinkedIn", 
-        "http://bit.ly/SCasegrp"));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_LINKEDIN, "<a href=\"{0}\">Join us</a> on LinkedIn", ScaseUiConstants.PROJECT_LINKEDIN));
       
-      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_TWITTER, "<a href=\"{0}\">Follow us</a> on Twitter", 
-        "http://www.twitter.com/scasefp7"));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_TWITTER, "<a href=\"{0}\">Follow us</a> on Twitter", ScaseUiConstants.PROJECT_TWITTER));
       
       return parent;
     }
