@@ -6,8 +6,6 @@
 <unit id="slf4j.log4j12" version="1.7.6"/>
 <unit id="jcl.over.slf4j" version="1.7.6"/>
 <unit id="slf4j.api" version="1.7.6"/>
-<unit id="eu.scasefp7.eclipse.core.feature.feature.group" version="1.0.2.201510291013"/>
-<unit id="eu.scasefp7.eclipse.core.dependencies.feature.feature.group" version="1.0.2.201510291013"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
 <unit id="net.sf.jung.api" version="2.0.1"/>
 <unit id="net.sourceforge.collections.generic" version="4.1.0"/>
