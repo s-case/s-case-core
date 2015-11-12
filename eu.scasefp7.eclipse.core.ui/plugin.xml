@@ -423,6 +423,25 @@
               optional="true">
         </commandParameter>
      </command>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.launchExternal"
+           name="LaunchExternalProgram">
+        <commandParameter
+              id="eu.scasefp7.eclipse.core.ui.location"
+              name="eu.scasefp7.eclipse.core.ui.location"
+              optional="true">
+        </commandParameter>
+        <commandParameter
+              id="eu.scasefp7.eclipse.core.ui.arguments"
+              name="eu.scasefp7.eclipse.core.ui.arguments"
+              optional="true">
+        </commandParameter>
+        <commandParameter
+              id="eu.scasefp7.eclipse.core.ui.workingDirectory"
+              name="eu.scasefp7.eclipse.core.ui.workingDirectory"
+              optional="true">
+        </commandParameter>
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.menus">
@@ -440,6 +459,22 @@
                     value="http://s-case.github.io/">
               </parameter>
            </command>
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.launchExternal"
+                 style="push">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.location"
+                    value="C:\\Windows\\system32\\notepad.exe">
+              </parameter>
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.arguments"
+                    value=" ">
+              </parameter>
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.workingDirectory"
+                    value=" ">
+              </parameter>
+           </command>
         </toolbar>
      </menuContribution>
   </extension>
@@ -448,6 +483,10 @@
      <handler
            class="eu.scasefp7.eclipse.core.ui.handlers.OpenBrowserHandler"
            commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.LaunchExternalProgramHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.launchExternal">
      </handler>
   </extension>
 </plugin>
