@@ -37,6 +37,8 @@ public class Property {
 	public Property(String name) {
 		this.Name = name;
 		this.Type = "String";
+		this.Unique = true;
+		this.NamingProperty = false;
 	}
 
 	/**
