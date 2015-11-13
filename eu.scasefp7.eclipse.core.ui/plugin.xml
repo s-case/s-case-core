@@ -225,6 +225,16 @@
               label="Generate code"
               tooltip="Generate code for the web service">
         </command>
+        <command
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              error="Code generation failed."
+              label="Re-generate code"
+              tooltip="Generate code for the web service using previous settings">
+           <parameter
+                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
+                 value="yes">
+           </parameter>
+        </command>
      </group>
      <group
            name="YouREST">
@@ -370,5 +380,4 @@
          </command>
       </menuContribution>
    </extension>
-  
 </plugin>
