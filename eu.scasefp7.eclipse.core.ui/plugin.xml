@@ -292,7 +292,8 @@
            allPopups="false"
            locationURI="toolbar:org.eclipse.ui.main.toolbar">
         <toolbar
-              id="eu.scasefp7.eclipse.core.ui.LinksToolbar">
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE project website">
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
                  icon="icons/view16/s-case_16.png"
