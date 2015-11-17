@@ -489,4 +489,14 @@
            commandId="eu.scasefp7.eclipse.core.ui.commands.launchExternal">
      </handler>
   </extension>
+  <extension
+        point="org.eclipse.ui.trace.traceComponents">
+     <component
+           id="eu.scasefp7.eclipse.core.trace"
+           label="S-CASE Core">
+        <bundle
+              name="eu.scasefp7.eclipse.*">
+        </bundle>
+     </component>
+  </extension>
 </plugin>

@@ -51,6 +51,7 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.osgi.internal.debug.FrameworkDebugTraceEntry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -79,6 +80,7 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
@@ -337,6 +339,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                     @Override
                     public void mouseDown(MouseEvent e) {
                         try {
+                        	
+                            Activator.trace.trace("/debug/userActions", "Button pressed: "+name);                         
                             executeCommand(commandId);
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {
@@ -351,6 +355,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                     @Override
                     public void mouseDown(MouseEvent e) {
                         try {
+                        	Activator.trace.trace("/debug/userActions", "Button pressed: "+name);                      	
                             executeCommand(commandId, params);
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {

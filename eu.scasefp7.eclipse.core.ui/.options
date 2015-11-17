@@ -1,0 +1,4 @@
+# Tracing options for the eu.scasefp7.eclipse.core.ui plug-in
+
+eu.scasefp7.eclipse.core.ui/debug=false
+eu.scasefp7.eclipse.core.ui/debug/userActions=false

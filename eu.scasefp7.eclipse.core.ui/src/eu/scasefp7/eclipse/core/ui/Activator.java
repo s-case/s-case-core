@@ -1,13 +1,18 @@
 package eu.scasefp7.eclipse.core.ui;
 
-import org.eclipse.jface.resource.ImageDescriptor;
+import java.util.Dictionary;
+import java.util.Hashtable;
+
+import org.eclipse.osgi.service.debug.DebugOptions;
+import org.eclipse.osgi.service.debug.DebugOptionsListener;
+import org.eclipse.osgi.service.debug.DebugTrace;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin implements DebugOptionsListener {
 
 	// The plug-in ID
 	public static final String PLUGIN_ID = "eu.scasefp7.eclipse.core.ui"; //$NON-NLS-1$
@@ -18,6 +23,9 @@ public class Activator extends AbstractUIPlugin {
 	// Images
 	private static SharedImages images = null;
 	
+	// fields to cache the debug flags
+	public static boolean DEBUG = false;
+	public static DebugTrace trace = null;
 	/**
 	 * The constructor
 	 */
@@ -30,6 +38,9 @@ public class Activator extends AbstractUIPlugin {
 	 */
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
+		Dictionary<String, String> props = new Hashtable<String,String>(4);
+		props.put(DebugOptions.LISTENER_SYMBOLICNAME, PLUGIN_ID); 
+		context.registerService(DebugOptionsListener.class.getName(), this, props);
 		plugin = this;
 	}
 
@@ -61,6 +72,13 @@ public class Activator extends AbstractUIPlugin {
 	        images = new SharedImages();
 	    }
 	    return images;
+	}
+
+	@Override
+	public void optionsChanged(DebugOptions options) {
+		DEBUG = options.getBooleanOption(PLUGIN_ID + "/debug", false);
+		trace = options.newDebugTrace(PLUGIN_ID);
+		
 	}
 	
 }
