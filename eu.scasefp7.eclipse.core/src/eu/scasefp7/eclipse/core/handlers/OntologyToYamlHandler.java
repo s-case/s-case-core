@@ -23,6 +23,7 @@ import eu.scasefp7.eclipse.core.ontologytoyamltools.Property;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Resource;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Resources;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Stemmer;
+import eu.scasefp7.eclipse.core.ontologytoyamltools.StringHelpers;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.VerbTypeFinder;
 
 /**
@@ -63,11 +64,13 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		// Iterate over all resources
 		Resources resources = new Resources();
 		for (String resourceName : linkedOntology.getResources()) {
-			Resource resource = resources.getResourceByName(Stemmer.stemNoun(resourceName));
+			Resource resource = resources.getResourceByName(StringHelpers.underscoreToCamelCase(Stemmer
+					.stemNounConstruct(resourceName)));
 
 			// Iterate over each related resource of this resource
 			for (String relatedResourceName : linkedOntology.getRelatedResourcesOfResource(resourceName)) {
-				resource.addRelatedResource(Stemmer.stemNoun(relatedResourceName));
+				resource.addRelatedResource(StringHelpers.underscoreToCamelCase(Stemmer
+						.stemNounConstruct(relatedResourceName)));
 			}
 
 			// Iterate over each activity of this resource
@@ -80,8 +83,10 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 					if (verbTypeFinder.getVerbType(action).equals("Other")) {
 						// Verb is of type Other
 						String stemmedAction = Stemmer.stemVerb(action);
-						String algorithmicResourceName = Stemmer.stemNoun(resourceName)
-								+ stemmedAction.substring(0, 1).toUpperCase() + stemmedAction.substring(1);
+						String algorithmicResourceName = StringHelpers.underscoreToCamelCase(Stemmer
+								.stemNounConstruct(resourceName))
+								+ stemmedAction.substring(0, 1).toUpperCase()
+								+ stemmedAction.substring(1);
 						resources.addResourceIfItDoesNotExist(algorithmicResourceName, true);
 						resource.addRelatedResource(algorithmicResourceName);
 					} else
@@ -94,13 +99,15 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 				// Iterate over next activities
 				for (String next_activity : linkedOntology.getNextActivitiesOfActivity(activity)) {
 					String relatedResource = linkedOntology.getResourceOfActivity(next_activity);
-					resource.addRelatedResource(Stemmer.stemNoun(relatedResource));
+					resource.addRelatedResource(StringHelpers.underscoreToCamelCase(Stemmer
+							.stemNounConstruct(relatedResource)));
 				}
 			}
 
 			// Iterate over each property of this resource
 			for (String property : linkedOntology.getPropertiesOfResource(resourceName)) {
-				resource.addProperty(new Property(Stemmer.stemNoun(property)));
+				resource.addProperty(new Property(StringHelpers.underscoreToCamelCase(Stemmer
+						.stemNounConstruct(property))));
 			}
 		}
 		return resources;
