@@ -32,7 +32,7 @@ public class OpenBrowserHandler extends AbstractHandler {
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		try {
 			String url = event.getParameter(PARAM_URL);
-			if(url.equals(null)) {
+			if(url == null) {
 				url = ScaseUiConstants.PROJECT_HOMEPAGE;
 			}
 			
