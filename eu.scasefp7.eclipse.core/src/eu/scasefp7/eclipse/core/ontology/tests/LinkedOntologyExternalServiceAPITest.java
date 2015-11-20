@@ -29,10 +29,10 @@ public class LinkedOntologyExternalServiceAPITest {
 				"JSON");
 
 		// Add the input parameters of the operation
-		linkedOntology.addInputParameter("from", "Primitive", false, false, "string");
-		linkedOntology.addInputParameter("subject", "Primitive", false, true, "string");
-		linkedOntology.addInputParameter("to", "Primitive", false, false, "string");
-		linkedOntology.addInputParameter("text", "Primitive", false, false, "string");
+		linkedOntology.addInputParameter("from", "Primitive", false, null, false, "string");
+		linkedOntology.addInputParameter("subject", "Primitive", false, null, true, "string");
+		linkedOntology.addInputParameter("to", "Primitive", false, null, false, "string");
+		linkedOntology.addInputParameter("text", "Primitive", false, null, false, "string");
 		linkedOntology.addInputParametersToOperation("get_live", "from", "subject", "to", "text");
 
 		// Add the output parameters of the operation
@@ -57,7 +57,7 @@ public class LinkedOntologyExternalServiceAPITest {
 		linkedOntology.addURIParametersToOperation("post_messages", "apikey", "domain");
 
 		// Add the query parameters of the operation
-		linkedOntology.addInputParameter("apiKey", "Primitive", false, false, "string");
+		linkedOntology.addInputParameter("apiKey", "Primitive", false, null, false, "string");
 		linkedOntology.addQueryParametersToOperation("post_messages", "apiKey");
 
 		// Close the linked ontology. The other two ontologies are not closed since they do not need to be saved.
