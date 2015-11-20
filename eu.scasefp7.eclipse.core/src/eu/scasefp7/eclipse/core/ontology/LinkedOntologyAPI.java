@@ -343,8 +343,7 @@ public class LinkedOntologyAPI {
 		linkedOntology.addPropertyToIndividual(parameterName, "hasName", parameterName);
 		linkedOntology.addPropertyToIndividual(parameterName, "isType", parameterType);
 		linkedOntology.addPropertyToIndividual(parameterName, "isAuthToken", parameterIsAuthToken);
-		if (parameterIsAuthToken)
-			linkedOntology.addPropertyToIndividual(parameterName, "belongsToURL", parameterAuthURL);
+		linkedOntology.addPropertyToIndividual(parameterName, "belongsToURL", parameterAuthURL);
 		linkedOntology.addPropertyToIndividual(parameterName, "isOptional", parameterIsOptional);
 		for (String parameterElement : parameterHasElements) {
 			linkedOntology.addPropertyAndReverseBetweenIndividuals(parameterName, "has_elements", parameterElement);
