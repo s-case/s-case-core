@@ -93,6 +93,22 @@ public class Stemmer {
 	}
 
 	/**
+	 * Stems a series of nouns split with an underscore (e.g. virtual_machines) given as input and returns the stemmed
+	 * nouns connected again with underscores (e.g. virtual_machine).
+	 * 
+	 * @param word the noun to be stemmed.
+	 * @return the stemmed noun.
+	 */
+	public static String stemNounConstruct(String wordConstruct) {
+		String[] words = wordConstruct.split("_");
+		String stemmedWordConstruct = "";
+		for (String word : words) {
+			stemmedWordConstruct += stemNoun(word) + "_";
+		}
+		return stemmedWordConstruct.substring(0, stemmedWordConstruct.length() - 1);
+	}
+
+	/**
 	 * Stems a noun given as input and returns the stemmed noun.
 	 * 
 	 * @param word the noun to be stemmed.
@@ -100,7 +116,6 @@ public class Stemmer {
 	 */
 	public static String stemNoun(String word) {
 		word = word.toLowerCase();
-		word = word.split("_")[0];
 		int wordLength = word.length();
 		if (nounExceptions.containsKey(word))
 			return nounExceptions.get(word);
@@ -108,7 +123,7 @@ public class Stemmer {
 				|| word.endsWith("lles"))
 			return word.substring(0, wordLength - 2);
 		else if (word.endsWith("ces") || word.endsWith("ses") || word.endsWith("tes") || word.endsWith("nges")
-				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des"))
+				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des") || word.endsWith("ges"))
 			return word.substring(0, wordLength - 1);
 		else if (word.endsWith("ves"))
 			return word.substring(0, wordLength - 3) + "fe";
@@ -136,7 +151,6 @@ public class Stemmer {
 	 */
 	public static String stemVerb(String word) {
 		word = word.toLowerCase();
-		word = word.split("_")[0];
 		int wordLength = word.length();
 		if (verbExceptions.containsKey(word))
 			return verbExceptions.get(word);
@@ -198,7 +212,9 @@ public class Stemmer {
 	 */
 	public static void main(String[] args) {
 		String exampleNoun = "businesses";
-		System.out.println(exampleNoun + " --> " + Stemmer.stemNoun(exampleNoun));
+		System.out.println(exampleNoun + " --> " + StringHelpers.underscoreToCamelCase(Stemmer.stemNoun(exampleNoun)));
+		String exampleNounConstruct = "virtual_machines";
+		System.out.println(exampleNounConstruct + " --> " + Stemmer.stemNounConstruct(exampleNounConstruct));
 		String exampleVerb = "creating";
 		System.out.println(exampleVerb + " --> " + Stemmer.stemVerb(exampleVerb));
 	}

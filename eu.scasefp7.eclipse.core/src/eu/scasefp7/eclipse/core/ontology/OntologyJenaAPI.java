@@ -12,7 +12,6 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
-import java.nio.charset.StandardCharsets;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
@@ -380,6 +379,20 @@ public class OntologyJenaAPI {
 	 * @param propertyValue the float value of the property to be added.
 	 */
 	public void addPropertyToIndividual(String individualName, String propertyName, float propertyValue) {
+		Property property = getProperty(propertyName);
+		Individual individual = getIndividual(individualName);
+		Statement stm = base.createLiteralStatement(individual, property, propertyValue);
+		base.add(stm);
+	}
+
+	/**
+	 * Adds a boolean property value to a property of an individual.
+	 * 
+	 * @param individualName the name of the individual.
+	 * @param propertyName the name of the property to add the value to.
+	 * @param propertyValue the boolean value of the property to be added.
+	 */
+	public void addPropertyToIndividual(String individualName, String propertyName, boolean propertyValue) {
 		Property property = getProperty(propertyName);
 		Individual individual = getIndividual(individualName);
 		Statement stm = base.createLiteralStatement(individual, property, propertyValue);

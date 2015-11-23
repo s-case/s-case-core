@@ -85,32 +85,35 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 
 				// Get the object of the activity and add it as a resource in the linked ontology
 				String object = dynamicOntology.getObjectOfActivity(dynactivity);
-				linkedOntology.addResource(object);
-				for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-					linkedOntology.addActivityDiagram(diagram);
-					linkedOntology.connectActivityDiagramToElement(diagram, object);
-				}
-
-				// Get the action of the activity and add it to the linked ontology
-				String action = dynamicOntology.getActionOfActivity(dynactivity);
-				String activity = action + " " + object;
-				linkedOntology.addActivityToResource(object, activity,
-						dynamicOntology.getActivityTypeOfActivity(dynactivity));
-				linkedOntology.addActionToActivity(activity, action);
-				for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-					linkedOntology.addActivityDiagram(diagram);
-					linkedOntology.connectActivityDiagramToElement(diagram, object);
-					linkedOntology.connectActivityDiagramToElement(diagram, action);
-					linkedOntology.connectActivityDiagramToElement(diagram, activity);
-				}
-
-				// Iterate over all properties of the activity and add them as properties of object to the linked
-				// ontology
-				for (String property : dynamicOntology.getPropertiesOfActivity(object)) {
-					linkedOntology.addPropertyToResource(object, property);
-					for (String diagram : dynamicOntology.getDiagramsOfConcept(property)) {
+				if (object != null) {
+					linkedOntology.addResource(object);
+					for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
 						linkedOntology.addActivityDiagram(diagram);
-						linkedOntology.connectActivityDiagramToElement(diagram, property);
+						linkedOntology.connectActivityDiagramToElement(diagram, object);
+					}
+
+					// Get the action of the activity and add it to the linked ontology
+					String action = dynamicOntology.getActionOfActivity(dynactivity);
+					if (action != null) {
+						String activity = action + " " + object;
+						linkedOntology.addActivityToResource(object, activity,
+								dynamicOntology.getActivityTypeOfActivity(dynactivity));
+						linkedOntology.addActionToActivity(activity, action);
+						for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
+							linkedOntology.addActivityDiagram(diagram);
+							linkedOntology.connectActivityDiagramToElement(diagram, object);
+							linkedOntology.connectActivityDiagramToElement(diagram, action);
+							linkedOntology.connectActivityDiagramToElement(diagram, activity);
+						}
+					}
+
+					// Iterate over all properties of activity and add them as properties of object to the ontology
+					for (String property : dynamicOntology.getPropertiesOfActivity(object)) {
+						linkedOntology.addPropertyToResource(object, property);
+						for (String diagram : dynamicOntology.getDiagramsOfConcept(property)) {
+							linkedOntology.addActivityDiagram(diagram);
+							linkedOntology.connectActivityDiagramToElement(diagram, property);
+						}
 					}
 				}
 			}
