@@ -123,7 +123,7 @@ public class Stemmer {
 				|| word.endsWith("lles"))
 			return word.substring(0, wordLength - 2);
 		else if (word.endsWith("ces") || word.endsWith("ses") || word.endsWith("tes") || word.endsWith("nges")
-				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des"))
+				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des") || word.endsWith("ges"))
 			return word.substring(0, wordLength - 1);
 		else if (word.endsWith("ves"))
 			return word.substring(0, wordLength - 3) + "fe";
