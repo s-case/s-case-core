@@ -1227,7 +1227,6 @@ public class OntologySource {
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#integer\"/>\n"
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#string\"/>\n"
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#char\"/>\n"
-			+ "<Project rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#Restmarks\"/>\n"
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#boolean\"/>\n"
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#float\"/>\n"
 			+ "<PrimitiveDatatype rdf:about=\"http://www.owl-ontologies.com/Ontology1273059028.owl#double\"/>\n"
