@@ -30,11 +30,11 @@ import com.hp.hpl.jena.query.QueryExecution;
 import com.hp.hpl.jena.query.QueryExecutionFactory;
 import com.hp.hpl.jena.query.QueryFactory;
 import com.hp.hpl.jena.query.ResultSet;
-import com.hp.hpl.jena.rdf.model.Literal;
 import com.hp.hpl.jena.rdf.model.ModelFactory;
 import com.hp.hpl.jena.rdf.model.NodeIterator;
 import com.hp.hpl.jena.rdf.model.Property;
 import com.hp.hpl.jena.rdf.model.Statement;
+import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
@@ -437,18 +437,55 @@ public class OntologyJenaAPI {
 	 * 
 	 * @param individualName the name of the individual of which the property value is returned,
 	 * @param propertyName the name of the property of which the value is returned,
-	 * @return a {@link Literal} containing the returned property value.
+	 * @return the returned property value.
 	 */
 	public String getIndividualPropertyValue(String individualName, String propertyName) {
 		Individual individual = getIndividual(individualName);
 		Property property = getProperty(propertyName);
 		if (individual != null && individual.getPropertyValue(property) != null) {
-			if (individual.getPropertyValue(property).toString().contains("#"))
+			if (individual.getPropertyValue(property).toString().startsWith("true^^"))
+				return "true";
+			else if (individual.getPropertyValue(property).toString().startsWith("false^^"))
+				return "false";
+			else if (individual.getPropertyValue(property).toString().contains("#"))
 				return individual.getPropertyValue(property).toString().split("#")[1];
 			else
-				return null;
+				return individual.getPropertyValue(property).toString();
 		} else
 			return null;
+	}
+
+	/**
+	 * Returns the values of the property of an individual given its name and the name of the property.
+	 * 
+	 * @param individualName the name of the individual of which the property value is returned,
+	 * @param propertyName the name of the property of which the value is returned,
+	 * @return a list containing the returned property values.
+	 */
+	public ArrayList<String> getIndividualPropertyValues(String individualName, String propertyName) {
+		ArrayList<String> result = new ArrayList<String>();
+		Individual individual = getIndividual(individualName);
+		Property property = getProperty(propertyName);
+		if (individual != null && individual.getPropertyValue(property) != null) {
+			StmtIterator valuesIterator = individual.listProperties(property);
+			while (valuesIterator.hasNext())
+				result.add(valuesIterator.next().getString());
+		}
+		return result;
+	}
+
+	/**
+	 * Returns the values of the properties of an individual given its name and the names of the properties.
+	 * 
+	 * @param individualName the name of the individual of which the properties values are returned,
+	 * @param propertyNames the names of the properties of which the values are returned,
+	 * @return a list containing the returned properties values.
+	 */
+	public String[] getIndividualPropertiesValues(String individualName, String... propertyNames) {
+		String[] values = new String[propertyNames.length];
+		for (int i = 0; i < propertyNames.length; i++)
+			values[i] = getIndividualPropertyValue(individualName, propertyNames[i]);
+		return values;
 	}
 
 	/**
