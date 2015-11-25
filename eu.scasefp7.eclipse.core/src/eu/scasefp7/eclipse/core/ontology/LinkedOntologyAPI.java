@@ -227,6 +227,228 @@ public class LinkedOntologyAPI {
 	}
 
 	/**
+	 * Adds an operation to a specific resource of the ontology.
+	 * 
+	 * @param resourceName the name of the resource to connect the operation to.
+	 * @param operationName the name of the operation to be added.
+	 * @param operationURL the URL to which this operation belongs.
+	 * @param operationPath the path of the newly added operation.
+	 * @param operationWSType the type of the web service of the newly added operation.
+	 * @param operationCRUDVerb the CRUD verb of the newly added operation.
+	 */
+	public void addOperationToResource(String resourceName, String operationName, String operationURL,
+			String operationPath, String operationWSType, String operationCRUDVerb, String operationResponseType) {
+		linkedOntology.addIndividual("Operation", operationName);
+		linkedOntology.addPropertyAndReverseBetweenIndividuals(resourceName, "has_operation", operationName);
+		linkedOntology.addPropertyToIndividual(operationName, "hasName", operationName);
+		linkedOntology.addPropertyToIndividual(operationName, "belongsToURL", operationURL);
+		linkedOntology.addPropertyToIndividual(operationName, "hasResourcePath", operationPath);
+		linkedOntology.addPropertyToIndividual(operationName, "belongsToWSType", operationWSType);
+		linkedOntology.addPropertyToIndividual(operationName, "hasCRUDVerb", operationCRUDVerb);
+		linkedOntology.addPropertyToIndividual(operationName, "hasResponseType", operationResponseType);
+	}
+
+	/**
+	 * Adds a query parameter to the ontology.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
+	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not an auth token.
+	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
+	 * @param parameterHasElements string or strings denoting the names of the parameter elements.
+	 */
+	public void addQueryParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
+			String parameterAuthURL, boolean parameterIsOptional, String... parameterHasElements) {
+		addInputParameter(parameterName, parameterType, parameterIsAuthToken, parameterAuthURL, parameterIsOptional,
+				parameterHasElements);
+	}
+
+	/**
+	 * Adds a query parameter to the ontology. Overloads
+	 * {@link #addQueryParameter(String, String, boolean, String, boolean, String...)}.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
+	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not an auth token.
+	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
+	 * @param parameterHasElements a list denoting the names of the parameter elements.
+	 */
+	public void addQueryParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
+			String parameterAuthURL, boolean parameterIsOptional, List<String> parameterHasElements) {
+		addInputParameter(parameterName, parameterType, parameterIsAuthToken, parameterAuthURL, parameterIsOptional,
+				parameterHasElements);
+	}
+
+	/**
+	 * Adds an input parameter to the ontology.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
+	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not an auth token.
+	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
+	 * @param parameterHasElements string or strings denoting the names of the parameter elements.
+	 */
+	public void addInputParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
+			String parameterAuthURL, boolean parameterIsOptional, String... parameterHasElements) {
+		linkedOntology.addIndividual("InputRepresentation", parameterName);
+		linkedOntology.addPropertyToIndividual(parameterName, "hasName", parameterName);
+		linkedOntology.addPropertyToIndividual(parameterName, "isType", parameterType);
+		linkedOntology.addPropertyToIndividual(parameterName, "isAuthToken", parameterIsAuthToken);
+		linkedOntology.addPropertyToIndividual(parameterName, "belongsToURL", parameterAuthURL);
+		linkedOntology.addPropertyToIndividual(parameterName, "isOptional", parameterIsOptional);
+		for (String parameterElement : parameterHasElements) {
+			linkedOntology.addPropertyAndReverseBetweenIndividuals(parameterName, "has_elements", parameterElement);
+		}
+	}
+
+	/**
+	 * Adds an input parameter to the ontology. Overloads
+	 * {@link #addInputParameter(String, String, boolean, String, boolean, String...)}.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
+	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not an auth token.
+	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
+	 * @param parameterHasElements a list denoting the names of the parameter elements.
+	 */
+	public void addInputParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
+			String parameterAuthURL, boolean parameterIsOptional, List<String> parameterHasElements) {
+		addInputParameter(parameterName, parameterType, parameterIsAuthToken, parameterAuthURL, parameterIsOptional,
+				parameterHasElements.toArray(new String[parameterHasElements.size()]));
+	}
+
+	/**
+	 * Adds an output parameter to the ontology.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterHasElements string or strings denoting the names of the parameter elements.
+	 */
+	public void addOutputParameter(String parameterName, String parameterType, String... parameterHasElements) {
+		linkedOntology.addIndividual("OutputRepresentation", parameterName);
+		linkedOntology.addPropertyToIndividual(parameterName, "hasName", parameterName);
+		linkedOntology.addPropertyToIndividual(parameterName, "isType", parameterType);
+		for (String parameterElement : parameterHasElements) {
+			linkedOntology.addPropertyAndReverseBetweenIndividuals(parameterName, "has_elements", parameterElement);
+		}
+	}
+
+	/**
+	 * Adds an output parameter to the ontology. Overloads {@link #addOutputParameter(String, String, String...)}.
+	 * 
+	 * @param parameterName the name of the parameter to be added.
+	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
+	 * @param parameterHasElements a list of strings denoting the names of the parameter elements.
+	 */
+	public void addOutputParameter(String parameterName, String parameterType, List<String> parameterHasElements) {
+		addOutputParameter(parameterName, parameterType,
+				parameterHasElements.toArray(new String[parameterHasElements.size()]));
+	}
+
+	/**
+	 * Adds one or more URI parameters in an operation.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addURIParametersToOperation(String operationName, String... parameterNames) {
+		for (String parameterName : parameterNames) {
+			linkedOntology.addPropertyToIndividual(operationName, "hasURIParameters", parameterName);
+		}
+	}
+
+	/**
+	 * Adds one or more URI parameters in an operation. Overloads
+	 * {@link #addURIParametersToOperation(String, String...)}.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames a list of the names of the parameters to be added to the operation.
+	 */
+	public void addURIParametersToOperation(String operationName, List<String> parameterNames) {
+		addURIParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	}
+
+	/**
+	 * Adds one or more query parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addQueryParameter}) before calling this method.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addQueryParametersToOperation(String operationName, String... parameterNames) {
+		for (String parameterName : parameterNames) {
+			linkedOntology
+					.addPropertyAndReverseBetweenIndividuals(operationName, "has_query_parameters", parameterName);
+		}
+	}
+
+	/**
+	 * Adds one or more query parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addQueryParameter}) before calling this method. Overloads
+	 * {@link #addQueryParametersToOperation(String, String...)}.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames a list of the names of the parameters to be added to the operation.
+	 */
+	public void addQueryParametersToOperation(String operationName, List<String> parameterNames) {
+		addQueryParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	}
+
+	/**
+	 * Adds one or more input parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addInputParametersToOperation(String operationName, String... parameterNames) {
+		for (String parameterName : parameterNames) {
+			linkedOntology.addPropertyAndReverseBetweenIndividuals(operationName, "has_input", parameterName);
+		}
+	}
+
+	/**
+	 * Adds one or more input parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method. Overloads
+	 * {@link #addInputParametersToOperation(String, String...)}.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addInputParametersToOperation(String operationName, List<String> parameterNames) {
+		addInputParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	}
+
+	/**
+	 * Adds one or more output parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addOutputParameter}) before calling this method.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addOutputParametersToOperation(String operationName, String... parameterNames) {
+		for (String parameterName : parameterNames) {
+			linkedOntology.addPropertyAndReverseBetweenIndividuals(operationName, "has_output", parameterName);
+		}
+	}
+
+	/**
+	 * Adds one or more output parameters in an operation. <u><b>NOTE</b></u> that you have to add the
+	 * parameters to the linked ontology (using {@link #addOutputParameter}) before calling this method. Overloads
+	 * {@link #addOutputParametersToOperation(String, String...)}.
+	 * 
+	 * @param operationName the name of the operation to add the URI parameter to.
+	 * @param parameterNames the names of the parameters to be added to the operation.
+	 */
+	public void addOutputParametersToOperation(String operationName, List<String> parameterNames) {
+		addOutputParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	}
+
+	/**
 	 * Returns the resources of the ontology for the current project.
 	 * 
 	 * @return an {@link ArrayList} containing the names of the resources.
@@ -302,195 +524,126 @@ public class LinkedOntologyAPI {
 	 * @return the type of the activity.
 	 */
 	public String getActivityTypeOfActivity(String activityName) {
-		return linkedOntology.getIndividualPropertyValue(activityName, "activitytype")/* .getString() */;
+		return linkedOntology.getIndividualPropertyValue(activityName, "activitytype");
 	}
 
 	/**
-	 * Adds an operation to a specific resource of the ontology.
+	 * Returns a boolean indicating whether a resource is an external service.
 	 * 
-	 * @param resourceName the name of the resource to connect the operation to.
-	 * @param operationName the name of the operation to be added.
-	 * @param operationURL the URL to which this operation belongs.
-	 * @param operationPath the path of the newly added operation.
-	 * @param operationWSType the type of the web service of the newly added operation.
-	 * @param operationCRUDVerb the CRUD verb of the newly added operation.
+	 * @param resourceName the name of the resource to check if it is an external service.
+	 * @return a boolean indicating whether the resource is an external service ({@code true}), or not ({@code false}).
 	 */
-	public void addOperationToResource(String resourceName, String operationName, String operationURL,
-			String operationPath, String operationWSType, String operationCRUDVerb, String operationResponseType) {
-		linkedOntology.addIndividual("Operation", operationName);
-		linkedOntology.addPropertyAndReverseBetweenIndividuals(resourceName, "has_operation", operationName);
-		linkedOntology.addPropertyToIndividual(operationName, "hasName", operationName);
-		linkedOntology.addPropertyToIndividual(operationName, "belongsToURL", operationURL);
-		linkedOntology.addPropertyToIndividual(operationName, "hasResourcePath", operationPath);
-		linkedOntology.addPropertyToIndividual(operationName, "belongsToWSType", operationWSType);
-		linkedOntology.addPropertyToIndividual(operationName, "hasCRUDVerb", operationCRUDVerb);
-		linkedOntology.addPropertyToIndividual(operationName, "hasResponseType", operationResponseType);
+	public boolean resourceIsExternalService(String resourceName) {
+		String value = linkedOntology.getIndividualPropertyValue(resourceName, "isExternalService");
+		if (value != null)
+			return Boolean.parseBoolean(value);
+		return false;
 	}
 
 	/**
-	 * Adds an input parameter to the ontology.
+	 * Returns the operation of a specific resource.
 	 * 
-	 * @param parameterName the name of the parameter to be added.
-	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
-	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
-	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not ana auth token.
-	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
-	 * @param parameterHasElements string or strings denoting the names of the parameter elements.
+	 * @param resourceName the name of the resource of which the operation is returned.
+	 * @return the name of the operation.
 	 */
-	public void addInputParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
-			String parameterAuthURL, boolean parameterIsOptional, String... parameterHasElements) {
-		linkedOntology.addIndividual("InputRepresentation", parameterName);
-		linkedOntology.addPropertyToIndividual(parameterName, "hasName", parameterName);
-		linkedOntology.addPropertyToIndividual(parameterName, "isType", parameterType);
-		linkedOntology.addPropertyToIndividual(parameterName, "isAuthToken", parameterIsAuthToken);
-		linkedOntology.addPropertyToIndividual(parameterName, "belongsToURL", parameterAuthURL);
-		linkedOntology.addPropertyToIndividual(parameterName, "isOptional", parameterIsOptional);
-		for (String parameterElement : parameterHasElements) {
-			linkedOntology.addPropertyAndReverseBetweenIndividuals(parameterName, "has_elements", parameterElement);
-		}
+	public String getOperationOfResource(String resourceName) {
+		return linkedOntology.getIndividualNameGivenIndividualAndProperty(resourceName, "has_operation");
 	}
 
 	/**
-	 * Adds an input parameter to the ontology. Overloads
-	 * {@link #addInputParameter(String, String, boolean, String, boolean, String...)}.
+	 * Returns the elements of a specific operation, including the ontology instances for classes {@code "belongsToURL"}
+	 * , {@code "hasResourcePath"}, {@code "belongsToWSType"}, {@code "hasCRUDVerb"}, and {@code "hasResponseType"}.
 	 * 
-	 * @param parameterName the name of the parameter to be added.
-	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
-	 * @param parameterIsAuthToken boolean denoting whether the parameter is an auth token.
-	 * @param parameterAuthURL the URL to which this parameter auth token is sent, null if it is not ana auth token.
-	 * @param parameterIsOptional boolean denoting whether the parameter is optional.
-	 * @param parameterHasElements a list denoting the names of the parameter elements.
+	 * @param operationName the name of the operation of which the elements are returned.
+	 * @return an array of the operation elements.
 	 */
-	public void addInputParameter(String parameterName, String parameterType, boolean parameterIsAuthToken,
-			String parameterAuthURL, boolean parameterIsOptional, List<String> parameterHasElements) {
-		addInputParameter(parameterName, parameterType, parameterIsAuthToken, parameterAuthURL, parameterIsOptional,
-				parameterHasElements.toArray(new String[parameterHasElements.size()]));
+	public String[] getOperationElements(String operationName) {
+		return linkedOntology.getIndividualPropertiesValues(operationName, "belongsToURL", "hasResourcePath",
+				"belongsToWSType", "hasCRUDVerb", "hasResponseType");
 	}
 
 	/**
-	 * Adds an output parameter to the ontology.
+	 * Returns the query parameters of a specific operation.
 	 * 
-	 * @param parameterName the name of the parameter to be added.
-	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
-	 * @param parameterHasElements string or strings denoting the names of the parameter elements.
+	 * @param operationName the name of the operation of which the query parameters are returned.
+	 * @return an {@link ArrayList} containing the names of the query parameters.
 	 */
-	public void addOutputParameter(String parameterName, String parameterType, String... parameterHasElements) {
-		linkedOntology.addIndividual("OutputRepresentation", parameterName);
-		linkedOntology.addPropertyToIndividual(parameterName, "hasName", parameterName);
-		linkedOntology.addPropertyToIndividual(parameterName, "isType", parameterType);
-		for (String parameterElement : parameterHasElements) {
-			linkedOntology.addPropertyAndReverseBetweenIndividuals(parameterName, "has_elements", parameterElement);
-		}
+	public ArrayList<String> getQueryParametersOfOperation(String operationName) {
+		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(operationName, "has_query_parameters");
 	}
 
 	/**
-	 * Adds an output parameter to the ontology. Overloads {@link #addOutputParameter(String, String, String...)}.
+	 * Returns the elements of a specific query parameter, including the ontology instances for classes {@code "isType"}
+	 * , {@code "isAuthToken"}, {@code "belongsToURL"}, and {@code "isOptional"}.
 	 * 
-	 * @param parameterName the name of the parameter to be added.
-	 * @param parameterType the type of the newly added parameter, one of "Primitive", "Array", "Object"
-	 * @param parameterHasElements a list of strings denoting the names of the parameter elements.
+	 * @param parameterName the name of the query parameter of which the elements are returned.
+	 * @return an array of the query parameter elements.
 	 */
-	public void addOutputParameter(String parameterName, String parameterType, List<String> parameterHasElements) {
-		addOutputParameter(parameterName, parameterType,
-				parameterHasElements.toArray(new String[parameterHasElements.size()]));
+	public String[] getQueryParameterElements(String parameterName) {
+		return linkedOntology.getIndividualPropertiesValues(parameterName, "isType", "isAuthToken", "belongsToURL",
+				"isOptional");
 	}
 
 	/**
-	 * Adds one or more URI parameters in an operation.
+	 * Returns the input parameters of a specific operation.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
+	 * @param operationName the name of the operation of which the input parameters are returned.
+	 * @return an {@link ArrayList} containing the names of the input parameters.
 	 */
-	public void addURIParametersToOperation(String operationName, String... parameterNames) {
-		for (String parameterName : parameterNames) {
-			linkedOntology.addPropertyToIndividual(operationName, "hasURIParameters", parameterName);
-		}
+	public ArrayList<String> getInputParametersOfOperation(String operationName) {
+		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(operationName, "has_input");
 	}
 
 	/**
-	 * Adds one or more URI parameters in an operation. Overloads
-	 * {@link #addURIParametersToOperation(String, String...)}.
+	 * Returns the elements of a specific input parameter, including the ontology instances for classes {@code "isType"}
+	 * , {@code "isAuthToken"}, {@code "belongsToURL"}, and {@code "isOptional"}.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames a list of the names of the parameters to be added to the operation.
+	 * @param parameterName the name of the input parameter of which the elements are returned.
+	 * @return an array of the input parameter elements.
 	 */
-	public void addURIParametersToOperation(String operationName, List<String> parameterNames) {
-		addURIParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	public String[] getInputParameterElements(String parameterName) {
+		return linkedOntology.getIndividualPropertiesValues(parameterName, "isType", "isAuthToken", "belongsToURL",
+				"isOptional");
 	}
 
 	/**
-	 * Adds one or more query parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method.
+	 * Returns the output parameters of a specific operation.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
+	 * @param operationName the name of the operation of which the output parameters are returned.
+	 * @return an {@link ArrayList} containing the names of the output parameters.
 	 */
-	public void addQueryParametersToOperation(String operationName, String... parameterNames) {
-		for (String parameterName : parameterNames) {
-			linkedOntology.addPropertyAndReverseBetweenIndividuals(operationName, "has_query_parameters", parameterName);
-		}
+	public ArrayList<String> getOutputParametersOfOperation(String operationName) {
+		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(operationName, "has_output");
 	}
 
 	/**
-	 * Adds one or more query parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method. Overloads
-	 * {@link #addQueryParametersToOperation(String, String...)}.
+	 * Returns the elements of a specific output parameter, including the ontology instance for class {@code "isType"}.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames a list of the names of the parameters to be added to the operation.
+	 * @param parameterName the name of the output parameter of which the elements are returned.
+	 * @return an array of the output parameter elements.
 	 */
-	public void addQueryParametersToOperation(String operationName, List<String> parameterNames) {
-		addQueryParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	public String[] getOutputParameterElements(String parameterName) {
+		return linkedOntology.getIndividualPropertiesValues(parameterName, "isType");
 	}
 
 	/**
-	 * Adds one or more input parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method.
+	 * Returns the URI parameters of a specific operation.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
+	 * @param operationName the name of the operation of which the URI parameters are returned.
+	 * @return an {@link ArrayList} containing the names of the URI parameters.
 	 */
-	public void addInputParametersToOperation(String operationName, String... parameterNames) {
-		for (String parameterName : parameterNames) {
-			linkedOntology.addPropertyAndReverseBetweenIndividuals(operationName, "has_input", parameterName);
-		}
+	public ArrayList<String> getURIParametersOfOperation(String operationName) {
+		return linkedOntology.getIndividualPropertyValues(operationName, "hasURIParameters");
 	}
 
 	/**
-	 * Adds one or more input parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addInputParameter}) before calling this method. Overloads
-	 * {@link #addInputParametersToOperation(String, String...)}.
+	 * Returns the type elements for a specific parameter.
 	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
+	 * @param parameterName the name of the parameter of which the type elements are returned.
+	 * @return an {@link ArrayList} containing the names of the type elements.
 	 */
-	public void addInputParametersToOperation(String operationName, List<String> parameterNames) {
-		addInputParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
-	}
-
-	/**
-	 * Adds one or more output parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addOutputParameter}) before calling this method.
-	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
-	 */
-	public void addOutputParametersToOperation(String operationName, String... parameterNames) {
-		for (String parameterName : parameterNames) {
-			linkedOntology.addPropertyAndReverseBetweenIndividuals(operationName, "has_output", parameterName);
-		}
-	}
-
-	/**
-	 * Adds one or more output parameters in an operation. <u><b>NOTE</b></u> that you have to add the
-	 * parameters to the linked ontology (using {@link #addOutputParameter}) before calling this method. Overloads
-	 * {@link #addOutputParametersToOperation(String, String...)}.
-	 * 
-	 * @param operationName the name of the operation to add the URI parameter to.
-	 * @param parameterNames the names of the parameters to be added to the operation.
-	 */
-	public void addOutputParametersToOperation(String operationName, List<String> parameterNames) {
-		addOutputParametersToOperation(operationName, parameterNames.toArray(new String[parameterNames.size()]));
+	public ArrayList<String> getParameterTypeElements(String parameterName) {
+		return linkedOntology.getIndividualNamesGivenIndividualAndProperty(parameterName, "has_elements");
 	}
 
 	/**
