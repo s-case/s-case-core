@@ -33,6 +33,8 @@ public class LinkedOntologyExternalServiceAPITest {
 		linkedOntology.addInputParameter("subject", "Primitive", false, "https://api:{apikey}@api.mailgun.net/v3/{domain}/messages", true, "string");
 		linkedOntology.addInputParameter("to", "Primitive", false, "https://api:{apikey}@api.mailgun.net/v3/{domain}/messages", false, "string");
 		linkedOntology.addInputParameter("text", "Primitive", false, "https://api:{apikey}@api.mailgun.net/v3/{domain}/messages", false, "string");
+		linkedOntology.addInputParameter("apikey", "Primitive", false, "https://api:{apikey}@api.mailgun.net/v3/{domain}/messages", false, "string");
+		linkedOntology.addInputParameter("domain", "Primitive", false, "https://api:{apikey}@api.mailgun.net/v3/{domain}/messages", false, "string");
 		linkedOntology.addInputParameter("access_key", "Primitive", false,"http://apilayer.net/api/live", false, "string");
 		linkedOntology.addQueryParametersToOperation("GetCurrencyRatesAndEmail", "from", "subject", "to", "text","access_key");
 
