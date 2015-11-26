@@ -1,7 +1,6 @@
 package eu.scasefp7.eclipse.core.ontologytoyamltools;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 import java.util.LinkedList;
 
 /**
@@ -41,8 +40,8 @@ public class Operation {
 	/** A list of the output parameters of the operation. */
 	public ArrayList<OutputProperty> TargetServiceOutputProperties;
 
-	/** A set of the complex parameters of the operation (used for nested types). */
-	public HashSet<OperationProperty> ComplexTypes;
+	/** A list of the complex types of the operation (used for nested types). */
+	public ComplexTypes complexTypes;
 
 	/**
 	 * Initializes this operation given its name and elements.
@@ -61,7 +60,7 @@ public class Operation {
 		TargetServiceURIParameters = new ArrayList<URIParameter>();
 		TargetServiceInputProperties = new ArrayList<InputProperty>();
 		TargetServiceOutputProperties = new ArrayList<OutputProperty>();
-		ComplexTypes = new HashSet<OperationProperty>();
+		complexTypes = new ComplexTypes();
 	}
 
 	/**
@@ -144,7 +143,8 @@ public class Operation {
 	 */
 	public LinkedList<String> addNonPrimitiveProperty(String parameterName, String[] parameterElements,
 			ArrayList<String> parameterTypeElements) {
-		ComplexTypes.add(new OperationProperty(parameterName, parameterElements[0], parameterTypeElements));
+		complexTypes.addOperationProperty(new OperationProperty(parameterName, parameterElements[0],
+				parameterTypeElements));
 		return findNonPrimitiveProperties(parameterTypeElements);
 	}
 
@@ -153,12 +153,15 @@ public class Operation {
 	 * 
 	 * @return a YAML representation of this operation.
 	 */
+	@SuppressWarnings("unchecked")
 	public String toYAMLString() {
 		String all = "\n  TargetServiceURL: " + TargetServiceURL;
 		all += "\n  TargetServicePath: " + TargetServicePath;
 		all += "\n  TargetServiceWSType: " + TargetServiceWSType;
 		all += "\n  TargetServiceCRUDVerb: " + TargetServiceCRUDVerb;
 		all += "\n  TargetServiceResponseType: " + TargetServiceResponseType;
+		complexTypes
+				.populate(TargetServiceQueryParameters, TargetServiceInputProperties, TargetServiceOutputProperties);
 		if (TargetServiceURIParameters.size() > 0) {
 			all += "\n  TargetServiceURIParameters:";
 			for (URIParameter property : TargetServiceURIParameters)
@@ -183,11 +186,8 @@ public class Operation {
 				all += "\n" + property.toYAMLString();
 		} else
 			all += "\n  TargetServiceQueryParameters: []";
-		if (ComplexTypes.size() > 0) {
-			for (OperationProperty property : ComplexTypes) {
-				all += "\n\n- !!eu.fp7.scase.inputParser.ComplexType";
-				all += "\n" + property.toYAMLString();
-			}
+		for (ComplexType complexType : complexTypes) {
+			all += complexType.toYAMLString();
 		}
 		return all;
 	}

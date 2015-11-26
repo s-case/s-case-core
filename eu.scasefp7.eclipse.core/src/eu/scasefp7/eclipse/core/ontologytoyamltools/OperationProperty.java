@@ -25,6 +25,9 @@ public class OperationProperty {
 	/** A boolean denoting if this property is unique or not. */
 	public boolean Unique;
 
+	/** The nested types of this property. */
+	public ArrayList<String> Types;
+
 	/**
 	 * Initializes this property given its name, type and nested types.
 	 * 
@@ -38,9 +41,11 @@ public class OperationProperty {
 			Type = parameterTypeElements.get(0).substring(0, 1).toUpperCase()
 					+ parameterTypeElements.get(0).substring(1);
 			TypeRef = "-";
+			Types = null;
 		} else {
 			Type = "Object";
 			TypeRef = Arrays.asList(parameterTypeElements).toString().replaceAll("^\\[|\\]$", "");
+			Types = parameterTypeElements;
 		}
 		Unique = !(parameterType.equals("Array"));
 	}
@@ -51,10 +56,10 @@ public class OperationProperty {
 	 * @return a YAML representation of this property.
 	 */
 	public String toYAMLString() {
-		String all = "  Name: " + Name;
-		all += "\n  Type: " + Type;
-		all += "\n  TypeRef: " + TypeRef;
-		all += "\n  Unique: " + Unique;
+		String all = "  - Name: " + Name;
+		all += "\n    Type: " + Type;
+		all += "\n    TypeRef: " + TypeRef;
+		all += "\n    Unique: " + Unique;
 		return all;
 	}
 
