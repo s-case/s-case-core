@@ -1,7 +1,6 @@
 package eu.scasefp7.eclipse.core.ontologytoyamltools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class representing an output property of an operation.
@@ -29,7 +28,7 @@ public class OutputProperty extends OperationProperty {
 	public String toYAMLString() {
 		String all = "  - Name: " + Name;
 		all += "\n    Type: " + Type;
-		all += "\n    TypeRef: " + Arrays.asList(Types).toString().replaceAll("^\\[|\\]$", "");
+		all += "\n    TypeRef: " + TypeRef;
 		all += "\n    Unique: " + Unique;
 		return all;
 	}

@@ -19,11 +19,11 @@ public class OperationProperty {
 	/** The type of this property. */
 	public String Type;
 
+	/** The reference to nested types. */
+	public String TypeRef;
+
 	/** A boolean denoting if this property is unique or not. */
 	public boolean Unique;
-
-	/** The nested types of this property. */
-	public ArrayList<String> Types;
 
 	/**
 	 * Initializes this property given its name, type and nested types.
@@ -34,17 +34,15 @@ public class OperationProperty {
 	 */
 	public OperationProperty(String parameterName, String parameterType, ArrayList<String> parameterTypeElements) {
 		Name = parameterName;
-		Type = parameterType;
-		if (StringHelpers.isPrimitive(Type))
-			Type = Type.substring(0, 1).toUpperCase() + Type.substring(1);
-		Unique = !(Type.equals("Array"));
-		Types = new ArrayList<String>();
-		for (String parameterTypeElement : parameterTypeElements) {
-			if (StringHelpers.isPrimitive(parameterTypeElement))
-				Types.add(parameterTypeElement.substring(0, 1).toUpperCase() + parameterTypeElement.substring(1));
-			else
-				Types.add(parameterTypeElement);
+		if (parameterType.equals("Primitive")) {
+			Type = parameterTypeElements.get(0).substring(0, 1).toUpperCase()
+					+ parameterTypeElements.get(0).substring(1);
+			TypeRef = "-";
+		} else {
+			Type = "Object";
+			TypeRef = Arrays.asList(parameterTypeElements).toString().replaceAll("^\\[|\\]$", "");
 		}
+		Unique = !(parameterType.equals("Array"));
 	}
 
 	/**
@@ -55,7 +53,7 @@ public class OperationProperty {
 	public String toYAMLString() {
 		String all = "  Name: " + Name;
 		all += "\n  Type: " + Type;
-		all += "\n  TypeRef: " + Arrays.asList(Types).toString().replaceAll("^\\[|\\]$", "");
+		all += "\n  TypeRef: " + TypeRef;
 		all += "\n  Unique: " + Unique;
 		return all;
 	}

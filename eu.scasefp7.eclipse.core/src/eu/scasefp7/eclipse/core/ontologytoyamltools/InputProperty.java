@@ -1,7 +1,6 @@
 package eu.scasefp7.eclipse.core.ontologytoyamltools;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 
 /**
  * Class representing an input property of an operation.
@@ -43,7 +42,7 @@ public class InputProperty extends OperationProperty {
 	public String toYAMLString() {
 		String all = "  - Name: " + Name;
 		all += "\n    Type: " + Type;
-		all += "\n    TypeRef: " + Arrays.asList(Types).toString().replaceAll("^\\[|\\]$", "");
+		all += "\n    TypeRef: " + TypeRef;
 		all += "\n    Unique: " + Unique;
 		all += "\n    IsAuthToken: " + IsAuthToken;
 		all += "\n    URL: " + URL;
