@@ -45,7 +45,7 @@ public class LinkedOntologyExternalServiceAPITest {
 		linkedOntology.addOutputParameter("timestamp", "Primitive", "string");
 		linkedOntology.addOutputParameter("id", "Primitive", "string");
 		linkedOntology.addOutputParameter("message", "Primitive", "string");
-		linkedOntology.addOutputParametersToOperation("GetCurrencyRatesAndEmail", "privacy", "quotes", "source", "terms", "timestamp", "id", "message");
+		linkedOntology.addOutputParametersToOperation("GetCurrencyRatesAndEmail", "privacy", "source", "terms", "timestamp", "id", "message");
 
 
 
