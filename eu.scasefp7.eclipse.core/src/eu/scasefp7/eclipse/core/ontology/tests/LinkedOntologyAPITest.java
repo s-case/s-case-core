@@ -32,6 +32,16 @@ public class LinkedOntologyAPITest {
 			// Add the object as a resource in the linked ontology
 			linkedOntology.addResource(object);
 
+			// Iterate over all related objects of the object and add them to the linked ontology
+			for (String relatedObject : staticOntology.getRelatedObjectsOfObject(object)) {
+				linkedOntology.addResource(relatedObject);
+				linkedOntology.addRelatedResourceToResource(object, relatedObject);
+				for (String requirement : staticOntology.getRequirementsOfConcept(relatedObject)) {
+					linkedOntology.addRequirement(requirement);
+					linkedOntology.connectRequirementToElement(requirement, relatedObject);
+				}
+			}
+
 			// Iterate over all properties of the object and add them to the linked ontology
 			for (String property : staticOntology.getPropertiesOfObject(object)) {
 				linkedOntology.addPropertyToResource(object, property);
@@ -115,6 +125,10 @@ public class LinkedOntologyAPITest {
 			String taction = dynamicOntology.getActionOfActivity(targetdynactivity);
 			String tobject = dynamicOntology.getObjectOfActivity(targetdynactivity);
 			String tactivity = taction + " " + tobject;
+
+			// Connect the activities
+			if (taction != null && saction != null)
+				linkedOntology.addNextActivityToActivity(sactivity, tactivity);
 
 			// Add the condition of the transition to the respective activity of the linked ontology.
 			if (condition != null && taction != null && saction != null) {
