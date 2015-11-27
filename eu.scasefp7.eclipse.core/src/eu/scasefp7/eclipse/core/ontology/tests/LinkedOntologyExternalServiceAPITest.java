@@ -50,9 +50,7 @@ public class LinkedOntologyExternalServiceAPITest {
 		// Add the output parameters of the operation
 		linkedOntology.addOutputParameter("privacy", "Primitive", "string");
 		linkedOntology.addOutputParameter("USDEUR", "Primitive", "double");
-		linkedOntology.addOutputParameter("USDGBP2014", "Primitive", "double");
-		linkedOntology.addOutputParameter("USDGBP2015", "Primitive", "double");
-		linkedOntology.addOutputParameter("USDGBP", "Object", "USDGBP2014", "USDGBP2015");
+		linkedOntology.addOutputParameter("USDGBP", "Primitive", "double");
 		linkedOntology.addOutputParameter("quotes", "Object", "USDEUR", "USDGBP");
 		linkedOntology.addOutputParameter("source", "Primitive", "string");
 		linkedOntology.addOutputParameter("terms", "Primitive", "string");
