@@ -23,7 +23,6 @@ import org.eclipse.core.runtime.Path;
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
 import com.hp.hpl.jena.ontology.OntModel;
-import com.hp.hpl.jena.ontology.OntProperty;
 import com.hp.hpl.jena.ontology.OntResource;
 import com.hp.hpl.jena.query.Query;
 import com.hp.hpl.jena.query.QueryExecution;
@@ -315,13 +314,16 @@ public class OntologyJenaAPI {
 	}
 
 	/**
-	 * Returns an ontology property object given its name.
+	 * Returns the inverse property of a property given its name.
 	 * 
-	 * @param propertyName the name of the property to be returned.
-	 * @return the existing property object.
+	 * @param propertyName the name of the property of which the inverse is returned.
+	 * @return the inverse property object or {@code null} if it does not exist.
 	 */
-	private OntProperty getOntProperty(String propertyName) {
-		return base.getOntProperty(addNamespaceToInstance(propertyName));
+	private Property getInverseProperty(String propertyName) {
+		if (base.getOntProperty(addNamespaceToInstance(propertyName)).hasInverse())
+			return base.getOntProperty(addNamespaceToInstance(propertyName)).getInverse();
+		else
+			return null;
 	}
 
 	/**
@@ -353,8 +355,9 @@ public class OntologyJenaAPI {
 		Individual individual2 = getIndividual(individualName2);
 		Statement stm = base.createStatement(individual1, property, individual2);
 		base.add(stm);
-		if (getOntProperty(propertyName).hasInverse())
-			base.add(base.createStatement(individual2, getOntProperty(propertyName).getInverse(), individual1));
+		Property inverseProperty = getInverseProperty(propertyName);
+		if (inverseProperty != null)
+			base.add(base.createStatement(individual2, inverseProperty, individual1));
 	}
 
 	/**
