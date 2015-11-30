@@ -40,6 +40,8 @@ public class OperationProperty {
 		if (parameterType.equals("Primitive")) {
 			Type = parameterTypeElements.get(0).substring(0, 1).toUpperCase()
 					+ parameterTypeElements.get(0).substring(1);
+			if (Type.equals("Int"))
+				Type = "Integer";
 			TypeRef = "-";
 			Types = null;
 		} else {

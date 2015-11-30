@@ -36,7 +36,8 @@ public class StringHelpers {
 		return (type.equals("boolean") || type.equals("char") || type.equals("double") || type.equals("float")
 				|| type.equals("integer") || type.equals("string") || type.equals("boolean"))
 				|| (type.equals("Boolean") || type.equals("Char") || type.equals("Double") || type.equals("Float")
-						|| type.equals("Integer") || type.equals("String") || type.equals("Boolean"));
+						|| type.equals("Integer") || type.equals("String") || type.equals("Boolean")
+						|| type.equals("int") || type.equals("long") || type.equals("Int") || type.equals("Long"));
 	}
 
 }
