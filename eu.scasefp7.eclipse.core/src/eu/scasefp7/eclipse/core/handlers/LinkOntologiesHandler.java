@@ -1,13 +1,8 @@
 package eu.scasefp7.eclipse.core.handlers;
 
-import java.util.List;
-
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
@@ -20,14 +15,10 @@ import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
  */
 public class LinkOntologiesHandler extends ProjectAwareHandler {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			List<Object> selectionList = structuredSelection.toList();
-			IProject project = getProjectOfSelectionList(selectionList);
+		IProject project = getProjectOfExecutionEvent(event);
+		if (project != null) {
 
 			// Load the two ontologies
 			StaticOntologyAPI staticOntology = new StaticOntologyAPI(project);
@@ -152,8 +143,10 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 
 			// Close the linked ontology. The other two ontologies are not closed since they do not need to be saved.
 			linkedOntology.close();
+			return null;
+		} else {
+			throw new ExecutionException("No project selected");
 		}
-		return null;
 	}
 
 }

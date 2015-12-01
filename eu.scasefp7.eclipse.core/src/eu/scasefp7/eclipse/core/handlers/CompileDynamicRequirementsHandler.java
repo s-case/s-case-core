@@ -18,9 +18,12 @@ public class CompileDynamicRequirementsHandler extends CommandExecutorHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		executeCommand("eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology");
-		executeCommand("eu.scasefp7.eclipse.umlrec.commands.exportActivityDiagramsToOntology");
-		return null;
+		if (getProjectOfExecutionEvent(event) != null) {
+			executeCommand("eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology");
+			executeCommand("eu.scasefp7.eclipse.umlrec.commands.exportActivityDiagramsToOntology");
+			return null;
+		} else {
+			throw new ExecutionException("No project selected");
+		}
 	}
-
 }

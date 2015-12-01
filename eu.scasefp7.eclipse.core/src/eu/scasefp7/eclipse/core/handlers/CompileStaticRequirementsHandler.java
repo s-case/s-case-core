@@ -18,9 +18,13 @@ public class CompileStaticRequirementsHandler extends CommandExecutorHandler {
 	 */
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		executeCommand("eu.scasefp7.eclipse.reqeditor.commands.exportAllToOntology");
-		executeCommand("eu.scasefp7.eclipse.umlrec.commands.exportUseCaseDiagramsToOntology");
-		return null;
+		if (getProjectOfExecutionEvent(event) != null) {
+			executeCommand("eu.scasefp7.eclipse.reqeditor.commands.exportAllToOntology");
+			executeCommand("eu.scasefp7.eclipse.umlrec.commands.exportUseCaseDiagramsToOntology");
+			return null;
+		} else {
+			throw new ExecutionException("No project selected");
+		}
 	}
 
 }

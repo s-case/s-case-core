@@ -7,7 +7,6 @@ import java.io.PrintWriter;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.StandardCharsets;
 import java.util.LinkedList;
-import java.util.List;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -15,9 +14,6 @@ import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.jface.viewers.ISelection;
-import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.ui.handlers.HandlerUtil;
 
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Operation;
@@ -36,21 +32,18 @@ import eu.scasefp7.eclipse.core.ontologytoyamltools.VerbTypeFinder;
  */
 public class OntologyToYamlHandler extends ProjectAwareHandler {
 
-	@SuppressWarnings("unchecked")
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
-		ISelection selection = HandlerUtil.getCurrentSelection(event);
-		if (selection instanceof IStructuredSelection) {
-			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			List<Object> selectionList = structuredSelection.toList();
-			IProject project = getProjectOfSelectionList(selectionList);
-
+		IProject project = getProjectOfExecutionEvent(event);
+		if (project != null) {
 			// Load the ontology
 			LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(project);
 			Resources resources = createResources(linkedOntology);
 			writeYamlFile(project, resources);
+			return null;
+		} else {
+			throw new ExecutionException("No project selected");
 		}
-		return null;
 	}
 
 	/**

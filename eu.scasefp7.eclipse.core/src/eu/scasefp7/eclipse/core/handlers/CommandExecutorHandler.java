@@ -1,6 +1,5 @@
 package eu.scasefp7.eclipse.core.handlers;
 
-import org.eclipse.core.commands.AbstractHandler;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -16,7 +15,7 @@ import org.eclipse.ui.services.IServiceLocator;
  * 
  * @author themis
  */
-public abstract class CommandExecutorHandler extends AbstractHandler {
+public abstract class CommandExecutorHandler extends ProjectAwareHandler {
 
 	/**
 	 * Executes an existing command.
