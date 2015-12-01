@@ -37,7 +37,8 @@ public class OperationProperty {
 	 */
 	public OperationProperty(String parameterName, String parameterType, ArrayList<String> parameterTypeElements) {
 		Name = parameterName;
-		if (parameterType.equals("Primitive")) {
+		if (parameterType.equals("Primitive")
+				|| (parameterType.equals("Array") && StringHelpers.isPrimitive(parameterTypeElements.get(0)))) {
 			Type = parameterTypeElements.get(0).substring(0, 1).toUpperCase()
 					+ parameterTypeElements.get(0).substring(1);
 			if (Type.equals("Int"))
