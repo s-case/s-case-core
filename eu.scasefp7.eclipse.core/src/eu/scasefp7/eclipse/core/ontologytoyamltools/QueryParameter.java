@@ -30,7 +30,7 @@ public class QueryParameter extends OperationProperty {
 		IsAuthToken = Boolean.parseBoolean(parameterElements[1]);
 		URL = parameterElements[2];
 		if (URL.equals(""))
-			URL = "-";
+			URL = null;
 		IsOptional = Boolean.parseBoolean(parameterElements[3]);
 	}
 

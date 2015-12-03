@@ -43,7 +43,7 @@ public class OperationProperty {
 					+ parameterTypeElements.get(0).substring(1);
 			if (Type.equals("Int"))
 				Type = "Integer";
-			TypeRef = "-";
+			TypeRef = null;
 			Types = null;
 		} else {
 			Type = "Object";
