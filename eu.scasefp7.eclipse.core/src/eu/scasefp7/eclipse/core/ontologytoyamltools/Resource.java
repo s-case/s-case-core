@@ -97,6 +97,10 @@ public class Resource {
 		InputRepresentation = "JSON";
 		OutputRepresentation = "JSON";
 		IsExternalService = isExternalService;
+		if (IsExternalService) {
+			IsAlgorithmic = true;
+			CRUDActivities.add("read");
+		}
 	}
 
 	/**
