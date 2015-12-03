@@ -185,10 +185,13 @@ public class Operation {
 			for (OutputProperty property : TargetServiceOutputProperties)
 				all += "\n" + property.toYAMLString();
 		} else
-			all += "\n  TargetServiceOutputProperties: []";
-		for (ComplexType complexType : complexTypes) {
-			all += complexType.toYAMLString();
-		}
+			all += "\n  TargetServiceComplexTypes: []";
+		if (complexTypes.size() > 0) {
+			all += "\n  TargetServiceComplexTypes:";
+			for (ComplexType complexType : complexTypes)
+				all += "\n" + complexType.toYAMLString();
+		} else
+			all += "\n  TargetServiceComplexTypes: []";
 		return all;
 	}
 }

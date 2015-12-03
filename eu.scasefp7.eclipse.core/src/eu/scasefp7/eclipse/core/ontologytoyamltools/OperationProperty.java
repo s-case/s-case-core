@@ -59,10 +59,26 @@ public class OperationProperty {
 	 * @return a YAML representation of this property.
 	 */
 	public String toYAMLString() {
-		String all = "  - Name: " + Name;
-		all += "\n    Type: " + Type;
-		all += "\n    TypeRef: " + TypeRef;
-		all += "\n    Unique: " + Unique;
+		return toYAMLString(1);
+	}
+
+	/**
+	 * Returns a YAML representation of this property.
+	 * 
+	 * @param indentLevel the indent level of this representation.
+	 * @return a YAML representation of this property.
+	 */
+	public String toYAMLString(int indentLevel) {
+		char[] outerChars = new char[2 * indentLevel];
+		char[] innerChars = new char[2 * indentLevel + 2];
+		Arrays.fill(outerChars, ' ');
+		Arrays.fill(innerChars, ' ');
+		String outerIndent = new String(outerChars);
+		String innerIndent = new String(innerChars);
+		String all = outerIndent + "- Name: " + Name;
+		all += "\n" + innerIndent + "Type: " + Type;
+		all += "\n" + innerIndent + "TypeRef: " + TypeRef;
+		all += "\n" + innerIndent + "Unique: " + Unique;
 		return all;
 	}
 

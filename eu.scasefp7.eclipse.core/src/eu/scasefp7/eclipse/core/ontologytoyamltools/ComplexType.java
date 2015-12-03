@@ -36,12 +36,11 @@ public class ComplexType {
 	 * @return a YAML representation of this complex type.
 	 */
 	public String toYAMLString() {
-		String all = "";
-		all += "\n\n- !!eu.fp7.scase.inputParser.ComplexType";
-		all += "\n  TypeRef: " + TypeRef;
-		all += "\n  ComplexTypeName: " + ComplexTypeName;
+		String all = "  - TypeRef: " + TypeRef;
+		all += "\n    ComplexTypeName: " + ComplexTypeName;
+		all += "\n    ComplexTypeProperties:";
 		for (OperationProperty property : ComplexTypeParameters) {
-			all += "\n" + property.toYAMLString();
+			all += "\n" + property.toYAMLString(2);
 		}
 		return all;
 	}
