@@ -179,13 +179,13 @@ public class Operation {
 			for (InputProperty property : TargetServiceInputProperties)
 				all += "\n" + property.toYAMLString();
 		} else
-			all += "\n  TargetServiceOutputProperties: []";
+			all += "\n  TargetServiceInputProperties: []";
 		if (TargetServiceOutputProperties.size() > 0) {
 			all += "\n  TargetServiceOutputProperties:";
 			for (OutputProperty property : TargetServiceOutputProperties)
 				all += "\n" + property.toYAMLString();
 		} else
-			all += "\n  TargetServiceQueryParameters: []";
+			all += "\n  TargetServiceOutputProperties: []";
 		for (ComplexType complexType : complexTypes) {
 			all += complexType.toYAMLString();
 		}
