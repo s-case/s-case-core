@@ -1,0 +1,51 @@
+package eu.scasefp7.eclipse.core.ui.preferences;
+
+import org.eclipse.jface.preference.StringFieldEditor;
+import org.eclipse.swt.widgets.Composite;
+import org.eclipse.ui.IWorkbench;
+import org.eclipse.ui.IWorkbenchPreferencePage;
+
+import eu.scasefp7.eclipse.core.ui.Activator;
+
+public class PreferenceConstantsPage extends FieldEditorOverlayPage implements
+		IWorkbenchPreferencePage {
+
+	private static final String PAGE_ID = "eu.scasefp7.eclipse.core.ui.preferencePages.PreferenceConstantsPage";
+
+	public PreferenceConstantsPage() {
+		super(GRID);
+		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+	}
+
+	@Override
+	public void createFieldEditors() {
+		addField(new StringFieldEditor("scase_fco_cust_uuid", "Customer UUID:",
+				getFieldEditorParent()));
+		
+		addField(new StringFieldEditor("scase_fco_cust_name", "Username:",
+				getFieldEditorParent()));
+		
+		addField(new StringFieldEditor("passwd", "Password",
+				getFieldEditorParent()) {
+			@Override
+			protected void doFillIntoGrid(Composite parent, int numColumns) {
+				super.doFillIntoGrid(parent, numColumns);
+				getTextControl().setEchoChar('*');
+			}
+		});
+		
+		addField(new MultiLineTextFieldEditor("scase_fco_ssh_key", "SSH key:",
+				getFieldEditorParent()));
+
+	}
+
+	@Override
+	public void init(IWorkbench workbench) {
+		setDescription("Preferences for arguments");
+	}
+
+	@Override
+	protected String getPageId() {
+		return PAGE_ID;
+	}
+}

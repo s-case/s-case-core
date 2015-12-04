@@ -114,6 +114,21 @@
 		     </adapt>         
          </enabledWhen>     
      </page>
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.preferences.PreferenceConstantsPage"
+           id="eu.scasefp7.eclipse.core.ui.page1"
+           name="Variables preference page">
+        <enabledWhen>
+           <adapt
+                 type="org.eclipse.core.resources.IProject">
+              <test
+                    property="org.eclipse.core.resources.projectNature"
+                    value="eu.scasefp7.eclipse.core.scaseNature">
+              </test>
+           </adapt>
+        </enabledWhen>
+     </page>
   </extension>
   <!--
   <extension
@@ -134,6 +149,19 @@
            class="eu.scasefp7.eclipse.core.ui.preferences.InfrastructureServicesPreferencePage"
            id="eu.scasefp7.eclipse.core.ui.preferencePages.InfrastructureServicesPreferencePage"
            name="%infrastructureServices.page">
+     </page>
+      <!--
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.StringVariablePreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.StringVariablePreferencePage"
+           name="String variable preference page">
+     </page>-->
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.preferences.PreferenceConstantsPage"
+           id="eu.scasefp7.eclipse.core.ui.page1"
+           name="Variables preference page">
      </page>
   </extension>
   
@@ -498,5 +526,28 @@
               name="eu.scasefp7.eclipse.*">
         </bundle>
      </component>
+  </extension>
+  <extension
+        point="org.eclipse.core.variables.dynamicVariables">
+     <variable
+           description="Customer UUID"
+           name="scase_fco_cust_uuid"
+           resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
+     </variable>
+     <variable
+           description="Username"
+           name="scase_fco_cust_name"
+           resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
+     </variable>
+     <variable
+           description="Password"
+           name="scase_fco_cust_pwd"
+           resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
+     </variable>
+     <variable
+           description="SSH key"
+           name="scase_fco_ssh_key"
+           resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
+     </variable>
   </extension>
 </plugin>
