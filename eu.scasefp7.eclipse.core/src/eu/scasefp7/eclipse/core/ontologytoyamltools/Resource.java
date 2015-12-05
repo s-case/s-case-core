@@ -34,6 +34,12 @@ public class Resource {
 	/** The output representation of this resource. */
 	public String OutputRepresentation;
 
+	/** A boolean denoting if this resource is an external service or not. */
+	public boolean IsExternalService;
+
+	/** The operation of this resource. */
+	public Operation ROperation;
+
 	/**
 	 * Empty constructor. This is required for instantiating/serializing using {@link org.yaml.snakeyaml.Yaml Yaml}.
 	 */
@@ -54,6 +60,7 @@ public class Resource {
 		Properties = new ArrayList<Property>();
 		InputRepresentation = "JSON";
 		OutputRepresentation = "JSON";
+		IsExternalService = false;
 	}
 
 	/**
@@ -71,6 +78,29 @@ public class Resource {
 		Properties = new ArrayList<Property>();
 		InputRepresentation = "JSON";
 		OutputRepresentation = "JSON";
+		IsExternalService = false;
+	}
+
+	/**
+	 * Initializes this object as a resource by receiving its name and whether it is algorithmic and instantiating the
+	 * lists.
+	 * 
+	 * @param name the name of this resource.
+	 * @param isAlgorithmic boolean denoting whether this resource is algorithmic.
+	 */
+	public Resource(String name, boolean isAlgorithmic, boolean isExternalService) {
+		this.Name = name;
+		this.IsAlgorithmic = isAlgorithmic;
+		CRUDActivities = new ArrayList<String>();
+		RelatedResources = new ArrayList<String>();
+		Properties = new ArrayList<Property>();
+		InputRepresentation = "JSON";
+		OutputRepresentation = "JSON";
+		IsExternalService = isExternalService;
+		if (IsExternalService) {
+			IsAlgorithmic = true;
+			CRUDActivities.add("read");
+		}
 	}
 
 	/**
@@ -96,7 +126,7 @@ public class Resource {
 	}
 
 	/**
-	 * Adds a property to this reource.
+	 * Adds a property to this resource.
 	 * 
 	 * @param property the property to be added.
 	 */
@@ -107,17 +137,12 @@ public class Resource {
 	}
 
 	/**
-	 * Returns a string representation of this resource.
+	 * Adds an operation to this resource.
 	 * 
-	 * @return a string representation of this object.
+	 * @param operation the operation to be added.
 	 */
-	@Override
-	public String toString() {
-		String all = "Resource:\n" + "Name: " + Name + "\n" + "IsAlgorithmic: " + IsAlgorithmic + "\n"
-				+ "CRUDActivities: " + Arrays.asList(CRUDActivities) + "\n" + "InputRepresentation: "
-				+ InputRepresentation + "\n" + "OutputRepresentation: " + OutputRepresentation + "\n" + "Properties: "
-				+ Arrays.asList(Properties) + "\n" + "RelatedResources: " + Arrays.asList(RelatedResources);
-		return all;
+	public void addOperation(Operation operation) {
+		ROperation = operation;
 	}
 
 	/**
@@ -130,6 +155,7 @@ public class Resource {
 		String all = "- !!eu.fp7.scase.inputParser.YamlResource";
 		all += "\n  Name: " + Name;
 		all += "\n  IsAlgorithmic: " + IsAlgorithmic;
+		all += "\n  IsExternalService: " + IsExternalService;
 		all += "\n  CRUDActivities: " + Arrays.asList(CRUDActivities).toString().replaceAll("^\\[|\\]$", "");
 		all += "\n  InputRepresentation: " + InputRepresentation;
 		all += "\n  OutputRepresentation: " + OutputRepresentation;
@@ -141,6 +167,8 @@ public class Resource {
 		} else
 			all += "\n  Properties: []";
 		all += "\n  RelatedResources: " + Arrays.asList(RelatedResources).toString().replaceAll("^\\[|\\]$", "");
+		if (IsExternalService && ROperation != null)
+			all += ROperation.toYAMLString();
 		return all;
 	}
 

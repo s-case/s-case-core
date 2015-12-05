@@ -53,7 +53,7 @@ public class Property {
 
 	/**
 	 * Returns a YAML representation of this property. This is used in order to create a more human-readable
-	 * representation. (It sould be also performed using {@link org.yaml.snakeyaml.Yaml Yaml}).
+	 * representation. (It could be also performed using {@link org.yaml.snakeyaml.Yaml Yaml}).
 	 * 
 	 * @return a YAML representation of this object.
 	 */
