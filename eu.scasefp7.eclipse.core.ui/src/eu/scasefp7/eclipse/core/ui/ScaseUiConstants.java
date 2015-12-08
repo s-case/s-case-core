@@ -24,7 +24,9 @@ package eu.scasefp7.eclipse.core.ui;
 public final class ScaseUiConstants {
 	
 	/** Used to store constants, cannot be instantiated. */
-	private ScaseUiConstants() {};
+	private ScaseUiConstants() {
+	    
+	};
 	
 	/** Category for views. */
 	public static final String VIEW_CATEGORY = "eu.scasefp7.eclipse.category"; //$NON-NLS-1$
@@ -72,25 +74,25 @@ public final class ScaseUiConstants {
     /**
      * URL for the project homepage (http://www.scasefp7.eu/).
      */
-    public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/";
+    public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/"; //$NON-NLS-1$
 
     /**
      * URL for the project github (https://github.com/s-case).
      */
-    public static final String PROJECT_GITHUB = "https://github.com/s-case";
+    public static final String PROJECT_GITHUB = "https://github.com/s-case"; //$NON-NLS-1$
 
     /**
      * URL for the project Facebook page.
      */
-    public static final String PROJECT_FACEBOOK = "http://bit.ly/SCasefb";
+    public static final String PROJECT_FACEBOOK = "http://bit.ly/SCasefb"; //$NON-NLS-1$
 
     /**
      * URL for the project LinkedIn page.
      */
-    public static final String PROJECT_LINKEDIN = "http://bit.ly/SCasegrp";
+    public static final String PROJECT_LINKEDIN = "http://bit.ly/SCasegrp"; //$NON-NLS-1$
 
     /**
      * URL for the project Twitter.
      */
-    public static final String PROJECT_TWITTER = "http://www.twitter.com/scasefp7";
+    public static final String PROJECT_TWITTER = "http://www.twitter.com/scasefp7"; //$NON-NLS-1$
 }
