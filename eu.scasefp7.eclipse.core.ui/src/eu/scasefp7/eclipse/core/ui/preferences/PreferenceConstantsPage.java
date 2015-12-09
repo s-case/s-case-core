@@ -2,6 +2,7 @@ package eu.scasefp7.eclipse.core.ui.preferences;
 
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
+import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
 
@@ -25,14 +26,18 @@ public class PreferenceConstantsPage extends FieldEditorOverlayPage implements
 		addField(new StringFieldEditor("scase_fco_cust_name", "Username:",
 				getFieldEditorParent()));
 		
-		addField(new StringFieldEditor("passwd", "Password",
+		addField(new StringFieldEditor("scase_fco_cust_pwd", "Password",
 				getFieldEditorParent()) {
 			@Override
 			protected void doFillIntoGrid(Composite parent, int numColumns) {
 				super.doFillIntoGrid(parent, numColumns);
+				Text text = getTextControl();
+				String value = text.toString();
 				getTextControl().setEchoChar('*');
+				setStringValue(value);
 			}
 		});
+		
 		
 		addField(new MultiLineTextFieldEditor("scase_fco_ssh_key", "SSH key:",
 				getFieldEditorParent()));

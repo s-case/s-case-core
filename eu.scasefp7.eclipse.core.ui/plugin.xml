@@ -470,6 +470,14 @@
               optional="true">
         </commandParameter>
      </command>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.createServer"
+           name="Create server">
+     </command>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.stopServer"
+           name="Stop server">
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.menus">
@@ -481,6 +489,7 @@
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
                  icon="icons/view16/s-case_16.png"
+                 label="Open browser"
                  style="push">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.url"
@@ -489,6 +498,7 @@
            </command>
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.launchExternal"
+                 label="Launch external"
                  style="push">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.location"
@@ -503,6 +513,16 @@
                     value=" ">
               </parameter>
            </command>
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.createServer"
+                 label="Create server"
+                 style="push">
+           </command>
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.stopServer"
+                 label="Stop server"
+                 style="push">
+           </command>
         </toolbar>
      </menuContribution>
   </extension>
@@ -515,6 +535,14 @@
      <handler
            class="eu.scasefp7.eclipse.core.ui.handlers.LaunchExternalProgramHandler"
            commandId="eu.scasefp7.eclipse.core.ui.commands.launchExternal">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.CreateServerHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.createServer">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.StopServerHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.stopServer">
      </handler>
   </extension>
   <extension
@@ -547,6 +575,11 @@
      <variable
            description="SSH key"
            name="scase_fco_ssh_key"
+           resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
+     </variable>
+     <variable
+           description="Server UUID"
+           name="scase_fco_server_uuid"
            resolver="eu.scasefp7.eclipse.core.ui.DynamicVariableResolver">
      </variable>
   </extension>
