@@ -478,6 +478,15 @@
            id="eu.scasefp7.eclipse.core.ui.commands.stopServer"
            name="Stop server">
      </command>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.importMavenProject"
+           name="Import Maven project">
+        <commandParameter
+              id="eu.scasefp7.eclipse.core.ui.projectDirectory"
+              name="eu.scasefp7.eclipse.core.ui.projectDirectory"
+              optional="true">
+        </commandParameter>
+     </command>
   </extension>
   <extension
         point="org.eclipse.ui.menus">
@@ -488,7 +497,6 @@
               id="eu.scasefp7.eclipse.core.ui.toolbar1">
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
-                 icon="icons/view16/s-case_16.png"
                  label="Open browser"
                  style="push">
               <parameter
@@ -523,6 +531,15 @@
                  label="Stop server"
                  style="push">
            </command>
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.importMavenProject"
+                 label="Import Maven project"
+                 style="push">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.projectDirectory"
+                    value=" ">
+              </parameter>
+           </command>
         </toolbar>
      </menuContribution>
   </extension>
@@ -543,6 +560,10 @@
      <handler
            class="eu.scasefp7.eclipse.core.ui.handlers.StopServerHandler"
            commandId="eu.scasefp7.eclipse.core.ui.commands.stopServer">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.ImportMavenProjectHandler"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.importMavenProject">
      </handler>
   </extension>
   <extension

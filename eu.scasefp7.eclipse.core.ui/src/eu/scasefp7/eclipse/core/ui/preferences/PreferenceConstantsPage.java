@@ -1,12 +1,12 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
 import org.eclipse.jface.preference.StringFieldEditor;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.IWorkbenchPreferencePage;
-
-import eu.scasefp7.eclipse.core.ui.Activator;
+import eu.scasefp7.eclipse.core.ui.handlers.SecureIPreferenceStore;
 
 public class PreferenceConstantsPage extends FieldEditorOverlayPage implements
 		IWorkbenchPreferencePage {
@@ -15,7 +15,7 @@ public class PreferenceConstantsPage extends FieldEditorOverlayPage implements
 
 	public PreferenceConstantsPage() {
 		super(GRID);
-		setPreferenceStore(Activator.getDefault().getPreferenceStore());
+		setPreferenceStore(new SecureIPreferenceStore(ConfigurationScope.INSTANCE,"eu.scasefp7.eclipse.core.ui.preferences.secure"));
 	}
 
 	@Override
@@ -37,7 +37,6 @@ public class PreferenceConstantsPage extends FieldEditorOverlayPage implements
 				setStringValue(value);
 			}
 		});
-		
 		
 		addField(new MultiLineTextFieldEditor("scase_fco_ssh_key", "SSH key:",
 				getFieldEditorParent()));
