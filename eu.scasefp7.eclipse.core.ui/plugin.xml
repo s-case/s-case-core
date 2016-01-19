@@ -200,6 +200,13 @@
               tooltip="Compile dynamic requirements">
         </command>
         <command
+              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
+              error="Import storyboard failed."
+              label="Import storyboard for service composition"
+              notification="Storyboard imported successfully."
+              tooltip="Use a storyboard for service composition">
+        </command>
+        <command
               commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
               label="Link ontologies"
               notification="Ontologies linked successfully."
@@ -209,13 +216,6 @@
      </group>
      <group
            name="Model-driven engineering">
-        <command
-              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
-              error="Import storyboard failed."
-              label="Import storyboard for service composition"
-              notification="Storyboard imported successfully."
-              tooltip="Use a storyboard for service composition">
-        </command>
         <command
               commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
               label="Export to YAML"
