@@ -2,6 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="eu.scasefp7.eclipse.core.ui.dashboardItem" name="Dashboard command" schema="schema/eu.scasefp7.eclipse.core.ui.dashboardItem.exsd"/>
+   <extension-point id="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard" name="New S-Case project wizard" schema="schema/eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard.exsd"/>
 
    <extension
          point="org.eclipse.ui.perspectives">
@@ -86,7 +87,14 @@
             project="true">
       	<description>Create a new S-CASE project to specify requirements for web services</description>
       </wizard>
-  </extension>
+      <wizard
+            category="eu.scasefp7.eclipse.category"
+            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
+            id="eu.scasefp7.eclipse.core.ui.wizard1"
+            name="S-CASE Project dva"
+            project="true">
+      </wizard>
+  </extension> 
   
   <extension
         point="org.eclipse.ui.propertyPages">
@@ -385,4 +393,19 @@
          </command>
       </menuContribution>
    </extension>
+  <extension
+        point="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard">
+     <page
+           class="org.eclipse.ui.dialogs.WizardNewProjectCreationPage"
+           description="Enter project name."
+           id="eu.scasefp7.eclipse.core.ui.page1"
+           name="Create a S-Case Project">
+     </page>
+     <page
+           class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
+           description="Select project domain"
+           id="eu.scasefp7.eclipse.core.ui.page2"
+           name="S-Case project domain">
+     </page>
+  </extension>
 </plugin>
