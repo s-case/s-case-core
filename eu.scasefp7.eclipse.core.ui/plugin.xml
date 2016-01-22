@@ -28,17 +28,20 @@
       </perspectiveExtension>
       
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
+         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
+         <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
+         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
       </perspectiveExtension>
       
-      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
-      	<perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
+      <perspectiveExtension
+            targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
+         <view
+               id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
+               ratio="0.5"
+               relationship="bottom">
+         </view>
       </perspectiveExtension>
-      
-      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
-      	<perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
-      </perspectiveExtension>
-      
      </extension>
   
   <extension
@@ -90,8 +93,9 @@
       <wizard
             category="eu.scasefp7.eclipse.category"
             class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
+            icon="icons/view16/s-case_16.png"
             id="eu.scasefp7.eclipse.core.ui.wizard1"
-            name="S-CASE Project dva"
+            name="S-CASE Project v2"
             project="true">
       </wizard>
   </extension> 
@@ -206,13 +210,6 @@
               label="Compile dynamic requirements"
               notification="Dynamic requirements compiled successfully."
               tooltip="Compile dynamic requirements">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
-              error="Import storyboard failed."
-              label="Import storyboard for service composition"
-              notification="Storyboard imported successfully."
-              tooltip="Use a storyboard for service composition">
         </command>
         <command
               commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"

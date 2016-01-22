@@ -11,11 +11,18 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.ide,
  org.eclipse.mylyn.commons.notifications.ui,
  org.eclipse.mylyn.commons.workbench,
- org.eclipse.ui.forms
+ org.eclipse.ui.forms,
+ org.eclipse.debug.core,
+ org.eclipse.ui.trace,
+ org.eclipse.core.variables,
+ org.eclipse.equinox.security,
+ org.eclipse.m2e.core,
+ org.eclipse.m2e.maven.runtime
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.scasefp7.eclipse.core.ui
 Bundle-Vendor: %Bundle-Vendor
 Bundle-ClassPath: .
 Bundle-Activator: eu.scasefp7.eclipse.core.ui.Activator
 Bundle-ActivationPolicy: lazy
-Import-Package: eu.scasefp7.eclipse.core.builder
+Import-Package: eu.scasefp7.eclipse.core.builder,
+ eu.scasefp7.eclipse.core.ontology

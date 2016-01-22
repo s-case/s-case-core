@@ -12,7 +12,7 @@ public class DomainBoldLabelProvider extends DomainLabelProvider implements IFon
 	private FilteredTree filterTree;
 	private PatternFilter filterForBoldElements;
 
-	DomainBoldLabelProvider(FilteredTree filterTree) {
+	public DomainBoldLabelProvider(FilteredTree filterTree) {
 		this.filterTree = filterTree;
 		filterForBoldElements = filterTree.getPatternFilter();
 	}
