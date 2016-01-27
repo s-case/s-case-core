@@ -2,7 +2,7 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="eu.scasefp7.eclipse.core.ui.dashboardItem" name="Dashboard command" schema="schema/eu.scasefp7.eclipse.core.ui.dashboardItem.exsd"/>
-   <extension-point id="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard" name="New S-Case project wizard" schema="schema/eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard.exsd"/>
+   <extension-point id="eu.scasefp7.eclipse.core.ui.projectWizardPages" name="S-CASE project wizard pages" schema="schema/eu.scasefp7.eclipse.core.ui.projectWizardPages.exsd"/>
 
    <extension
          point="org.eclipse.ui.perspectives">
@@ -87,13 +87,17 @@
             project="true">
       	<description>Create a new S-CASE project to specify requirements for web services</description>
       </wizard>
-      <wizard
+      <!--wizard
+      		name="S-CASE Project (extendable)"
+      		icon="icons/view16/s-case_16.png"
             category="eu.scasefp7.eclipse.category"
             class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
-            id="eu.scasefp7.eclipse.core.ui.wizard1"
-            name="S-CASE Project dva"
+            finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
+            hasPages="true"
+            id="eu.scasefp7.eclipse.core.ui.newProjectWizard2"
             project="true">
-      </wizard>
+      	<description>Create a new S-CASE project to specify requirements for web services</description>
+      </wizard -->
   </extension> 
   
   <extension
@@ -162,12 +166,14 @@
               tooltip="Create a new textual requirements collection">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
         </command>
+        <!--
         <command
               commandId="org.eclipse.ui.file.import"
               label="Import UML Use case diagram"
               tooltip="Import UML use case diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizardDISABLE" />
         </command>
+        -->
      </group>
      <group
            name="Dynamic modeling">
@@ -177,13 +183,15 @@
               tooltip="Create a new storyboard to describe system behaviour">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
         </command>
+        <!--
         <command
               commandId="org.eclipse.ui.file.import"
               label="Import UML Activity diagram"
               tooltip="Import UML Activity diagram from an image">
               <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
-     </group>
+        -->
+      </group>
       <group
            name="Requirements compilation">
  <!--       <command
@@ -393,19 +401,13 @@
          </command>
       </menuContribution>
    </extension>
-  <extension
-        point="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard">
+  <!--extension
+        point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
      <page
-           class="org.eclipse.ui.dialogs.WizardNewProjectCreationPage"
-           description="Enter project name."
-           id="eu.scasefp7.eclipse.core.ui.page1"
-           name="Create a S-Case Project">
-     </page>
-     <page
-           class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
+           class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage:PAGE TITLE"
            description="Select project domain"
            id="eu.scasefp7.eclipse.core.ui.page2"
-           name="S-Case project domain">
+           title="S-CASE Project domain">
      </page>
-  </extension>
+  </extension-->
 </plugin>
