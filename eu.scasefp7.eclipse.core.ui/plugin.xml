@@ -393,12 +393,6 @@
   <extension
         point="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard">
      <page
-           class="org.eclipse.ui.dialogs.WizardNewProjectCreationPage"
-           description="Enter project name."
-           id="eu.scasefp7.eclipse.core.ui.page1"
-           name="Create a S-Case Project">
-     </page>
-     <page
            class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
            description="Select project domain"
            id="eu.scasefp7.eclipse.core.ui.page2"
