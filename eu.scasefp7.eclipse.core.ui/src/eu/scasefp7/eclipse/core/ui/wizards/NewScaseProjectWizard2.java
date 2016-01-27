@@ -1,11 +1,11 @@
 package eu.scasefp7.eclipse.core.ui.wizards;
 
 
+import java.lang.reflect.InvocationTargetException;
 import java.net.URI;
 import java.util.ArrayList;
 
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.Platform;
@@ -33,7 +33,8 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard {
     
     private WizardNewProjectCreationPage _pageOne;
 	//private PropertyWizardPage _pageTwo;
-	private IProjectWizardPage[] _pages = null;
+	private ArrayList<IProjectWizardPage> _pages = new ArrayList<IProjectWizardPage>();
+    
 	
 	/**
 	 * 
@@ -53,7 +54,6 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard {
 	    super.addPages();
 	    IExtensionRegistry registry = Platform.getExtensionRegistry();
 		IConfigurationElement[] contributions = registry.getConfigurationElementsFor(ScaseUiConstants.NEWPROJECTPAGES_EXTENSION);
-		ArrayList<IProjectWizardPage> pages = new ArrayList<IProjectWizardPage>();
 		
 		// Add first page to be able to create a project
 		_pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
@@ -67,25 +67,24 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard {
             for (IConfigurationElement elem : contributions) {
                 if(elem.getName().equals(CONTRIBUTION_PAGE)) {
                     try {
+                        String className = elem.getAttribute(CONTRIBUTION_CLASS);
                         String description = elem.getAttribute(CONTRIBUTION_DESCRIPTION);
                         String title = elem.getAttribute(CONTRIBUTION_TITLE);
         
-                        IProjectWizardPage page;               
-                        page = (IProjectWizardPage) elem.createExecutableExtension(CONTRIBUTION_CLASS);
-                    
+                        Class<? extends IProjectWizardPage> clazz = Class.forName(className).asSubclass(IProjectWizardPage.class);
+                        IProjectWizardPage page = (IProjectWizardPage) clazz.getDeclaredConstructor(String.class).newInstance(title);
+                                          
                         page.setTitle(title);
                         page.setDescription(description);
-                        pages.add(page);
+                        _pages.add(page);
                         addPage(page);
-                    } catch (CoreException e) {
+                    } catch (ClassNotFoundException | InstantiationException | IllegalAccessException | IllegalArgumentException | InvocationTargetException | NoSuchMethodException | SecurityException e) {
                         // TODO Auto-generated catch block
                         e.printStackTrace();
-                    }                    
+                    }              
                 }
             }
         }
-        
-        _pages = (IProjectWizardPage[]) pages.toArray();
 	}
 	
 	@Override
@@ -95,7 +94,7 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard {
 	    URI location = null;
 	    if (!_pageOne.useDefaults()) {
 	        location = _pageOne.getLocationURI();
-	    } // else location == null
+	    }
 	 
 	    IResource res = ScaseProjectSupport.createProject(name, location);
 	    

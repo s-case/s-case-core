@@ -404,7 +404,7 @@
   <!--extension
         point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
      <page
-           class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage:PAGE TITLE"
+           class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
            description="Select project domain"
            id="eu.scasefp7.eclipse.core.ui.page2"
            title="S-CASE Project domain">
