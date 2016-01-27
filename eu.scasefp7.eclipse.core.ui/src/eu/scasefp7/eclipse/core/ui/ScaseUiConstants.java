@@ -38,7 +38,7 @@ public final class ScaseUiConstants {
 	public static final String NEW_PROJECT_WIZARD = "eu.scasefp7.eclipse.core.ui.newProjectWizard"; //$NON-NLS-1$
 	
 	/** New S-CASE project wizard ID2. */
-	public static final String NEW_PROJECT_WIZARD2 = "eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"; //$NON-NLS-1$
+	public static final String NEW_PROJECT_WIZARD2 = "eu.scasefp7.eclipse.core.ui.newProjectWizard2"; //$NON-NLS-1$
 	
 	/** S-CASE Dashboard view ID. */
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
@@ -46,8 +46,8 @@ public final class ScaseUiConstants {
 	/** Extension point used to contribute dashboard items. */
 	public static final String DASHBOARD_EXTENSION = "eu.scasefp7.eclipse.core.ui.dashboardItem"; //$NON-NLS-1$
 	
-	/** Extension point for new project wizard */
-	public static final String NEWPROJECT_EXTENSION = "eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard"; //$NON-NLS-1$
+	/** Extension point for new project wizard pages */
+	public static final String NEWPROJECTPAGES_EXTENSION = "eu.scasefp7.eclipse.core.ui.projectWizardPages"; //$NON-NLS-1$
 	
 	/** Link ontologies command ID. */
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
