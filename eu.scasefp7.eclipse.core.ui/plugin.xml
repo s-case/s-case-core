@@ -97,7 +97,7 @@
             id="eu.scasefp7.eclipse.core.ui.newProjectWizard2"
             project="true">
       	<description>Create a new S-CASE project to specify requirements for web services</description>
-      </wizard -->
+      </wizard-->
   </extension> 
   
   <extension
@@ -159,12 +159,21 @@
         </command>
      </group> -->
      <group
-           name="Static modeling">
+           name="Design">
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create requirements"
               tooltip="Create a new textual requirements collection">
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
+        </command>
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create storyboards"
+              tooltip="Create a new storyboard to describe system behaviour">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
+           </parameter>
         </command>
         <!--
         <command
@@ -175,25 +184,8 @@
         </command>
         -->
      </group>
-     <group
-           name="Dynamic modeling">
-        <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create storyboards"
-              tooltip="Create a new storyboard to describe system behaviour">
-              <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
-        </command>
-        <!--
-        <command
-              commandId="org.eclipse.ui.file.import"
-              label="Import UML Activity diagram"
-              tooltip="Import UML Activity diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
-        </command>
-        -->
-      </group>
       <group
-           name="Requirements compilation">
+           name="Mashup">
  <!--       <command
               commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
               error="Requrements compilation failed."
@@ -202,43 +194,15 @@
               tooltip="Compile requirements in text or storyboards">
         </command>-->
         <command
-              commandId="eu.scasefp7.eclipse.core.commands.compileStaticRequirements"
-              error="Requirements compilation failed."
-              label="Compile static requirements"
-              notification="Static requirements compiled successfully."
-              tooltip="Compile static requirements">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.compileDynamicRequirements"
-              error="Requirements compilation failed."
-              label="Compile dynamic requirements"
-              notification="Dynamic requirements compiled successfully."
-              tooltip="Compile dynamic requirements">
-        </command>
-        <command
               commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
               error="Import storyboard failed."
-              label="Import storyboard for service composition"
+              label="Create service composition"
               notification="Storyboard imported successfully."
               tooltip="Use a storyboard for service composition">
         </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
-              label="Link ontologies"
-              notification="Ontologies linked successfully."
-              tooltip="Link compiled requirements and storyboards"
-              error="Ontologies linking failed.">
-        </command>
      </group>
      <group
-           name="Model-driven engineering">
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
-              label="Export to YAML"
-              notification="YAML export complete."
-              error="YAML export failed."
-              tooltip="Create a YAML description of the service resources">
-        </command>
+           name="Code">
         <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
               error="Code generation failed."
@@ -257,10 +221,10 @@
         </command>
      </group>
      <group
-           name="YouREST">
+           name="Run">
         <command
               commandId="eu.scasefp7.eclipse.core.ui.command12"
-              label="Deploy">
+              label="Deploy on YouREST">
         </command>
      </group>
   </extension>
@@ -401,13 +365,19 @@
          </command>
       </menuContribution>
    </extension>
-  <!--extension
+  <extension
         point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
-           description="Select project domain"
+           description="Select a domain that best describes your project"
            id="eu.scasefp7.eclipse.core.ui.page2"
-           title="S-CASE Project domain">
+           title="Project domain">
      </page>
-  </extension-->
+     <page
+           class="eu.scasefp7.eclipse.core.ui.preferences.XtraWizardPageFromFieldOverlayPage"
+           description="Select a domain that best describes your project"
+           id="eu.scasefp7.eclipse.core.ui.page2"
+           title="Project domain">
+     </page>
+  </extension>
 </plugin>
