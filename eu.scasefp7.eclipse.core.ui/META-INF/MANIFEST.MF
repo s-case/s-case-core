@@ -12,7 +12,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.mylyn.commons.notifications.ui,
  org.eclipse.mylyn.commons.workbench,
  org.eclipse.ui.forms,
- org.eclipse.ui.trace
+ org.eclipse.ui.trace,
+ org.eclipse.equinox.security;bundle-version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.scasefp7.eclipse.core.ui
 Bundle-Vendor: %Bundle-Vendor
