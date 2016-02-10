@@ -80,7 +80,7 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard, IExecu
 					// TODO Auto-generated catch block
 					e.printStackTrace();
 				}
-
+ 
             }
 
         }

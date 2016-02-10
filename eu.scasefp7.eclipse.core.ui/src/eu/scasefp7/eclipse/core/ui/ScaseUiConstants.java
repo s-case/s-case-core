@@ -52,6 +52,12 @@ public final class ScaseUiConstants {
 	/** Link ontologies command ID. */
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
 	
+	/** Paths to project folders*/
+	public static final String REQUIREMENTS_FOLDER = "eu.scasefp7.eclipse.core.ui.rqsFolder"; //$NON-NLS-1$
+	public static final String COMPOSITIONS_FOLDER = "eu.scasefp7.eclipse.core.ui.compFolder"; //$NON-NLS-1$
+	public static final String MODELS_FOLDER = "eu.scasefp7.eclipse.core.ui.modelsFolder"; //$NON-NLS-1$
+	public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
+	
 	
 	/* These are external, included here for convenience */
 	

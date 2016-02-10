@@ -393,10 +393,29 @@
   <extension
         point="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard">
      <page
+           class="eu.scasefp7.eclipse.core.ui.wizards.ScaseProjectWizardPageTwo"
+           description="Select new folders or use the defaults"
+           id="eu.scasefp7.eclipse.core.ui.page1"
+           name="S-Case project folders">
+     </page>
+     <page
            class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
            description="Select project domain"
            id="eu.scasefp7.eclipse.core.ui.page2"
            name="S-Case project domain">
      </page>
+  </extension>
+  <extension
+        point="org.eclipse.ui.decorators">
+     <decorator
+           class="eu.scasefp7.eclipse.core.ui.navigator.ScaseLabel"
+           icon="icons/view32/s-case_32.png"
+           id="eu.scasefp7.eclipse.core.ui.decorator1"
+           label="label"
+           lightweight="true"
+           location="TOP_RIGHT"
+           objectClass="org.eclipse.core.resources.IFolder"
+           state="true">
+     </decorator>
   </extension>
 </plugin>
