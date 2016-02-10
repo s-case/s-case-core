@@ -2,7 +2,8 @@
 <?eclipse version="3.4"?>
 <plugin>
    <extension-point id="eu.scasefp7.eclipse.core.ui.dashboardItem" name="Dashboard command" schema="schema/eu.scasefp7.eclipse.core.ui.dashboardItem.exsd"/>
-   <extension-point id="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard" name="New S-Case project wizard" schema="schema/eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard.exsd"/>
+   <extension-point id="eu.scasefp7.eclipse.core.ui.projectWizardPages" name="S-CASE project wizard pages" schema="schema/eu.scasefp7.eclipse.core.ui.projectWizardPages.exsd"/>
+
 
    <extension
          point="org.eclipse.ui.perspectives">
@@ -28,20 +29,17 @@
       </perspectiveExtension>
       
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
-         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaPerspective"/>
-         <perspectiveShortcut id="org.eclipse.jdt.ui.JavaBrowsingPerspective"/>
-         <actionSet id="org.eclipse.jdt.ui.JavaActionSet"/>
-         <showInPart id="org.eclipse.jdt.ui.PackageExplorer"/>
+         <perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
       </perspectiveExtension>
       
-      <perspectiveExtension
-            targetID="eu.scasefp7.eclipse.core.ui.ScasePerspective">
-         <view
-               id="eu.scasefp7.eclipse.core.ui.views.Dashboard"
-               ratio="0.5"
-               relationship="bottom">
-         </view>
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaPerspective">
+      	<perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
       </perspectiveExtension>
+      
+      <perspectiveExtension targetID="org.eclipse.jdt.ui.JavaBrowsingPerspective">
+      	<perspectiveShortcut id="eu.scasefp7.eclipse.core.ui.ScasePerspective"/>
+      </perspectiveExtension>
+      
      </extension>
   
   <extension
@@ -83,21 +81,24 @@
             name="S-CASE Project"
             icon="icons/view16/s-case_16.png"
             category="eu.scasefp7.eclipse.category"
-            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard"
+            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
             finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
             hasPages="true"
             id="eu.scasefp7.eclipse.core.ui.newProjectWizard"
             project="true">
       	<description>Create a new S-CASE project to specify requirements for web services</description>
       </wizard>
-      <wizard
+      <!--wizard
+      		name="S-CASE Project (extendable)"
+      		icon="icons/view16/s-case_16.png"
             category="eu.scasefp7.eclipse.category"
             class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
-            icon="icons/view16/s-case_16.png"
-            id="eu.scasefp7.eclipse.core.ui.wizard1"
-            name="S-CASE Project v2"
+            finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
+            hasPages="true"
+            id="eu.scasefp7.eclipse.core.ui.newProjectWizard2"
             project="true">
-      </wizard>
+      	<description>Create a new S-CASE project to specify requirements for web services</description>
+      </wizard-->
   </extension> 
   
   <extension
@@ -159,7 +160,7 @@
         </command>
      </group> -->
      <group
-           name="Static modeling">
+           name="Design">
         <command
               commandId="org.eclipse.ui.newWizard"
               label="Create requirements"
@@ -167,29 +168,25 @@
               <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
         </command>
         <command
-              commandId="org.eclipse.ui.file.import"
-              label="Import UML Use case diagram"
-              tooltip="Import UML use case diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
-        </command>
-     </group>
-     <group
-           name="Dynamic modeling">
-        <command
               commandId="org.eclipse.ui.newWizard"
               label="Create storyboards"
               tooltip="Create a new storyboard to describe system behaviour">
-              <parameter name="newWizardId" value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID" />
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
+           </parameter>
         </command>
+        <!--
         <command
               commandId="org.eclipse.ui.file.import"
-              label="Import UML Activity diagram"
-              tooltip="Import UML Activity diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
+              label="Import UML Use case diagram"
+              tooltip="Import UML use case diagram from an image">
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizardDISABLE" />
         </command>
+        -->
      </group>
       <group
-           name="Requirements compilation">
+           name="Mashup">
  <!--       <command
               commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
               error="Requrements compilation failed."
@@ -198,36 +195,15 @@
               tooltip="Compile requirements in text or storyboards">
         </command>-->
         <command
-              commandId="eu.scasefp7.eclipse.core.commands.compileStaticRequirements"
-              error="Requirements compilation failed."
-              label="Compile static requirements"
-              notification="Static requirements compiled successfully."
-              tooltip="Compile static requirements">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.compileDynamicRequirements"
-              error="Requirements compilation failed."
-              label="Compile dynamic requirements"
-              notification="Dynamic requirements compiled successfully."
-              tooltip="Compile dynamic requirements">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
-              label="Link ontologies"
-              notification="Ontologies linked successfully."
-              tooltip="Link compiled requirements and storyboards"
-              error="Ontologies linking failed.">
+              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
+              error="Import storyboard failed."
+              label="Create service composition"
+              notification="Storyboard imported successfully."
+              tooltip="Use a storyboard for service composition">
         </command>
      </group>
      <group
-           name="Model-driven engineering">
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
-              label="Export to YAML"
-              notification="YAML export complete."
-              error="YAML export failed."
-              tooltip="Create a YAML description of the service resources">
-        </command>
+           name="Code">
         <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
               error="Code generation failed."
@@ -246,10 +222,10 @@
         </command>
      </group>
      <group
-           name="YouREST">
+           name="Run">
         <command
               commandId="eu.scasefp7.eclipse.core.ui.command12"
-              label="Deploy">
+              label="Deploy on YouREST">
         </command>
      </group>
   </extension>
@@ -391,18 +367,18 @@
       </menuContribution>
    </extension>
   <extension
-        point="eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard">
+        point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
      <page
            class="eu.scasefp7.eclipse.core.ui.wizards.ScaseProjectWizardPageTwo"
            description="Select new folders or use the defaults"
            id="eu.scasefp7.eclipse.core.ui.page1"
-           name="S-Case project folders">
+           title="S-Case project folders">
      </page>
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
-           description="Select project domain"
+           description="Select a domain that best describes your project"
            id="eu.scasefp7.eclipse.core.ui.page2"
-           name="S-Case project domain">
+           title="S-Case project domain">
      </page>
   </extension>
   <extension

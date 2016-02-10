@@ -1,22 +1,9 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<<<<<<< HEAD
-<?pde version="3.8"?><target name="Development platform" sequenceNumber="73">
-<locations>
-<location path="${eclipse_home}" type="Profile"/>
-<location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
-<unit id="eu.scasefp7.eclipse.core.feature.feature.group" version="1.0.2.201509150922"/>
-<unit id="com.googlecode.json-simple" version="1.1.1"/>
-<unit id="eu.scasefp7.eclipse.core.dependencies.feature.feature.group" version="1.0.2.201509150922"/>
-<unit id="org.apache.servicemix.bundles.jung-graph-impl" version="2.0.1.2"/>
-<unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20150909140529"/>
-<unit id="org.yaml.snakeyaml" version="1.16.0"/>
-=======
-<?pde version="3.8"?><target name="Development platform" sequenceNumber="88">
+<?pde version="3.8"?><target name="Development platform" sequenceNumber="91">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
 <unit id="slf4j.log4j12" version="1.7.6"/>
-<unit id="eu.scasefp7.eclipse.core.dependencies.feature.feature.group" version="1.1.1.201510300826"/>
 <unit id="jcl.over.slf4j" version="1.7.6"/>
 <unit id="slf4j.api" version="1.7.6"/>
 <unit id="com.googlecode.json-simple" version="1.1.1"/>
@@ -26,9 +13,6 @@
 <unit id="org.hamcrest.core" version="1.1.0"/>
 <unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20150909140529"/>
 <unit id="org.yaml.snakeyaml" version="1.16.0"/>
->>>>>>> upstream/master
-
->>>>>>> upstream/master
 <repository location="http://s-case.github.io/s-case_dev_site/"/>
 </location>
 </locations>

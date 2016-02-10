@@ -23,18 +23,25 @@ import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
-
-
+/**
+ * @author Leonora Gaspar
+ * @author Marin Orlic
+ */
 public class NewScaseProjectWizard2 extends Wizard implements INewWizard, IExecutableExtension, IRegistryEventListener {
 	
-	private WizardNewProjectCreationPage _pageOne;
-	private List<IScaseWizardPage> pages = new ArrayList<IScaseWizardPage>();
-	
-	private static final String PAGE_NAME = "Project name";
-	private static final String WIZARD_NAME = "New S-CASE Project"; 
-	private static final String CONTRIBUTION_PAGE = "page";
-   
+	private static final String CONTRIBUTION_CLASS = "class";
+    private static final String CONTRIBUTION_TITLE = "title";
+    private static final String CONTRIBUTION_DESCRIPTION = "description";
+    private static final String CONTRIBUTION_PAGE = "page";
 
+    private static final String PAGE_NAME = "Project name";
+    private static final String WIZARD_NAME = "New S-CASE Project";     
+    
+    private WizardNewProjectCreationPage _pageOne;
+	
+	
+    private List<IScaseWizardPage> _pages = new ArrayList<IScaseWizardPage>();
+	
 
 	public NewScaseProjectWizard2() {
 		setWindowTitle(WIZARD_NAME);
@@ -51,39 +58,43 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard, IExecu
 	public void addPages() {
 	    super.addPages();
 	    IExtensionRegistry registry = Platform.getExtensionRegistry();
-		IConfigurationElement[] contributions = registry.getConfigurationElementsFor(ScaseUiConstants.NEWPROJECT_EXTENSION);
+		IConfigurationElement[] contributions = registry.getConfigurationElementsFor(ScaseUiConstants.NEWPROJECTPAGES_EXTENSION);
 		
+		// Add first page to be able to create a project
 		_pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
-    	_pageOne.setTitle("Create a S-Case Project");
-    	_pageOne.setDescription("Enter project name.");
+		_pageOne.setTitle("Create a new S-CASE Project");
+	    _pageOne.setDescription("Enter project name.");
 	    addPage(_pageOne);
 		
-        for (IConfigurationElement elem : contributions) {
-            if(elem.getName().equals(CONTRIBUTION_PAGE)) {
-            	
-            	String title = elem.getAttribute("name");
-            	String description = elem.getAttribute("description");
-            	String qualifiedName = elem.getAttribute("class");
-            	
-				try {
-					 Class<? extends IScaseWizardPage> c = Class.forName(qualifiedName).asSubclass (IScaseWizardPage.class);
-					 IScaseWizardPage p = (IScaseWizardPage) c.getDeclaredConstructor(String.class).newInstance(title);
-		             
-		             p.setDescription(description);
-		             p.setTitle(title);
-		             //add pages to the list so we can call performFinish on them later
-		             pages.add(p);
-		             //add page to the wizard
-		             addPage(p);
-		             
-				} catch (Exception e) {
-					// TODO Auto-generated catch block
-					e.printStackTrace();
-				}
- 
-            }
+	    // Add contributions
+        if (contributions.length > 0) {
+        	// Create the configured items
+			for (IConfigurationElement elem : contributions) {
+				if (elem.getName().equals(CONTRIBUTION_PAGE)) {
 
-        }
+					String className = elem.getAttribute(CONTRIBUTION_CLASS);
+                    String description = elem.getAttribute(CONTRIBUTION_DESCRIPTION);
+                    String title = elem.getAttribute(CONTRIBUTION_TITLE);
+
+					try {
+						Class<? extends IScaseWizardPage> c = Class.forName(className).asSubclass(IScaseWizardPage.class);
+						IScaseWizardPage p = (IScaseWizardPage) c.getDeclaredConstructor(String.class).newInstance(title);
+						
+						p.setTitle(title);
+						p.setDescription(description);
+						
+						_pages.add(p);
+						addPage(p);
+
+					} catch (Exception e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+
+				}
+
+			} 
+		}
         
 	    
 	    
@@ -100,7 +111,7 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard, IExecu
 	 
 	    IResource res = ScaseProjectSupport.createProject(name, location);
 	 
-	    for (IScaseWizardPage page : pages) 
+	    for (IScaseWizardPage page : _pages) 
 			page.performFinish(res);
 	    
 		return true;

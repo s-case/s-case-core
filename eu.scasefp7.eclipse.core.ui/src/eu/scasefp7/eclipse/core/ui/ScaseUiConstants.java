@@ -49,6 +49,9 @@ public final class ScaseUiConstants {
 	/** Extension point for new project wizard */
 	public static final String NEWPROJECT_EXTENSION = "eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard"; //$NON-NLS-1$
 	
+	/** Extension point for new project wizard pages */
+	public static final String NEWPROJECTPAGES_EXTENSION = "eu.scasefp7.eclipse.core.ui.projectWizardPages"; //$NON-NLS-1$
+	
 	/** Link ontologies command ID. */
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
 	
