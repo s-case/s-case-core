@@ -15,11 +15,16 @@
  */
 package eu.scasefp7.eclipse.core.ui.views;
 
+import java.time.ZoneId;
+import java.time.ZonedDateTime;
+import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.apache.maven.plugin.logging.Log;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -38,11 +43,14 @@ import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
+import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IRegistryEventListener;
+import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.RegistryFactory;
+import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -115,6 +123,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static final String CONTRIBUTION_COMMAND_NOTIFICATION_FAIL = "error";
 
     protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
+    
+    private static ILog pluginLog =  Activator.getDefault().getLog();
       
     /**
      * The currently selected project
@@ -337,14 +347,18 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
+                    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
+                                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
                         try {
-                        	
-                            Activator.trace.trace("/debug/userActions", "Button pressed: "+name);                         
+                            Activator.trace.trace("/debug/userActions", "Button pressed: "+name); 
                             executeCommand(commandId);
                             notifyUser(commandId, notificationSuccess);     
-                        } catch (CommandException ex) {
+
+                        } catch ( CommandException ex) {  
                             notifyUser(commandId, notificationFail, ex);     
                             ex.printStackTrace();
+                            String logEntry = failureFormater(name, startTimestamp, ex.getLocalizedMessage());
+                            pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
                         }
                     }
                 });
@@ -353,13 +367,18 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
+                    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
+                                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
                         try {
-                        	Activator.trace.trace("/debug/userActions", "Button pressed: "+name);                      	
+                        	
+                        	Activator.trace.trace("/debug/userActions", "Button pressed: "+name);  
                             executeCommand(commandId, params);
-                            notifyUser(commandId, notificationSuccess);     
-                        } catch (CommandException ex) {
+                            notifyUser(commandId, notificationSuccess);   
+                        } catch (CommandException ex) { 
                             notifyUser(commandId, notificationFail, ex);     
-                            ex.printStackTrace();
+
+                            String logEntry = failureFormater(name, startTimestamp, ex.getLocalizedMessage());
+                            pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
                         }
                     }
                 });   
@@ -438,11 +457,20 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId, Map<String, String> parameters) throws CommandException {
+		String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
+                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
-
+		String par ="";
+		
+		for (String key : parameters.keySet()) {
+		    System.out.println("Key = " + key);
+		    parameters.get(key);
+		    par+=key+" : " + parameters.get(key) + ", ";
+		}
+		Activator.trace.trace("/debug/userActions", "Command called: "+commandId+", parameters: " + par.substring(0,par.length()-2)); 
 		ICommandService commandService = (ICommandService)serviceLocator.getService(ICommandService.class);
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		
@@ -465,7 +493,9 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		    
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-		    
+			String logEntry = failureFormater(commandId, startTimestamp, ex.getLocalizedMessage());
+        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
+			//pluginLog.log(new Status(IStatus.ERROR, ID, ex.getLocalizedMessage(), ex));
 		   throw ex;
 		}
 	}
@@ -478,11 +508,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId) throws CommandException {
+		String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
+                .format( DateTimeFormatter.ISO_DATE_TIME );
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
-
+		 Activator.trace.trace("/debug/userActions", "Command called: "+commandId); 
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		try  { 
 		    // Execute command via its ID
@@ -490,7 +522,9 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-		    
+			String logEntry = failureFormater(commandId, startTimestamp, ex.getLocalizedMessage());
+        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
+			//pluginLog.log(new Status(IStatus.ERROR, ID, ex.getLocalizedMessage(), ex));
 		    throw ex;
 		}
 	}
@@ -624,13 +658,16 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     }
     
     private static int getProjectDomainId(IProject project) {
+    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.MINUTES )
+                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
         try {
             String domain = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN));
             if(domain != null) {
                 return Integer.parseInt(domain);
             }
         } catch (CoreException | NumberFormatException e) {
-            
+        	String logEntry = failureFormater("getProjectDomainId", startTimestamp, e.getLocalizedMessage());
+        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, e));
         }
         return ScaseUiConstants.PROP_PROJECT_DOMAIN_DEFAULT;
     }
@@ -657,6 +694,35 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     public void removed(IExtensionPoint[] extensionPoints) {
         // TODO Auto-generated method stub
         
+    }
+    
+    private static String failureFormater(String name, String startTime, String message){
+    	
+    	//incremental id in the form t0, t1, t2, t3,...
+    	String Id = "t0";
+    	//the name of the service we are monitoring and logging
+    	String serviceName = "svc";
+    	//the version of the released service under execution/test
+    	String serviceVersion = "0.0";
+    	//the UTC date when the service operational execution (re)started 
+    	String startingServiceOperationalTestingTime = startTime;
+    	//the component where the fault and error raise
+    	String className = "Dashboard";
+    	//the component where the fault and error raise
+    	String functionName = name;
+    	//the UTC date when the failure happen 
+    	String failureTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
+                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
+    	//a human-readable message about the detected error
+    	String errorMsg = message;
+    	return errorMsg + "\n"
+    			+ "Id: " + Id + "\n"
+    			+ "Service name: " + serviceName + "\n"
+    			+ "Service version: " + serviceVersion +"\n"
+    			+ "Starting service time: " + startingServiceOperationalTestingTime + "\n"
+    			+ "Class name: " + className + "\n"
+    			+ "Component name: " + functionName + "\n"
+    			+ "Service name: " + failureTimestamp ;
     }
 
 }

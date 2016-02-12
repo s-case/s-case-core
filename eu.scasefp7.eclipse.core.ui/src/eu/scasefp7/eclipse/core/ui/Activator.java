@@ -1,6 +1,7 @@
 package eu.scasefp7.eclipse.core.ui;
 
 import java.util.Dictionary;
+
 import java.util.Hashtable;
 
 import org.eclipse.osgi.service.debug.DebugOptions;
@@ -8,6 +9,7 @@ import org.eclipse.osgi.service.debug.DebugOptionsListener;
 import org.eclipse.osgi.service.debug.DebugTrace;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
+
 
 /**
  * The activator class controls the plug-in life cycle
@@ -26,6 +28,8 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	// fields to cache the debug flags
 	public static boolean DEBUG = false;
 	public static DebugTrace trace = null;
+
+
 	/**
 	 * The constructor
 	 */
@@ -42,13 +46,15 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 		props.put(DebugOptions.LISTENER_SYMBOLICNAME, PLUGIN_ID); 
 		context.registerService(DebugOptionsListener.class.getName(), this, props);
 		plugin = this;
+
+	    
 	}
 
 	/*
 	 * (non-Javadoc)
 	 * @see org.eclipse.ui.plugin.AbstractUIPlugin#stop(org.osgi.framework.BundleContext)
 	 */
-	public void stop(BundleContext context) throws Exception {
+	public void stop(BundleContext context) throws Exception { 
 		plugin = null;
 		super.stop(context);
 	}
@@ -61,6 +67,7 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	public static Activator getDefault() {
 		return plugin;
 	}
+
 
 	/**
 	 * Returns the shared image registry
@@ -77,6 +84,7 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	@Override
 	public void optionsChanged(DebugOptions options) {
 		DEBUG = options.getBooleanOption(PLUGIN_ID + "/debug", false);
+		//DEBUG = true;
 		trace = options.newDebugTrace(PLUGIN_ID);
 		
 	}
