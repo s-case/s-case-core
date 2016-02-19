@@ -15,6 +15,7 @@ import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 
+import eu.scasefp7.eclipse.core.Activator;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Operation;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Property;
@@ -177,7 +178,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 			try {
 				file.delete(IResource.FORCE, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+			    Activator.log("Unable to delete YAML file (service.yml).", e);
 			}
 		}
 
@@ -190,7 +191,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		try {
 			file.create(ymlStream, IResource.FORCE, null);
 		} catch (CoreException e) {
-			e.printStackTrace();
+            Activator.log("Unable to create YAML file (service.yml).", e);
 		}
 	}
 

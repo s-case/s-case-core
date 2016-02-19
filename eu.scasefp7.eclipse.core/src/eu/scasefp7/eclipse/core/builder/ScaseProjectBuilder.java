@@ -23,6 +23,8 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.Activator;
+
 /**
  * Builder for S-CASE projects.
  * 
@@ -122,8 +124,7 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
 
             handlerService.executeCommand(commandId, null);
         } catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException ex) {
-            // Replace with real-world exception handling
-            ex.printStackTrace();
+            Activator.log("Unable to execute command " + commandId, ex);
         }
     }
 
@@ -144,8 +145,7 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
             handlerService.executeCommand(parametrizedCommand, null);
 
         } catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException ex) {
-            // Replace with real-world exception handling
-            ex.printStackTrace();
+            Activator.log("Unable to execute command " + commandId + " with filename " + fileName, ex);
         }
 
     }

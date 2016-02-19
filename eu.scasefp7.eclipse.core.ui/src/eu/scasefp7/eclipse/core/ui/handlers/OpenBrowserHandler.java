@@ -12,6 +12,8 @@ import org.eclipse.ui.browser.IWebBrowser;
 //import org.eclipse.ui.browser.IWorkbenchBrowserSupport;
 //import org.eclipse.ui.internal.browser.WorkbenchBrowserSupport;
 
+
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
 
@@ -30,8 +32,9 @@ public class OpenBrowserHandler extends AbstractHandler {
 	
     @Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
+        String url = "";
 		try {
-			String url = event.getParameter(PARAM_URL);
+			url = event.getParameter(PARAM_URL);
 			if(url == null) {
 				url = ScaseUiConstants.PROJECT_HOMEPAGE;
 			}
@@ -39,8 +42,7 @@ public class OpenBrowserHandler extends AbstractHandler {
 			final IWebBrowser browser = PlatformUI.getWorkbench().getBrowserSupport().createBrowser("browser");
 			browser.openURL(new URL(url));
 		} catch (PartInitException | MalformedURLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		    Activator.log("Unable to open browser on " + url, e);
 		}
 		
 //		ALTERNATIVE:

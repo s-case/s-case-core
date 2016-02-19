@@ -10,6 +10,8 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.Activator;
+
 /**
  * Abstract handler with a convenience method to execute other commands.
  * 
@@ -29,7 +31,7 @@ public abstract class CommandExecutorHandler extends ProjectAwareHandler {
 			Command command = commandService.getCommand(commandId);
 			command.executeWithChecks(new ExecutionEvent());
 		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to execute command " + commandId, e);
 		}
 	}
 

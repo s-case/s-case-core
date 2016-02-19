@@ -6,6 +6,8 @@ import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
 import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.ui.preferences.ScopedPreferenceStore;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
+
 /**
  * Implements a secure preference store using Eclipse preference APIs.
  * 
@@ -33,7 +35,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.putBoolean(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+			Activator.log("Unable to store boolean preference.", e);
 		}
 	}
 
@@ -42,7 +44,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.putDouble(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to store double preference.", e);
 		}
 	}
 
@@ -51,7 +53,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.putFloat(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to store float preference.", e);
 		}
 	}
 
@@ -60,7 +62,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.putInt(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to store int preference.", e);
 		}
 	}
 
@@ -69,7 +71,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.putLong(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to store long preference.", e);
 		}
 	}
 
@@ -78,7 +80,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			SECURE_PREFERENCES.put(name, value, true);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to store string preference.", e);
 		}
 	}
 
@@ -88,7 +90,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.getBoolean(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load boolean preference.", e);
 		}
 		return result;
 	}
@@ -99,7 +101,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.getDouble(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load double preference.", e);
 		}
 		return result;
 	}
@@ -110,7 +112,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.getFloat(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load float preference.", e);
 		}
 		return result;
 	}
@@ -121,7 +123,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.getInt(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load int preference.", e);
 		}
 		return result;
 	}
@@ -132,7 +134,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.getLong(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load long preference.", e);
 		}
 		return result;
 	}
@@ -143,7 +145,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 		try {
 			result = SECURE_PREFERENCES.get(name, result);
 		} catch (StorageException e) {
-			e.printStackTrace();
+		    Activator.log("Unable to load string preference.", e);
 		}
 		return result;
 	}

@@ -36,6 +36,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import eu.scasefp7.eclipse.core.Activator;
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 
 /**
@@ -86,7 +87,7 @@ public class OntologyJenaAPI {
 							ontologyContents.getBytes(StandardCharsets.UTF_8));
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
-					e.printStackTrace();
+				    Activator.log("Unable to force delete and recreate ontology " + ontologyType, e);
 				}
 			} else if (testfile != null && testfile.exists()) {
 				try {
@@ -96,7 +97,7 @@ public class OntologyJenaAPI {
 					writer.println(ontologyContents);
 					writer.close();
 				} catch (FileNotFoundException | UnsupportedEncodingException e) {
-					e.printStackTrace();
+                    Activator.log("Unable to write ontology " + ontologyType, e);
 				}
 			}
 		}
