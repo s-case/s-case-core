@@ -87,7 +87,8 @@ public class OntologyJenaAPI {
 							ontologyContents.getBytes(StandardCharsets.UTF_8));
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
-				    Activator.log("Unable to force delete and recreate ontology " + ontologyType, e);
+					Activator.log("Unable to force delete and recreate " + ontologyType.name().toLowerCase()
+							+ " ontology file", e);
 				}
 			} else if (testfile != null && testfile.exists()) {
 				try {
@@ -97,7 +98,7 @@ public class OntologyJenaAPI {
 					writer.println(ontologyContents);
 					writer.close();
 				} catch (FileNotFoundException | UnsupportedEncodingException e) {
-                    Activator.log("Unable to write ontology " + ontologyType, e);
+					e.printStackTrace();
 				}
 			}
 		}
@@ -178,14 +179,14 @@ public class OntologyJenaAPI {
 				try {
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
-					e.printStackTrace();
+					Activator.log("Unable to create new " + ontologyType.name().toLowerCase() + " ontology file", e);
 				}
 			}
 			try {
 				InputStream in = file.getContents();
 				base.read(in, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				Activator.log("Unable to read created " + ontologyType.name().toLowerCase() + " ontology file", e);
 			}
 		}
 
@@ -514,7 +515,8 @@ public class OntologyJenaAPI {
 			FileOutputStream out = null;
 			try {
 				out = new FileOutputStream(testfile);
-			} catch (FileNotFoundException e1) {
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
 			base.write(out);
 		} else {
@@ -525,7 +527,7 @@ public class OntologyJenaAPI {
 			try {
 				file.setContents(originalInputStream, IResource.FORCE, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				Activator.log("Unable to save the " + ontologyType.name().toLowerCase() + " ontology file", e);
 			}
 		}
 
