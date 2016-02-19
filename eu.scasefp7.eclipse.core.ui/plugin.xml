@@ -193,6 +193,15 @@
               notification="Requirements compiled successfully."
               tooltip="Compile requirements in text or storyboards">
         </command>-->
+ 		<command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create mashups"
+              tooltip="Create a new storyboard to describe service composition">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
+           </parameter>
+        </command>
         <command
               commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
               error="Import storyboard failed."

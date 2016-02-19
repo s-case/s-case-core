@@ -115,9 +115,8 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
 						// Focus view
                         try {
                             window.getActivePage().showView(getViewID());
-                        } catch (PartInitException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
+                        } catch (PartInitException ex) {
+                            Activator.log("Unable to show view " + getViewID(), ex);
                         }						
 					}
 				});
@@ -163,9 +162,8 @@ public class NotificationPopup extends AbstractWorkbenchNotificationPopup {
                         // Focus view
                         try {
                             window.getActivePage().showView(getViewID());
-                        } catch (PartInitException e1) {
-                            // TODO Auto-generated catch block
-                            e1.printStackTrace();
+                        } catch (PartInitException ex) {
+                            Activator.log("Unable to show view " + getViewID(), ex);
                         }                       
 					}
 				});

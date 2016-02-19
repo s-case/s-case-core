@@ -23,6 +23,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
@@ -32,7 +33,7 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
  */
 public class ProjectDomainPropertyPage extends PropertyPage {
 
-	private static final String DOMAIN_PROPERTY = "eu.scasefp7.eclipse.core.projectDomain";
+	private static final String DOMAIN_PROPERTY = ScaseUiConstants.PROP_PROJECT_DOMAIN;
 	private static final int DOMAIN_DEFAULT = -1;
 	
 	private Label domainLabel;

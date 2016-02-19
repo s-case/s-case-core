@@ -78,6 +78,7 @@ import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
@@ -340,7 +341,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {
                             notifyUser(commandId, notificationFail, ex);     
-                            ex.printStackTrace();
+                            Activator.log("Unable to execute command " + commandId, ex);
                         }
                     }
                 });
@@ -354,7 +355,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {
                             notifyUser(commandId, notificationFail, ex);     
-                            ex.printStackTrace();
+                            Activator.log("Unable to execute command " + commandId, ex);
                         }
                     }
                 });   
