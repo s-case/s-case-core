@@ -73,8 +73,6 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.menus.CommandContributionItem;
-import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
@@ -149,13 +147,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 */
 	public void createPartControl(Composite parent) {
 	    // Set the main layout
-		RowLayout rl_parent = new RowLayout(SWT.HORIZONTAL);
-		rl_parent.pack = false;
-		rl_parent.fill = true;
-		rl_parent.marginWidth = 10;
-		rl_parent.marginHeight = 10;
-		rl_parent.spacing = 10;
-		parent.setLayout(rl_parent);
+		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
+		layout.pack = false;
+		layout.fill = true;
+		layout.marginWidth = 10;
+		layout.marginHeight = 10;
+		layout.spacing = 10;
+		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		// Add menu and toolbar
@@ -180,7 +178,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             @Override
             public void controlResized(ControlEvent e) {
                 parent.getShell().layout();
-                System.out.println("RESIZED");
             }
         });
         
@@ -272,11 +269,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private void fillLocalToolBar(IToolBarManager manager) {
 //      manager.add(action1);
 //      manager.add(action2);
-        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
-            "eu", new HashMap<Object, Object>(), null, null, null, "MENUUU", "C", 
-            "Shows the project properties pages", 
-            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
-        manager.add(new CommandContributionItem(param)); 
+//        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
+//            "eu", new HashMap<Object, Object>(), null, null, null, "MENUUU", "C", 
+//            "Shows the project properties pages", 
+//            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
+//        manager.add(new CommandContributionItem(param)); 
     }
 
     
@@ -337,11 +334,14 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                     @Override
                     public void mouseDown(MouseEvent e) {
                         try {
+                            // Trace user action
+                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
+                            
                             executeCommand(commandId);
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {
-                            notifyUser(commandId, notificationFail, ex);     
                             Activator.log("Unable to execute command " + commandId, ex);
+                            notifyUser(commandId, notificationFail, ex);     
                         }
                     }
                 });
@@ -351,11 +351,14 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                     @Override
                     public void mouseDown(MouseEvent e) {
                         try {
+                            // Trace user action
+                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
+                            
                             executeCommand(commandId, params);
                             notifyUser(commandId, notificationSuccess);     
                         } catch (CommandException ex) {
-                            notifyUser(commandId, notificationFail, ex);     
                             Activator.log("Unable to execute command " + commandId, ex);
+                            notifyUser(commandId, notificationFail, ex);     
                         }
                     }
                 });   
@@ -415,10 +418,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged() || cmdEvent.isHandledChanged()) {
 					control.setEnabled(command.isDefined() && command.isEnabled() && command.isHandled());
 				}
-				if(command.getId().equals("eu.scasefp7.eclipse.core.commands.compileToOntology")) {
-				    System.out.println("cmdEvent def " + cmdEvent.isDefinedChanged() + " en " + cmdEvent.isEnabledChanged() + " hand " + cmdEvent.isHandledChanged());
-				    System.out.println("command " + command.getId() + " def " + command.isDefined() + " en " + command.isEnabled() + " hand " + command.isHandled());
-				}
 			}
 		}; 
 	    
@@ -453,9 +452,12 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     				Parameterization param = new Parameterization(p, entry.getValue());
     				params.add(param);
 		        } else {
-		            System.out.println("Cannot find parameter: " + entry.getKey() + " of command " + commandId);
+		            Activator.TRACE.trace("/dashboard/executeCommand", "Cannot find parameter: " + entry.getKey() + " of command " + commandId);
 		        }
 		    }
+		    
+		    Activator.TRACE.trace("/dashboard/userActions", "Command called: " + commandId + ", parameters: " + params); 
+	        
 			ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params.toArray(new Parameterization[params.size()]));
 		    handlerService.executeCommand(parametrizedCommand, null);
 		    
@@ -479,6 +481,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
 
+		Activator.TRACE.trace("/dashboard/executeCommand", "Executing: " + commandId);
+		
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		try  { 
 		    // Execute command via its ID
@@ -548,7 +552,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 //        if(part == null || !part.equals(currentPart)){
 //            return;
 //        }
-        
         updateSelection(sel);
         updateContentDescription();
     }
@@ -583,6 +586,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             @SuppressWarnings("unchecked")
             IProject project = getProjectOfSelectionList(sel.toList());
             if (project != null) {
+                Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
                 this.currentProject = project;
             }    
         }
@@ -626,7 +630,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 return Integer.parseInt(domain);
             }
         } catch (CoreException | NumberFormatException e) {
-            
+            Activator.log("Unable to load project domain", e);
         }
         return ScaseUiConstants.PROP_PROJECT_DOMAIN_DEFAULT;
     }

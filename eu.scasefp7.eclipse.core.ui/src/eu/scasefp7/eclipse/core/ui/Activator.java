@@ -3,19 +3,24 @@ package eu.scasefp7.eclipse.core.ui;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Dictionary;
+import java.util.Hashtable;
 import java.util.TimeZone;
 
 import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.resource.ImageDescriptor;
+import org.eclipse.osgi.service.debug.DebugOptions;
+import org.eclipse.osgi.service.debug.DebugOptionsListener;
+import org.eclipse.osgi.service.debug.DebugTrace;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
 import org.osgi.framework.BundleContext;
 
 /**
  * The activator class controls the plug-in life cycle
  */
-public class Activator extends AbstractUIPlugin {
+public class Activator extends AbstractUIPlugin implements DebugOptionsListener {
 
-	/** The plug-in ID */
+	/** The plug-in ID. */
 	public static final String PLUGIN_ID = "eu.scasefp7.eclipse.core.ui"; //$NON-NLS-1$
 	
 	/** The starting time of the current session for this plugin. */
@@ -24,14 +29,20 @@ public class Activator extends AbstractUIPlugin {
     /** The current error ID for this session for this plugin. */
     private static int errorID;
 	
-	/** The shared instance */
+	/** The shared instance. */
 	private static Activator plugin;
 	
-	// Images
+	/** The shared images. */
 	private static SharedImages images = null;
 	
+	/** Cached debug tracing flag. */
+    public static boolean DEBUG = false;
+    
+    /** Cached debug trace output. */
+    public static DebugTrace TRACE = null;
+	
 	/**
-	 * The constructor
+	 * The constructor.
 	 */
 	public Activator() {
 	}
@@ -43,8 +54,13 @@ public class Activator extends AbstractUIPlugin {
 	public void start(BundleContext context) throws Exception {
 		super.start(context);
 		plugin = this;
-		STARTING_TIME = this.oDateFormatter.format(new Date());
+		STARTING_TIME = Activator.oDateFormatter.format(new Date());
         errorID = 0;
+        
+        // Register for debug trace
+        Dictionary<String, String> props = new Hashtable<String,String>(4);
+        props.put(DebugOptions.LISTENER_SYMBOLICNAME, PLUGIN_ID); 
+        context.registerService(DebugOptionsListener.class.getName(), this, props);
 	}
 
 	/*
@@ -74,6 +90,7 @@ public class Activator extends AbstractUIPlugin {
 	    if(images == null) {
 	        images = new SharedImages();
 	    }
+	    
 	    return images;
 	}
 	
@@ -134,5 +151,14 @@ public class Activator extends AbstractUIPlugin {
     static {
         oDateFormatter = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm'Z'");
         oDateFormatter.setTimeZone(TimeZone.getTimeZone("UTC"));
+    }
+    
+    /**
+     * Refreshes the debug trace sink when debug options have changed.
+     */
+    @Override
+    public void optionsChanged(DebugOptions options) {
+        DEBUG = options.getBooleanOption(PLUGIN_ID + "/debug", false);
+        TRACE = options.newDebugTrace(PLUGIN_ID);
     }
 }
