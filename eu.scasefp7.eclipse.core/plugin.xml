@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <?eclipse version="3.4"?>
 <plugin>
-
+   <extension-point id="eu.scasefp7.eclipse.core.builder" name="builder" schema="schema/eu.scasefp7.eclipse.core.builder.exsd"/>
    <extension point="org.eclipse.ui.commands">
       <category id="eu.scasefp7.eclipse.core.commands.category" name="Core Commands Category"/>
       <command categoryId="eu.scasefp7.eclipse.core.commands.category" id="eu.scasefp7.eclipse.core.commands.testSetup" name="Test project setup"/>
@@ -19,11 +19,21 @@
             categoryId="eu.scasefp7.eclipse.core.commands.category"
             id="eu.scasefp7.eclipse.core.commands.linkOntologies"
             name="Link Ontologies">
+         <commandParameter
+               id="fileName"
+               name="name"
+               optional="true">
+         </commandParameter>
       </command>
       <command
             categoryId="eu.scasefp7.eclipse.core.commands.category"
             id="eu.scasefp7.eclipse.core.commands.exportToYaml"
             name="Export ontology to YAML">
+         <commandParameter
+               id="fileName"
+               name="name"
+               optional="true">
+         </commandParameter>
       </command>
       <command
             categoryId="eu.scasefp7.eclipse.core.commands.category"
@@ -101,5 +111,45 @@
      <super
            type="org.eclipse.core.resources.problemmarker">
      </super>
+  </extension>
+  <extension
+        name="Test"
+        point="org.eclipse.core.variables.dynamicVariables">
+     <variable
+           description="description"
+           name="argument1"
+           resolver="eu.scasefp7.eclipse.core.builder.TestDynamicVariableResolver">
+     </variable>
+  </extension>
+  <extension
+        name="name1"
+        point="eu.scasefp7.eclipse.core.builder">
+     <buildStep
+           commandId="eu.scasefp7.eclipse.storyboards.commands.exportToOntology"
+           condition="(.*).sbd"
+           name="Export storyboards to ontology">
+     </buildStep>
+     <buildStep
+           commandId="eu.scasefp7.eclipse.reqeditor.commands.exportToOntology"
+           condition="(.*).rqs"
+           name="Export requirements to ontology">
+     </buildStep>
+     <buildStep
+           commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"
+           condition="(.*).owl"
+           name="Link ontologies">
+     </buildStep>
+     <buildStep
+           commandId="eu.scasefp7.eclipse.core.commands.exportToYaml"
+           condition="(.*)LinkedOntology.owl"
+           name="Export to YAML">
+     </buildStep>
+     <cleanStep
+           name="Remove generated files">
+        <removal
+              condition="(.*).txt"
+              name="Txt files remove">
+        </removal>
+     </cleanStep>
   </extension>
 </plugin>

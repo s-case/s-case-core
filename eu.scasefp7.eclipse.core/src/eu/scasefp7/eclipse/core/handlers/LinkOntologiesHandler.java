@@ -2,7 +2,10 @@ package eu.scasefp7.eclipse.core.handlers;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.ResourcesPlugin;
+import org.eclipse.core.runtime.Path;
 
 import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
@@ -18,6 +21,15 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IProject project = getProjectOfExecutionEvent(event);
+		//String projectName = event.getParameter("projectName");
+		String fileName = event.getParameter("fileName");
+		Path path = new Path(fileName);
+		//When handler is called from builder
+		if(fileName != null){
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			project = file.getProject();
+			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		}
 		if (project != null) {
 
 			// Load the two ontologies

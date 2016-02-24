@@ -13,7 +13,9 @@ import org.eclipse.core.commands.ExecutionException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
 
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Operation;
@@ -35,6 +37,15 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IProject project = getProjectOfExecutionEvent(event);
+		//String projectName = event.getParameter("projectName");
+		String fileName = event.getParameter("fileName");
+		Path path = new Path(fileName);
+		//When handler is called from builder
+		if(fileName != null){
+			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
+			project = file.getProject();
+			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
+		}
 		if (project != null) {
 			// Load the ontology
 			LinkedOntologyAPI linkedOntology = new LinkedOntologyAPI(project);

@@ -10,7 +10,7 @@
       </documentation>
    </annotation>
 
-   <element name="extension">
+  <element name="extension">
       <annotation>
          <appinfo>
             <meta.element />

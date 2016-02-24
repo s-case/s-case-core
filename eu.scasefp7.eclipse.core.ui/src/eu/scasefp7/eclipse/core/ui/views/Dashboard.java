@@ -82,6 +82,7 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
+import org.eclipse.ui.internal.registry.RegistryReader;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
@@ -125,6 +126,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
     
     private static ILog pluginLog =  Activator.getDefault().getLog();
+    static int incrementalId = 0;
       
     /**
      * The currently selected project
@@ -379,6 +381,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
                             String logEntry = failureFormater(name, startTimestamp, ex.getLocalizedMessage());
                             pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
+                            
                         }
                     }
                 });   
@@ -495,7 +498,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		        NotEnabledException | NotHandledException ex) {
 			String logEntry = failureFormater(commandId, startTimestamp, ex.getLocalizedMessage());
         	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
-			//pluginLog.log(new Status(IStatus.ERROR, ID, ex.getLocalizedMessage(), ex));
+	
 		   throw ex;
 		}
 	}
@@ -514,7 +517,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
-		 Activator.trace.trace("/debug/userActions", "Command called: "+commandId); 
+		Activator.trace.trace("/debug/userActions", "Command called: "+commandId); 
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		try  { 
 		    // Execute command via its ID
@@ -699,11 +702,12 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static String failureFormater(String name, String startTime, String message){
     	
     	//incremental id in the form t0, t1, t2, t3,...
-    	String Id = "t0";
+    	String Id = "t" + incrementalId;
+    	incrementalId++;
     	//the name of the service we are monitoring and logging
-    	String serviceName = "svc";
+    	String serviceName = "S-Case Dashboard";
     	//the version of the released service under execution/test
-    	String serviceVersion = "0.0";
+    	String serviceVersion = "1.0.0-SNAPSHOT";
     	//the UTC date when the service operational execution (re)started 
     	String startingServiceOperationalTestingTime = startTime;
     	//the component where the fault and error raise
@@ -716,13 +720,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     	//a human-readable message about the detected error
     	String errorMsg = message;
     	return errorMsg + "\n"
-    			+ "Id: " + Id + "\n"
-    			+ "Service name: " + serviceName + "\n"
-    			+ "Service version: " + serviceVersion +"\n"
-    			+ "Starting service time: " + startingServiceOperationalTestingTime + "\n"
-    			+ "Class name: " + className + "\n"
-    			+ "Component name: " + functionName + "\n"
-    			+ "Service name: " + failureTimestamp ;
+    			+ "ERROR_ID t " + Id + "\n"
+    			+ "SERVICE_NAME " + serviceName + "\n"
+    			+ "SERVICE_VERSION  " + serviceVersion +"\n"
+    			+ "STARTING_TIME: " + startingServiceOperationalTestingTime + "\n"
+    			+ "CLASS_NAME " + className + "\n"
+    			+ "FUNCTION_NAME  " + functionName + "\n"
+    			+ "FAILURE_TIMESTAMP " + failureTimestamp ;
     }
 
 }

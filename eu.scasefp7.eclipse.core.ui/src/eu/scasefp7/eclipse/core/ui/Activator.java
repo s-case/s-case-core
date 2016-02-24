@@ -84,7 +84,6 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	@Override
 	public void optionsChanged(DebugOptions options) {
 		DEBUG = options.getBooleanOption(PLUGIN_ID + "/debug", false);
-		//DEBUG = true;
 		trace = options.newDebugTrace(PLUGIN_ID);
 		
 	}
