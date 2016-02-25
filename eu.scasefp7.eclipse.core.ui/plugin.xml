@@ -206,7 +206,6 @@
               commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
               error="Import storyboard failed."
               label="Create service composition"
-              notification="Storyboard imported successfully."
               tooltip="Use a storyboard for service composition">
         </command>
      </group>
