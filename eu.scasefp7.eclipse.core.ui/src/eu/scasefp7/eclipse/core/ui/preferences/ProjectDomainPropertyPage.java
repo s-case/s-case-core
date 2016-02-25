@@ -3,6 +3,7 @@ package eu.scasefp7.eclipse.core.ui.preferences;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
@@ -254,7 +255,14 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		try {
 			DomainEntry de = (DomainEntry) domainLabel.getData();
 			if(de != null) {
-				((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				 IAdaptable element = getElement();
+				 if (element instanceof IResource)
+					 ((IResource) element).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				 else {
+					 Object resource = element.getAdapter(IResource.class);
+					 if (resource instanceof IResource)
+					     ((IResource) resource).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				 }
 			}
 		} catch (CoreException e) {
 			return false;
