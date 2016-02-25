@@ -3,6 +3,7 @@ package eu.scasefp7.eclipse.core.ui.preferences;
 import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
@@ -23,6 +24,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
@@ -223,11 +225,13 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		//super.addListeners(tree);
 		return tree;
 	}
+	
 	public Label getDomainLabel(){
 		
 		return domainLabel;
 		
 	}
+	
 	protected DomainEntry getSingleSelection(ISelection selection)
 	{
 	  if (!selection.isEmpty()) {
@@ -255,9 +259,20 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 		try {
 			DomainEntry de = (DomainEntry) domainLabel.getData();
 			if(de != null) {
-				((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				IAdaptable element = getElement();
+				if(element instanceof IResource) {
+				    ((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				} else {
+				    Object resource = element.getAdapter(IResource.class);
+				    if (resource instanceof IResource) {
+				        ((IResource) resource).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
+				    } else {
+				        Activator.log("Unable to set project domain on adaptable " + element.toString(), null);
+				    }
+				}
 			}
 		} catch (CoreException e) {
+		    Activator.log("Unable to set project domain.", e);
 			return false;
 		}
 		return true;
@@ -290,5 +305,4 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 			domainLabel.setData(domain);
 		}
 	}
-
 }
