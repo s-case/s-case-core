@@ -10,11 +10,8 @@ import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 
@@ -39,15 +36,14 @@ public class ScaseProjectWizardPageTwo extends WizardPage implements IScaseWizar
 	
 	protected ScaseProjectWizardPageTwo(String pageName) {
 		super(pageName);
-		// TODO Auto-generated constructor stub
+		setTitle(pageName);
 	}
 
 	
 	@Override
 	public void createControl(Composite parent) {
-		initializeDialogUnits(parent);
-
 		final Composite composite= new Composite(parent, SWT.NULL);
+		initializeDialogUnits(parent);
 		composite.setFont(parent.getFont());
 		GridLayout layout = new GridLayout();
 		layout.numColumns = 3;
@@ -288,4 +284,8 @@ public class ScaseProjectWizardPageTwo extends WizardPage implements IScaseWizar
 		return false;
 	}
 
+	@Override
+	public boolean canFlipToNextPage() {
+		return false;
+	}
 }

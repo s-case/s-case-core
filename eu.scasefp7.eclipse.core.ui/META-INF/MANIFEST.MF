@@ -25,4 +25,5 @@ Bundle-ClassPath: .
 Bundle-Activator: eu.scasefp7.eclipse.core.ui.Activator
 Bundle-ActivationPolicy: lazy
 Import-Package: eu.scasefp7.eclipse.core.builder,
- eu.scasefp7.eclipse.core.ontology
+ eu.scasefp7.eclipse.core.ontology,
+ org.eclipse.debug.internal.ui

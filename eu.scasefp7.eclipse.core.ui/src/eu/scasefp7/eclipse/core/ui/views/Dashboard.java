@@ -614,6 +614,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 }
             }
         }
+        
         return project;
     }
     
@@ -625,6 +626,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             IProject project = getProjectOfSelectionList(sel.toList());
             if (project != null) {
                 this.currentProject = project;
+                System.out.println("Current project: " + project);
             }    
         }
     }

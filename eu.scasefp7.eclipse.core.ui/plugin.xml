@@ -224,7 +224,7 @@
      <group
            name="Run">
         <command
-              commandId="eu.scasefp7.eclipse.core.ui.command12"
+              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
               label="Deploy on YouREST">
         </command>
      </group>
@@ -241,6 +241,10 @@
               optional="true">
         </commandParameter>
      </command>
+     <command
+           id="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
+           name="Open deploy wizard">
+     </command>
   </extension>
 
   <extension
@@ -248,6 +252,10 @@
      <handler
            class="eu.scasefp7.eclipse.core.ui.handlers.OpenBrowserHandler"
            commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.OpenDeployWizardHander"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard">
      </handler>
   </extension>
   
