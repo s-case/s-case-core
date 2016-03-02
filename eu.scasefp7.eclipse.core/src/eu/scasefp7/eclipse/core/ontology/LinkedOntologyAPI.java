@@ -93,6 +93,17 @@ public class LinkedOntologyAPI {
 	}
 
 	/**
+	 * Adds a requirement in the ontology, including its text, and connects it to the project.
+	 * 
+	 * @param requirementName the requirement to be added.
+	 * @param requirementsText the text of the requirement to be added.
+	 */
+	public void addRequirement(String requirementName, String requirementsText) {
+		linkedOntology.addIndividual("Requirement", requirementName, requirementsText);
+		linkedOntology.addPropertyAndReverseBetweenIndividuals(projectName, "has_requirement", requirementName);
+	}
+
+	/**
 	 * Connects a requirement to an element of the ontology.
 	 * 
 	 * @param requirementName the requirement to be connected.
@@ -106,10 +117,22 @@ public class LinkedOntologyAPI {
 	/**
 	 * Adds an activity diagram in the ontology and connects it to the project.
 	 * 
-	 * @param activityDiagramName the requirement to be added.
+	 * @param activityDiagramName the activity diagram to be added.
 	 */
 	public void addActivityDiagram(String activityDiagramName) {
 		linkedOntology.addIndividual("ActivityDiagram", activityDiagramName);
+		linkedOntology
+				.addPropertyAndReverseBetweenIndividuals(projectName, "has_activity_diagram", activityDiagramName);
+	}
+
+	/**
+	 * Adds an activity diagram in the ontology, including its text, and connects it to the project.
+	 * 
+	 * @param activityDiagramName the activity diagram to be added.
+	 * @param activityDiagramText the text of the activity diagram to be added.
+	 */
+	public void addActivityDiagram(String activityDiagramName, String activityDiagramText) {
+		linkedOntology.addIndividual("ActivityDiagram", activityDiagramName, activityDiagramText);
 		linkedOntology
 				.addPropertyAndReverseBetweenIndividuals(projectName, "has_activity_diagram", activityDiagramName);
 	}

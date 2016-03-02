@@ -83,6 +83,17 @@ public class StaticOntologyAPI {
 	}
 
 	/**
+	 * Adds a requirement in the ontology, including its text, and connects it to the project.
+	 * 
+	 * @param requirementName the requirement to be added.
+	 * @param requirementsText the text of the requirement to be added.
+	 */
+	public void addRequirement(String requirementName, String requirementsText) {
+		staticOntology.addIndividual("Requirement", requirementName, requirementsText);
+		staticOntology.addPropertyAndReverseBetweenIndividuals(projectName, "project_has_requirement", requirementName);
+	}
+
+	/**
 	 * Connects a requirement to a concept of the ontology.
 	 * 
 	 * @param requirementName the requirement to be connected.
@@ -158,6 +169,16 @@ public class StaticOntologyAPI {
 	 */
 	public ArrayList<String> getRequirementsOfConcept(String concept) {
 		return staticOntology.getIndividualNamesGivenIndividualAndProperty(concept, "is_concept_of_requirement");
+	}
+
+	/**
+	 * Returns the text of a specific requirement.
+	 * 
+	 * @param requirement the requirement of which the text is returned.
+	 * @return the text of the given requirement.
+	 */
+	public String getTextOfRequirement(String requirement) {
+		return staticOntology.getIndividualComment(requirement);
 	}
 
 	/**

@@ -72,14 +72,25 @@ public class DynamicOntologyAPI {
 		dynamicOntology.addIndividual("Project", projectName);
 	}
 
-
 	/**
 	 * Adds an activity diagram in the ontology and connects it to the project.
 	 * 
-	 * @param activityDiagramName the requirement to be added.
+	 * @param activityDiagramName the diagram to be added.
 	 */
 	public void addActivityDiagram(String activityDiagramName) {
 		dynamicOntology.addIndividual("ActivityDiagram", activityDiagramName);
+		dynamicOntology
+				.addPropertyAndReverseBetweenIndividuals(projectName, "project_has_diagram", activityDiagramName);
+	}
+
+	/**
+	 * Adds an activity diagram in the ontology, including its text, and connects it to the project.
+	 * 
+	 * @param activityDiagramName the diagram to be added.
+	 * @param activityDiagramText the text of the diagram to be added.
+	 */
+	public void addActivityDiagram(String activityDiagramName, String activityDiagramText) {
+		dynamicOntology.addIndividual("ActivityDiagram", activityDiagramName, activityDiagramText);
 		dynamicOntology
 				.addPropertyAndReverseBetweenIndividuals(projectName, "project_has_diagram", activityDiagramName);
 	}
@@ -216,6 +227,16 @@ public class DynamicOntologyAPI {
 	 */
 	public ArrayList<String> getDiagramsOfConcept(String concept) {
 		return dynamicOntology.getIndividualNamesGivenIndividualAndProperty(concept, "is_of_diagram");
+	}
+
+	/**
+	 * Returns the text of a specific activity diagram.
+	 * 
+	 * @param diagram the activity diagram of which the text is returned.
+	 * @return the text of the given activity diagram.
+	 */
+	public String getTextOfActivityDiagram(String diagram) {
+		return dynamicOntology.getIndividualComment(diagram);
 	}
 
 	/**
