@@ -148,87 +148,6 @@
   </extension>
   
   <!-- Dashboard commands -->
-  <extension
-        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
- <!--    <group
-           name="Project setup">
-        <command
-              commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
-              error="Project configuration failed"
-              label="Configure project"
-              notification="Project successfully configured">
-        </command>
-     </group> -->
-     <group
-           name="Design">
-        <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create requirements"
-              tooltip="Create a new textual requirements collection">
-              <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
-        </command>
-        <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create storyboards"
-              tooltip="Create a new storyboard to describe system behaviour">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
-           </parameter>
-        </command>
-        <!--
-        <command
-              commandId="org.eclipse.ui.file.import"
-              label="Import UML Use case diagram"
-              tooltip="Import UML use case diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizardDISABLE" />
-        </command>
-        -->
-     </group>
-      <group
-           name="Mashup">
- <!--       <command
-              commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
-              error="Requrements compilation failed."
-              label="Compile"
-              notification="Requirements compiled successfully."
-              tooltip="Compile requirements in text or storyboards">
-        </command>-->
-        <command
-              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
-              error="Import storyboard failed."
-              label="Create service composition"
-              notification="Storyboard imported successfully."
-              tooltip="Use a storyboard for service composition">
-        </command>
-     </group>
-     <group
-           name="Code">
-        <command
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              label="Generate code"
-              tooltip="Generate code for the web service">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              label="Re-generate code"
-              tooltip="Generate code for the web service using previous settings">
-           <parameter
-                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
-                 value="yes">
-           </parameter>
-        </command>
-     </group>
-     <group
-           name="Run">
-        <command
-              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
-              label="Deploy on YouREST">
-        </command>
-     </group>
-  </extension>
   
   <extension
         point="org.eclipse.ui.commands">
@@ -410,5 +329,69 @@
               name="eu.scasefp7.eclipse.*">
         </bundle>
      </component>
+  </extension>
+  <extension
+        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
+     <group
+           icon="icons/dashboardDesignBackground.png"
+           name="Design">
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create requirements"
+              tooltip="Create a new textual requirements collection">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard">
+           </parameter>
+        </command>
+         <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create storyboards"
+              tooltip="Create a new storyboard to describe system behaviour">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
+           </parameter>
+        </command>
+     </group>
+     <group
+           icon="icons/dashboardMashupBackground.png"
+           name="Mashup">
+           <command
+              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
+              error="Import storyboard failed."
+              label="Create service composition"
+              notification="Storyboard imported successfully."
+              tooltip="Use a storyboard for service composition">
+        </command>
+     </group>
+     <group
+           icon="icons/dashboardCodeBackground.png"
+           name="Code">
+           <command
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              error="Code generation failed."
+              label="Generate code"
+              tooltip="Generate code for the web service">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              error="Code generation failed."
+              label="Re-generate code"
+              tooltip="Generate code for the web service using previous settings">
+           <parameter
+                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
+                 value="yes">
+           </parameter>
+        </command>
+     </group>
+     <group
+           icon="icons/dashboardRunBackground.png"
+           name="Run">
+           <command
+              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
+              label="Deploy on YouREST">
+        </command>
+     </group>
   </extension>
 </plugin>

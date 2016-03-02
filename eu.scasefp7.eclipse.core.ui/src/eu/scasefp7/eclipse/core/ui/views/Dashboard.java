@@ -24,7 +24,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-import org.apache.maven.plugin.logging.Log;
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.CommandEvent;
 import org.eclipse.core.commands.ExecutionException;
@@ -58,7 +57,6 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
-import org.eclipse.osgi.internal.debug.FrameworkDebugTraceEntry;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -67,7 +65,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.widgets.Button;
+import org.eclipse.swt.graphics.Image;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -82,11 +80,11 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.internal.registry.RegistryReader;
 import org.eclipse.ui.menus.CommandContributionItem;
 import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
+import org.eclipse.wb.swt.ResourceManager;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
@@ -115,6 +113,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static final String CONTRIBUTION_GROUP_NAME = "name";
     private static final String CONTRIBUTION_COMMAND = "command";
     private static final String CONTRIBUTION_COMMAND_ID = "commandId";
+    private static final String CONTRIBUTION_COMMAND_ICON = "icon";
     private static final String CONTRIBUTION_COMMAND_LABEL = "label";
     private static final String CONTRIBUTION_COMMAND_TOOLTIP = "tooltip";
     private static final String CONTRIBUTION_COMMAND_PARAM = "parameter";
@@ -185,7 +184,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 handleGroup(parent, elem);
             }
             if(elem.getName().equals(CONTRIBUTION_COMMAND)) {
-                handleButton(parent, elem);   
+                handleButton(parent, elem, "");   
             }
         }
 		
@@ -301,14 +300,19 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * @throws InvalidRegistryObjectException
      */
     private void handleGroup(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {
-        Group group = createGroup(parent, elem.getAttribute(CONTRIBUTION_GROUP_NAME));
-        
+        Group group = createGroup(parent, "        "+elem.getAttribute(CONTRIBUTION_GROUP_NAME));
+
+        String icon = elem.getAttribute(CONTRIBUTION_COMMAND_ICON);
+        if(icon == null)
+        	icon = "";
+        Image img = ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", icon);
+        group.setBackgroundImage(img);
         for (IConfigurationElement child : elem.getChildren()) {
             if(child.getName().equals(CONTRIBUTION_GROUP)) {
                 handleGroup(group, child);
             }
             if(child.getName().equals(CONTRIBUTION_COMMAND)) {
-                handleButton(group, child);    
+                handleButton(group, child, icon);    
             }
         }
     }
@@ -320,16 +324,22 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * @param elem configuration element describing the button
      * @throws InvalidRegistryObjectException
      */
-    private void handleButton(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {       
+    private void handleButton(Composite parent, IConfigurationElement elem, String icon) throws InvalidRegistryObjectException {       
 
         String name = elem.getAttribute(CONTRIBUTION_COMMAND_LABEL);
         String tooltip = elem.getAttribute(CONTRIBUTION_COMMAND_TOOLTIP);
+        
         final String commandId = elem.getAttribute(CONTRIBUTION_COMMAND_ID);
         final String notificationSuccess = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS);
         final String notificationFail = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_FAIL);
         
-        Button btn = new Button(parent, SWT.NONE);
-        
+        ImageButton btn = new ImageButton(parent, SWT.NULL);
+
+       
+		Image img = ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/dashboardButton.png");
+		btn.setImage(img);
+        btn.setSize(150, 24);
+
         if(name != null) {
             btn.setText(name);
         }
