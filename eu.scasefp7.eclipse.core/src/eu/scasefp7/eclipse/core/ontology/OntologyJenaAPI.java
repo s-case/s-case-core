@@ -234,6 +234,21 @@ public class OntologyJenaAPI {
 	}
 
 	/**
+	 * Adds a new individual in the ontology including a comment.
+	 * 
+	 * @param className the OWL class that the new individual shall exist.
+	 * @param individualName the name of the new individual to be added.
+	 * @param commentText the text of the comment to be added.
+	 */
+	public void addIndividual(String className, String individualName, String commentText) {
+		OntClass ontClass = base.getOntClass(addNamespaceToInstance(className));
+		if (commentText != null && !commentText.equals(""))
+			base.createIndividual(addNamespaceToInstance(individualName), ontClass).addComment(commentText, null);
+		else
+			base.createIndividual(addNamespaceToInstance(individualName), ontClass);
+	}
+
+	/**
 	 * Removes an individual of the ontology given its name. Note that this method removes also all the statements that
 	 * refer to this individual.
 	 * 
@@ -277,6 +292,16 @@ public class OntologyJenaAPI {
 	 */
 	private Individual getIndividual(String individualName) {
 		return base.getIndividual(addNamespaceToInstance(individualName));
+	}
+
+	/**
+	 * Returns the comment of an individual given its name.
+	 * 
+	 * @param individualName the name of the individual of which the comment is returned.
+	 * @return the comment of the given individual.
+	 */
+	public String getIndividualComment(String individualName) {
+		return base.getIndividual(addNamespaceToInstance(individualName)).getComment(null);
 	}
 
 	/**
