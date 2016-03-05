@@ -1,7 +1,7 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.QualifiedName;
@@ -236,7 +236,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	{
 	  if (!selection.isEmpty()) {
 	    IStructuredSelection structured = (IStructuredSelection)selection;
-	    if ((structured.getFirstElement() instanceof DomainEntry)) {
+	    if (structured.getFirstElement() instanceof DomainEntry) {
 	      return (DomainEntry)structured.getFirstElement();
 	    }
 	  }
@@ -292,8 +292,9 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 * @param selection
 	 */
 	private void updateDomainLabel(DomainEntry domain) {
-		if(domain == null)
+		if(domain == null) {
 			return; 
+		}
 		
 		DomainEntry parent = domain.getParent();
 		

@@ -14,6 +14,7 @@ import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
+import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
@@ -28,6 +29,7 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	
 	private WizardNewProjectCreationPage _pageOne;
 	private PropertyWizardPage _pageTwo;
+	private ProjectFoldersWizardPage _pageThree;
 	private static final String PAGE_NAME = "Project name";
 	private static final String WIZARD_NAME = "New S-CASE Project"; 
 
@@ -54,9 +56,15 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	    
 	    _pageTwo = new PropertyWizardPage("S-Case project domain");
 	    _pageTwo.setTitle("Select project domain");
+	    _pageTwo.setDescription("Select the domain of the project from the list");
+	    
+	    _pageThree = new ProjectFoldersWizardPage("Project folders");
+	    _pageThree.setTitle("Folders in the project");
+	    _pageThree.setDescription("Configure folders that will be used to organize the project");
 	    
 	    addPage(_pageOne);
 	    addPage(_pageTwo);
+	    addPage(_pageThree);
 	}
 	
 	@Override
@@ -79,9 +87,10 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	    try {
 			res.setPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN), Integer.toString(k));
 		} catch (CoreException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+			Activator.log("Unable to set project property", e);
 		}
+	    
+	    _pageThree.performFinish(res);
 	    
 		return true;
 	}

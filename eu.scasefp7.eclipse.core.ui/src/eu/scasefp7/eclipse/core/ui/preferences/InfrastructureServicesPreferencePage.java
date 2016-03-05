@@ -29,7 +29,12 @@ public class InfrastructureServicesPreferencePage extends FieldEditorOverlayPage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
+        addField(new StringFieldEditor(PreferenceConstants.P_CONTROLTOWER_ENDPOINT, "Control Tower &URI:", getFieldEditorParent()));
 		addField(new StringFieldEditor(PreferenceConstants.P_NLP_ENDPOINT, "NLP service &URI:", getFieldEditorParent()));
+        addField(new StringFieldEditor(PreferenceConstants.P_UML_ENDPOINT, "UML extractor service &URI:", getFieldEditorParent()));
+        addField(new StringFieldEditor(PreferenceConstants.P_ONTOREPO_ENDPOINT, "Ontology repository &URI:", getFieldEditorParent()));
+        addField(new StringFieldEditor(PreferenceConstants.P_WSC_ENDPOINT, "Service composition server &URI:", getFieldEditorParent()));
+        
 	}
 
 	

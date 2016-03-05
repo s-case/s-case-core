@@ -165,8 +165,11 @@ public final class SharedImages implements IDisposable {
 //        OBJ_REPOSITORY(obj16("repository.gif")), //$NON-NLS-1$
 //        OVR_STAR(ovr16("star.png")), //$NON-NLS-1$
 //        VIEW_SLICE(view16("slice.gif")); //$NON-NLS-1$
+
+        /** Project folder. */
+        DECORATOR_SCASE(obj16("s-case_8.png")), //$NON-NLS-1$
         
-        /**
+        /** 
          * S-CASE logo
          */
         VIEW_SCASE(view16("s-case_16.png")); //$NON-NLS-1$

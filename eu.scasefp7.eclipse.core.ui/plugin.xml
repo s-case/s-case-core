@@ -400,4 +400,17 @@
         </bundle>
       </component>
    </extension>
+   <extension
+      point="org.eclipse.ui.decorators">
+      <decorator
+            class="eu.scasefp7.eclipse.core.ui.navigator.ProjectFolderLabelProvider"
+            icon="icons/view32/s-case_32.png"
+            id="eu.scasefp7.eclipse.core.ui.folderDecorator"
+            label="label"
+            lightweight="true"
+            location="TOP_RIGHT"
+            objectClass="org.eclipse.core.resources.IFolder"
+            state="true">
+      </decorator>
+   </extension>
 </plugin>

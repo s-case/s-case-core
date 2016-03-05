@@ -89,7 +89,9 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
       GridDataFactory.fillDefaults().grab(true, false).applyTo(group);
       GridLayoutFactory.swtDefaults().numColumns(2).applyTo(group);
       
-      addOpenBrowserAction(createLink(group, SharedImages.Images.VIEW_SCASE, "Visit the <a href=\"{0}\">Project Homepage</a>", ScaseUiConstants.PROJECT_HOMEPAGE));
+      addOpenBrowserAction(createLink(group, SharedImages.Images.VIEW_SCASE, "Visit the <a href=\"{0}\">S-CASE tools homepage</a>", ScaseUiConstants.TOOLS_HOMEPAGE));
+      
+      addOpenBrowserAction(createLink(group, SharedImages.Images.VIEW_SCASE, "Visit the <a href=\"{0}\">Project homepage</a>", ScaseUiConstants.PROJECT_HOMEPAGE));
       
       addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_GITHUB, "View the <a href=\"{0}\">Project source code</a>", ScaseUiConstants.PROJECT_GITHUB));
 
@@ -98,6 +100,8 @@ public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPr
       addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_LINKEDIN, "<a href=\"{0}\">Join us</a> on LinkedIn", ScaseUiConstants.PROJECT_LINKEDIN));
       
       addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_TWITTER, "<a href=\"{0}\">Follow us</a> on Twitter", ScaseUiConstants.PROJECT_TWITTER));
+      
+      addOpenBrowserAction(createLink(group, SharedImages.Images.OBJ_TWITTER, "We can <a href=\"{0}\">#devtherightway</a> together", ScaseUiConstants.PROJECT_HASHTAG));
       
       return parent;
     }
