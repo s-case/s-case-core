@@ -4,6 +4,8 @@ import org.eclipse.core.resources.IProject;
 
 public abstract interface IArtefactGroup {
 	  public abstract String getName();
+	  
+	  public abstract String getType();
 
 	  public abstract IProject getParent();
 	  

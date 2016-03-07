@@ -36,6 +36,7 @@ import com.hp.hpl.jena.rdf.model.Statement;
 import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
+import eu.scasefp7.eclipse.core.Activator;
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 
 /**
@@ -86,7 +87,8 @@ public class OntologyJenaAPI {
 							ontologyContents.getBytes(StandardCharsets.UTF_8));
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
-					e.printStackTrace();
+					Activator.log("Unable to force delete and recreate " + ontologyType.name().toLowerCase()
+							+ " ontology file", e);
 				}
 			} else if (testfile != null && testfile.exists()) {
 				try {
@@ -177,14 +179,14 @@ public class OntologyJenaAPI {
 				try {
 					file.create(ontologyStream, IResource.FORCE, null);
 				} catch (CoreException e) {
-					e.printStackTrace();
+					Activator.log("Unable to create new " + ontologyType.name().toLowerCase() + " ontology file", e);
 				}
 			}
 			try {
 				InputStream in = file.getContents();
 				base.read(in, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				Activator.log("Unable to read created " + ontologyType.name().toLowerCase() + " ontology file", e);
 			}
 		}
 
@@ -232,6 +234,21 @@ public class OntologyJenaAPI {
 	}
 
 	/**
+	 * Adds a new individual in the ontology including a comment.
+	 * 
+	 * @param className the OWL class that the new individual shall exist.
+	 * @param individualName the name of the new individual to be added.
+	 * @param commentText the text of the comment to be added.
+	 */
+	public void addIndividual(String className, String individualName, String commentText) {
+		OntClass ontClass = base.getOntClass(addNamespaceToInstance(className));
+		if (commentText != null && !commentText.equals(""))
+			base.createIndividual(addNamespaceToInstance(individualName), ontClass).addComment(commentText, null);
+		else
+			base.createIndividual(addNamespaceToInstance(individualName), ontClass);
+	}
+
+	/**
 	 * Removes an individual of the ontology given its name. Note that this method removes also all the statements that
 	 * refer to this individual.
 	 * 
@@ -275,6 +292,16 @@ public class OntologyJenaAPI {
 	 */
 	private Individual getIndividual(String individualName) {
 		return base.getIndividual(addNamespaceToInstance(individualName));
+	}
+
+	/**
+	 * Returns the comment of an individual given its name.
+	 * 
+	 * @param individualName the name of the individual of which the comment is returned.
+	 * @return the comment of the given individual.
+	 */
+	public String getIndividualComment(String individualName) {
+		return base.getIndividual(addNamespaceToInstance(individualName)).getComment(null);
 	}
 
 	/**
@@ -513,7 +540,8 @@ public class OntologyJenaAPI {
 			FileOutputStream out = null;
 			try {
 				out = new FileOutputStream(testfile);
-			} catch (FileNotFoundException e1) {
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
 			}
 			base.write(out);
 		} else {
@@ -524,7 +552,7 @@ public class OntologyJenaAPI {
 			try {
 				file.setContents(originalInputStream, IResource.FORCE, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				Activator.log("Unable to save the " + ontologyType.name().toLowerCase() + " ontology file", e);
 			}
 		}
 

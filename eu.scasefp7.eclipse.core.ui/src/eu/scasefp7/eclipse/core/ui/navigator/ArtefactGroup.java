@@ -5,17 +5,20 @@ import org.eclipse.core.resources.IProject;
 public class ArtefactGroup implements IArtefactGroup {
 	
 	protected String name;
+	protected String type;
 	protected IProject parent;
 	protected Object[] children;
 	
-	ArtefactGroup(String name, IProject parent){
+	ArtefactGroup(String name, String type, IProject parent){
 		this.name = name;
+		this.type = type;
 		this.parent = parent;
 		this.children = null;
 	}
 	
-	ArtefactGroup(String name, IProject parent, Object[] children){
+	ArtefactGroup(String name, String type, IProject parent, Object[] children){
 		this.name = name;
+		this.type = type;
 		this.parent = parent;
 		this.children = children;
 	}
@@ -33,6 +36,11 @@ public class ArtefactGroup implements IArtefactGroup {
 	@Override
 	public String getName() {
 		return name;
+	}
+	
+	@Override
+	public String getType() {
+		return type;
 	}
 
 	@Override

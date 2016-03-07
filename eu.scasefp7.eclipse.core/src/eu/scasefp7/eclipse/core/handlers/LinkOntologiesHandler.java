@@ -73,7 +73,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				linkedOntology.addResource(relatedObject);
 				linkedOntology.addRelatedResourceToResource(object, relatedObject);
 				for (String requirement : staticOntology.getRequirementsOfConcept(relatedObject)) {
-					linkedOntology.addRequirement(requirement);
+					linkedOntology.addRequirement(requirement, staticOntology.getTextOfRequirement(requirement));
 					linkedOntology.connectRequirementToElement(requirement, relatedObject);
 				}
 			}
@@ -82,7 +82,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 			for (String property : staticOntology.getPropertiesOfObject(object)) {
 				linkedOntology.addPropertyToResource(object, property);
 				for (String requirement : staticOntology.getRequirementsOfConcept(property)) {
-					linkedOntology.addRequirement(requirement);
+					linkedOntology.addRequirement(requirement, staticOntology.getTextOfRequirement(requirement));
 					linkedOntology.connectRequirementToElement(requirement, property);
 				}
 			}
@@ -93,7 +93,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				linkedOntology.addActivityToResource(object, activity);
 				linkedOntology.addActionToActivity(activity, action);
 				for (String requirement : staticOntology.getRequirementsOfOperation(action)) {
-					linkedOntology.addRequirement(requirement);
+					linkedOntology.addRequirement(requirement, staticOntology.getTextOfRequirement(requirement));
 					linkedOntology.connectRequirementToElement(requirement, activity);
 					linkedOntology.connectRequirementToElement(requirement, action);
 				}
@@ -101,7 +101,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 
 			// Iterate over all requirements containing the object and add them to the linked ontology
 			for (String requirement : staticOntology.getRequirementsOfConcept(object)) {
-				linkedOntology.addRequirement(requirement);
+				linkedOntology.addRequirement(requirement, staticOntology.getTextOfRequirement(requirement));
 				linkedOntology.connectRequirementToElement(requirement, object);
 			}
 		}
@@ -114,7 +114,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 			if (object != null) {
 				linkedOntology.addResource(object);
 				for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-					linkedOntology.addActivityDiagram(diagram);
+					linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
 					linkedOntology.connectActivityDiagramToElement(diagram, object);
 				}
 
@@ -126,7 +126,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 							dynamicOntology.getActivityTypeOfActivity(dynactivity));
 					linkedOntology.addActionToActivity(activity, action);
 					for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-						linkedOntology.addActivityDiagram(diagram);
+						linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
 						linkedOntology.connectActivityDiagramToElement(diagram, object);
 						linkedOntology.connectActivityDiagramToElement(diagram, action);
 						linkedOntology.connectActivityDiagramToElement(diagram, activity);
@@ -137,7 +137,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				for (String property : dynamicOntology.getPropertiesOfActivity(object)) {
 					linkedOntology.addPropertyToResource(object, property);
 					for (String diagram : dynamicOntology.getDiagramsOfConcept(property)) {
-						linkedOntology.addActivityDiagram(diagram);
+						linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
 						linkedOntology.connectActivityDiagramToElement(diagram, property);
 					}
 				}
@@ -170,7 +170,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 			if (condition != null && taction != null && saction != null) {
 				linkedOntology.addConditionToActivity(tactivity, condition);
 				for (String diagram : dynamicOntology.getDiagramsOfConcept(condition)) {
-					linkedOntology.addActivityDiagram(diagram);
+					linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
 					linkedOntology.connectActivityDiagramToElement(diagram, condition);
 				}
 			}

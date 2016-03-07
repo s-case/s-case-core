@@ -19,14 +19,26 @@ public class ArtefactLabelProvider implements ILabelProvider {
    
 
    public Image getImage(Object element) {
+	 String type = "";
+	 
+     if (element instanceof IArtefact) 
+    	 type = ((IArtefact)element).getType();
+     if (element instanceof IArtefactGroup) 
+    	 type = ((IArtefactGroup)element).getType();
+     
+     if(type.startsWith("Activit"))
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/navigatorAction.png");
+     if(type.startsWith("Requirement"))
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/navigatorRequirement.png");
+     if(type.startsWith("Object"))
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/navigatorObject.png");
+     if(type.startsWith("Transition"))
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/navigatorTransition.png");
+     if(type.startsWith("Root"))
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/navigatorRoot.png");
+     if (element instanceof IArtefact)
+    		 return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/artefact-text.png");
 
-     if ((element instanceof IArtefact)) 
-       return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/artefact-text.png");
-     
-     if ((element instanceof IArtefactGroup)) 
-         return ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/artefact.png");
-       
-     
      return null;
    }
    
