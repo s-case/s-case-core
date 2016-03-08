@@ -10,10 +10,15 @@ import java.util.LinkedList;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
+import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 
 import eu.scasefp7.eclipse.core.Activator;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
@@ -173,11 +178,20 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 */
 	private void writeYamlFile(IProject project, Resources resources) throws ExecutionException {
 		// Open a new YAML file in the project
-		IFile file;
-		if (project.getFolder("models").exists())
-			file = project.getFile("models/service.yml");
-		else
-			file = project.getFile("service.yml");
+		String modelsFolderLocation = null;
+		try {
+			modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
+					"eu.scasefp7.eclipse.core.ui.modelsFolder"));
+		} catch (CoreException e) {
+			Activator.log("Error retrieving project property (models folder location)", e);
+		}
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IContainer container = project;
+		if (modelsFolderLocation != null) {
+			if (root.findMember(new Path(modelsFolderLocation)).exists())
+				container = (IContainer) root.findMember(new Path(modelsFolderLocation));
+		}
+		IFile file = container.getFile(new Path("service.yml"));
 		if (file.exists()) {
 			try {
 				file.delete(IResource.FORCE, null);
