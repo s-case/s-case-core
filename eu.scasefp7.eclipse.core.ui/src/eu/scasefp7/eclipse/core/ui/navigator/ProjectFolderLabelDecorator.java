@@ -18,7 +18,7 @@ import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
  * @author Marin Orlic
  *
  */
-public class ProjectFolderLabelProvider extends LabelProvider implements ILightweightLabelDecorator {
+public class ProjectFolderLabelDecorator extends LabelProvider implements ILightweightLabelDecorator {
  
 	@Override
 	public void decorate(Object resource, IDecoration decoration) {
@@ -28,7 +28,7 @@ public class ProjectFolderLabelProvider extends LabelProvider implements ILightw
 			String outputPath = "";
 			String reqPath = "";
 			String comPath = "";
-			String resourcePath = ((IFolder) resource).getFullPath().toString();
+			String resourcePath = ((IFolder) resource).getProjectRelativePath().toString();
 			
 			try {
 				comPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER));
