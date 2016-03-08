@@ -173,12 +173,16 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 */
 	private void writeYamlFile(IProject project, Resources resources) throws ExecutionException {
 		// Open a new YAML file in the project
-		IFile file = project.getFile("service.yml");
+		IFile file;
+		if (project.getFolder("models").exists())
+			file = project.getFile("models/service.yml");
+		else
+			file = project.getFile("service.yml");
 		if (file.exists()) {
 			try {
 				file.delete(IResource.FORCE, null);
 			} catch (CoreException e) {
-			    Activator.log("Unable to delete YAML file (service.yml).", e);
+				Activator.log("Unable to delete YAML file (service.yml).", e);
 			}
 		}
 
@@ -191,7 +195,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		try {
 			file.create(ymlStream, IResource.FORCE, null);
 		} catch (CoreException e) {
-            Activator.log("Unable to create YAML file (service.yml).", e);
+			Activator.log("Unable to create YAML file (service.yml).", e);
 		}
 	}
 

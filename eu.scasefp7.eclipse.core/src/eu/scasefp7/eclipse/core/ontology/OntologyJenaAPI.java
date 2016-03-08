@@ -128,8 +128,12 @@ public class OntologyJenaAPI {
 		IFile file = null;
 		String filename = getFilenameForOntologyType(ontologyType);
 		if (project != null) {
-			if (filename != null)
-				file = project.getFile(filename);
+			if (filename != null) {
+				if (project.getFolder("models").exists())
+					file = project.getFile("models/" + filename);
+				else
+					file = project.getFile(filename);
+			}
 		} else {
 			if (filename != null) {
 				filename = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString() + "/" + filename;
