@@ -27,9 +27,9 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
  */
 public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecutableExtension {
 	
-	private WizardNewProjectCreationPage _pageOne;
-	private PropertyWizardPage _pageTwo;
-	private ProjectFoldersWizardPage _pageThree;
+	private WizardNewProjectCreationPage pageOne;
+	private PropertyWizardPage pageTwo;
+	private ProjectFoldersWizardPage pageThree;
 	private static final String PAGE_NAME = "Project name";
 	private static final String WIZARD_NAME = "New S-CASE Project"; 
 
@@ -50,47 +50,48 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	public void addPages() {
 	    super.addPages();
 	 
-	    _pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
-	    _pageOne.setTitle("Create a S-Case Project");
-	    _pageOne.setDescription("Enter project name.");
+	    pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
+	    pageOne.setTitle("Create a S-Case Project");
+	    pageOne.setDescription("Enter project name.");
 	    
-	    _pageTwo = new PropertyWizardPage("S-Case project domain");
-	    _pageTwo.setTitle("Select project domain");
-	    _pageTwo.setDescription("Select the domain of the project from the list");
+	    pageTwo = new PropertyWizardPage("S-Case project domain");
+	    pageTwo.setTitle("Select project domain");
+	    pageTwo.setDescription("Select the domain of the project from the list");
 	    
-	    _pageThree = new ProjectFoldersWizardPage("Project folders");
-	    _pageThree.setTitle("Folders in the project");
-	    _pageThree.setDescription("Configure folders that will be used to organize the project");
+	    pageThree = new ProjectFoldersWizardPage("Project folders");
+	    pageThree.setTitle("Folders in the project");
+	    pageThree.setDescription("Configure folders that will be used to organize the project");
 	    
-	    addPage(_pageOne);
-	    addPage(_pageTwo);
-	    addPage(_pageThree);
+	    addPage(pageOne);
+	    addPage(pageTwo);
+	    addPage(pageThree);
 	}
 	
 	@Override
 	public boolean performFinish() {
 		
-		String name = _pageOne.getProjectName();
+		String name = pageOne.getProjectName();
 	    URI location = null;
-	    if (!_pageOne.useDefaults()) {
-	        location = _pageOne.getLocationURI();
+	    if (!pageOne.useDefaults()) {
+	        location = pageOne.getLocationURI();
 	    } // else location == null
 	 
 	    IResource res = ScaseProjectSupport.createProject(name, location);
 	    int k;
-	    org.eclipse.swt.widgets.Label domainLabel = _pageTwo.getDomainLabel();
+	    org.eclipse.swt.widgets.Label domainLabel = pageTwo.getDomainLabel();
 	    DomainEntry de = (DomainEntry) domainLabel.getData();
-	    if (de == null)
+	    if (de == null) {
 	    	k = -1;
-	    else
+	    } else {
 	    	k =  de.getId();
+	    }
 	    try {
 			res.setPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN), Integer.toString(k));
 		} catch (CoreException e) {
 			Activator.log("Unable to set project property", e);
 		}
 	    
-	    _pageThree.performFinish(res);
+	    pageThree.performFinish(res);
 	    
 		return true;
 	}

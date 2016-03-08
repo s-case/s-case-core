@@ -6,7 +6,9 @@ package eu.scasefp7.eclipse.core.ui.preferences;
 public final class PreferenceConstants {
 
     /** Used to store constants, cannot be instantiated. */
-    private PreferenceConstants() {};
+    private PreferenceConstants() {
+        
+    }
     
     /** Use project prefs to override global ones. */
     public static final String P_USE_PROJECT_PREFS = "useProjectPreferences"; //$NON-NLS-1$
