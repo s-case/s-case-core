@@ -175,6 +175,16 @@
                  value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
            </parameter>
         </command>
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create mashups"
+              tooltip="Create a new storyboard to describe service composition">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
+           </parameter>
+        </command>
+        
         <!--
         <command
               commandId="org.eclipse.ui.file.import"
@@ -193,15 +203,6 @@
               notification="Requirements compiled successfully."
               tooltip="Compile requirements in text or storyboards">
         </command>-->
- 		<command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create mashups"
-              tooltip="Create a new storyboard to describe service composition">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
-           </parameter>
-        </command>
         <command
               commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
               error="Import storyboard failed."
@@ -231,7 +232,7 @@
      <group
            name="Run">
         <command
-              commandId="eu.scasefp7.eclipse.core.ui.command12"
+              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
               label="Deploy on YouREST">
         </command>
      </group>
@@ -248,6 +249,10 @@
               optional="true">
         </commandParameter>
      </command>
+     <command
+              id="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
+              name="Generated service deployment wizard">
+     </command>
   </extension>
 
   <extension
@@ -255,6 +260,10 @@
      <handler
            class="eu.scasefp7.eclipse.core.ui.handlers.OpenBrowserHandler"
            commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser">
+     </handler>
+     <handler
+           class="eu.scasefp7.eclipse.core.ui.handlers.OpenDeployWizardHander"
+           commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard">
      </handler>
   </extension>
   
@@ -291,6 +300,21 @@
                  icon="icons/view16/s-case_16.png"
                  label="S-CASE project website"
                  style="push"
+                 tooltip="S-CASE tools website">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="http://s-case.github.io/">
+              </parameter>
+           </command>
+        </toolbar>
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE project website">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE project website"
+                 style="push"
                  tooltip="S-CASE project website">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
@@ -303,7 +327,7 @@
               label="S-CASE Github">
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
-                 icon="icons/view16/s-case_16.png"
+                 icon="icons/obj16/GitHub-Mark-16px.png"
                  label="S-CASE Github"
                  style="push"
                  tooltip="S-CASE Github">
@@ -400,17 +424,146 @@
         </bundle>
       </component>
    </extension>
+  <!--
    <extension
       point="org.eclipse.ui.decorators">
       <decorator
-            class="eu.scasefp7.eclipse.core.ui.navigator.ProjectFolderLabelProvider"
+            adaptable="true"
+            class="eu.scasefp7.eclipse.core.ui.navigator.ProjectFolderLabelDecorator"
             icon="icons/view32/s-case_32.png"
             id="eu.scasefp7.eclipse.core.ui.folderDecorator"
-            label="label"
+            label="S-CASE Folders"
             lightweight="true"
             location="TOP_RIGHT"
-            objectClass="org.eclipse.core.resources.IFolder"
             state="true">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IFolder">
+               </objectClass>
+               <objectState
+                     name="projectNature"
+                     value="eu.scasefp7.eclipse.core.scaseNature">
+               </objectState>
+            </and>
+         </enablement>
+      </decorator>
+      <decorator
+            class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactDecorator"
+            id="eu.fp7.scase.tools.ui.navigator.artefactDecorator"
+            label="S-CASE Artefacts"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <or>
+				<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefact"/>
+              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup"/>
+              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup"/>
+			</or>
+         </enablement>
       </decorator>
    </extension>
+     <extension
+        point="org.eclipse.ui.navigator.viewer">
+     <viewerContentBinding
+           viewerId="org.eclipse.jdt.ui.PackageExplorer">
+        <includes>
+           <contentExtension
+                 isRoot="false"
+                 pattern="eu.scasefp7.eclipse.core.ui.artefact.content">
+           </contentExtension>
+        </includes>
+     </viewerContentBinding>
+     <viewerContentBinding
+           viewerId="org.eclipse.ui.views.ResourceNavigator">
+        <includes>
+           <contentExtension
+                 isRoot="false"
+                 pattern="eu.scasefp7.eclipse.core.ui.artefact.content">
+           </contentExtension>
+        </includes>
+     </viewerContentBinding>
+     <viewerContentBinding
+           viewerId="org.eclipse.ui.navigator.ProjectExplorer">
+        <includes>
+           <contentExtension
+                 isRoot="false"
+                 pattern="eu.scasefp7.eclipse.core.ui.artefact.content">
+           </contentExtension>
+        </includes>
+     </viewerContentBinding>
+  </extension>
+  <extension
+        point="org.eclipse.ui.navigator.navigatorContent">
+     <navigatorContent
+           activeByDefault="true"
+           contentProvider="eu.scasefp7.eclipse.core.ui.navigator.ArtefactContentProvider"
+           icon="icons/s-case_16x16.png"
+           id="eu.scasefp7.eclipse.core.ui.artefact.content"
+           labelProvider="eu.scasefp7.eclipse.core.ui.navigator.ArtefactLabelProvider"
+           name="S-CASE Artefacts">
+        <triggerPoints>
+           <or>
+              <instanceof
+                    value="org.eclipse.core.resources.IWorkspaceRoot">
+              </instanceof>
+              <instanceof
+                    value="org.eclipse.core.resources.IProject">
+              </instanceof>
+              <instanceof
+                    value="org.eclipse.core.resources.IFolder">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+              </instanceof>
+           </or>
+        </triggerPoints>
+        <possibleChildren>
+           <or>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+              </instanceof>
+              <instanceof
+                    value="org.eclipse.core.resources.IFolder">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+              </instanceof>
+           </or>
+        </possibleChildren>
+        <enablement>
+           <or>
+              <instanceof
+                    value="org.eclipse.core.resources.IWorkspaceRoot">
+              </instanceof>
+              <instanceof
+                    value="org.eclipse.core.resources.IProject">
+              </instanceof>
+              <instanceof
+                    value="org.eclipse.core.resources.IFolder">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+              </instanceof>
+              <instanceof
+                    value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+              </instanceof>
+           </or>
+        </enablement>
+        <commonSorter
+              class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactSorter"
+              id="eu.scasefp7.eclipse.core.ui.artefact.sorter">
+        </commonSorter>
+     </navigatorContent>
+  </extension>
+  -->
 </plugin>
