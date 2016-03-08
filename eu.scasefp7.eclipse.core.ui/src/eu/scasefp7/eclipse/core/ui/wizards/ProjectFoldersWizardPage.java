@@ -8,14 +8,13 @@ import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
+import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
-import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.GridLayout;
-import org.eclipse.swt.layout.RowData;
-import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Event;
@@ -26,9 +25,6 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
-
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.QualifiedName;
 
 
 /**
@@ -75,7 +71,8 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
         final Button button = new Button(composite, SWT.PUSH);
         
         label.setText("Models folder path: ");
-        models.setText("/models");
+        models.setText("models");
+        models.setEnabled(false);
         button.setText("Browse...");
         models.setLayoutData(gridData);
 
@@ -127,7 +124,8 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
         final Button button2 = new Button(composite, SWT.PUSH);
         
         label2.setText("Output folder path: ");
-        output.setText("/output");
+        output.setText("output");
+        output.setEnabled(false);
         button2.setText("Browse...");
         output.setLayoutData(gridData3);
         
@@ -178,7 +176,8 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
         final Button button3 = new Button(composite, SWT.PUSH);
         
         label3.setText("Requirements folder path: ");
-        requirements.setText("/requirements");
+        requirements.setText("requirements");
+        requirements.setEnabled(false);
         button3.setText("Browse...");
         requirements.setLayoutData(gridData4);
         
@@ -229,7 +228,8 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
         gridData6.grabExcessHorizontalSpace = true;
         
         label4.setText("Compositions folder path: ");
-        compositions.setText("/compositions");
+        compositions.setText("compositions");
+        compositions.setEnabled(false);
         button4.setText("Browse...");
         compositions.setLayoutData(gridData6);
         
@@ -284,15 +284,14 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
 		    Activator.log("Unable to create project folders.", e);
 		}
 		
-		String projectName = project.getName();
 		if(modelsPath.equals(""))
-			modelsPath = "/" + projectName + "/models";
+			modelsPath = models.getProjectRelativePath().toPortableString();
 		if(outputPath.equals(""))
-			outputPath = "/" + projectName + "/output";
+			outputPath = output.getProjectRelativePath().toPortableString();
 		if(reqPath.equals(""))
-			reqPath = "/" + projectName + "/requirements";
+			reqPath = requirements.getProjectRelativePath().toPortableString();
 		if(comPath.equals(""))
-			comPath = "/" + projectName + "/compositions";
+			comPath = compositions.getProjectRelativePath().toPortableString();
 		
 		try {
 			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
