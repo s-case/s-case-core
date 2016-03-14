@@ -81,7 +81,7 @@
             name="S-CASE Project"
             icon="icons/view16/s-case_16.png"
             category="eu.scasefp7.eclipse.category"
-            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"
+            class="eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard"
             finalPerspective="eu.scasefp7.eclipse.core.ui.ScasePerspective"
             hasPages="true"
             id="eu.scasefp7.eclipse.core.ui.newProjectWizard"
@@ -293,6 +293,7 @@
          </command>
       </menuContribution>
    </extension>
+   <!--
   <extension
         point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
      <page
@@ -308,6 +309,7 @@
            title="S-Case project domain">
      </page>
   </extension>
+  -->
   <extension
         point="org.eclipse.ui.decorators">
      <decorator
@@ -469,26 +471,35 @@
            </or>
         </possibleChildren>
         <enablement>
-           <or>
-              <instanceof
-                    value="org.eclipse.core.resources.IWorkspaceRoot">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IProject">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IFolder">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
-              </instanceof>
-           </or>
+           <and>
+              <adapt
+                    type="org.eclipse.core.resources.IProject">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="eu.scasefp7.eclipse.core.scaseNature">
+                 </test>
+              </adapt>
+              <or>
+                 <instanceof
+                       value="org.eclipse.core.resources.IWorkspaceRoot">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IProject">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IFolder">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+                 </instanceof>
+              </or>
+           </and>
         </enablement>
         <commonSorter
               class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactSorter"
