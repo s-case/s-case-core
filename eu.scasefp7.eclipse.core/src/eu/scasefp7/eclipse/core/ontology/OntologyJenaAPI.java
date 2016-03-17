@@ -13,12 +13,15 @@ import java.nio.charset.StandardCharsets;
 import java.util.ArrayList;
 import java.util.Iterator;
 
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 
 import com.hp.hpl.jena.ontology.Individual;
 import com.hp.hpl.jena.ontology.OntClass;
@@ -128,8 +131,24 @@ public class OntologyJenaAPI {
 		IFile file = null;
 		String filename = getFilenameForOntologyType(ontologyType);
 		if (project != null) {
-			if (filename != null)
-				file = project.getFile(filename);
+			if (filename != null) {
+				String modelsFolderLocation = null;
+				try {
+					modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
+							"eu.scasefp7.eclipse.core.ui.modelsFolder"));
+				} catch (CoreException e) {
+					Activator.log("Error retrieving project property (models folder location)", e);
+				}
+				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+				IContainer container = project;
+				if (modelsFolderLocation != null) {
+					String workspacePath = project.getFullPath().toPortableString()+"/"+ modelsFolderLocation;
+					
+					if (root.findMember(new Path(workspacePath)) != null) 
+						container = (IContainer) root.findMember(new Path(workspacePath));
+				}
+				file = container.getFile(new Path(filename));
+			}
 		} else {
 			if (filename != null) {
 				filename = ResourcesPlugin.getWorkspace().getRoot().getLocation().toString() + "/" + filename;

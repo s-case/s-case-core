@@ -10,13 +10,17 @@ import java.util.LinkedList;
 
 import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
+import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
+import org.eclipse.core.runtime.QualifiedName;
 
+import eu.scasefp7.eclipse.core.Activator;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Operation;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Property;
@@ -39,9 +43,9 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		IProject project = getProjectOfExecutionEvent(event);
 		//String projectName = event.getParameter("projectName");
 		String fileName = event.getParameter("fileName");
-		Path path = new Path(fileName);
 		//When handler is called from builder
 		if(fileName != null){
+			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			project = file.getProject();
 			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
@@ -183,12 +187,26 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 */
 	private void writeYamlFile(IProject project, Resources resources) throws ExecutionException {
 		// Open a new YAML file in the project
-		IFile file = project.getFile("service.yml");
+		String modelsFolderLocation = null;
+		try {
+			modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
+					"eu.scasefp7.eclipse.core.ui.modelsFolder"));
+		} catch (CoreException e) {
+			Activator.log("Error retrieving project property (models folder location)", e);
+		}
+		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
+		IContainer container = project;
+		String workspacePath = project.getFullPath().toPortableString()+"/"+ modelsFolderLocation;
+		if (workspacePath != null) {
+			if (root.findMember(new Path(workspacePath)) != null)
+				container = (IContainer) root.findMember(new Path(workspacePath));
+		}
+		IFile file = container.getFile(new Path("service.yml"));
 		if (file.exists()) {
 			try {
 				file.delete(IResource.FORCE, null);
 			} catch (CoreException e) {
-				e.printStackTrace();
+				Activator.log("Unable to delete YAML file (service.yml).", e);
 			}
 		}
 
@@ -201,7 +219,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		try {
 			file.create(ymlStream, IResource.FORCE, null);
 		} catch (CoreException e) {
-			e.printStackTrace();
+			Activator.log("Unable to create YAML file (service.yml).", e);
 		}
 	}
 
