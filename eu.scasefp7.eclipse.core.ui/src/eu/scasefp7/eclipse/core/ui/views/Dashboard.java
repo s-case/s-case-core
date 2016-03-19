@@ -31,8 +31,8 @@ import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.CommandException;
 import org.eclipse.core.commands.common.NotDefinedException;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
@@ -557,26 +557,26 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     }
 
     protected IProject getProjectOfSelectionList(List<Object> selectionList) {
-        IProject project = null;
-        for (Object object : selectionList) {
-            IFile file = (IFile)Platform.getAdapterManager().getAdapter(object, IFile.class);
-            IProject theproject = null;
-            if (file != null) {
-                theproject = file.getProject();
-            } else {
-                theproject = (IProject)Platform.getAdapterManager().getAdapter(object, IProject.class);
-            }
-            if (theproject != null) {
-                if (project == null) {
-                    project = theproject;
-                } else {
-                    if (!project.equals(theproject)) {
-                        return null;
-                    }
-                }
-            }
-        }
-        return project;
+		IProject project = null;
+		for (Object object : selectionList) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(object, IResource.class);
+			IProject theproject = null;
+			if (resource != null) {
+				theproject = resource.getProject();
+			} else {
+				theproject = (IProject) Platform.getAdapterManager().getAdapter(object, IProject.class);
+			}
+			if (theproject != null) {
+				if (project == null) {
+					project = theproject;
+				} else {
+					if (!project.equals(theproject)) {
+						return null;
+					}
+				}
+			}
+		}
+		return project;
     }
     
     private void updateSelection(ISelection selection) {
