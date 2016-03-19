@@ -14,8 +14,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
-import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
@@ -185,11 +183,10 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		} catch (CoreException e) {
 			Activator.log("Error retrieving project property (models folder location)", e);
 		}
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IContainer container = project;
 		if (modelsFolderLocation != null) {
-			if (root.findMember(new Path(modelsFolderLocation)).exists())
-				container = (IContainer) root.findMember(new Path(modelsFolderLocation));
+			if (project.findMember(new Path(modelsFolderLocation)).exists())
+				container = (IContainer) project.findMember(new Path(modelsFolderLocation));
 		}
 		IFile file = container.getFile(new Path("service.yml"));
 		if (file.exists()) {
