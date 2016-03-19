@@ -122,7 +122,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				}
 
 				// Iterate over all properties of activity and add them as properties of object to the ontology
-				for (String property : dynamicOntology.getPropertiesOfActivity(object)) {
+				for (String property : dynamicOntology.getPropertiesOfActivity(dynactivity)) {
 					linkedOntology.addPropertyToResource(object, property);
 					for (String diagram : dynamicOntology.getDiagramsOfConcept(property)) {
 						linkedOntology.addActivityDiagram(diagram, dynamicOntology.getTextOfActivityDiagram(diagram));
