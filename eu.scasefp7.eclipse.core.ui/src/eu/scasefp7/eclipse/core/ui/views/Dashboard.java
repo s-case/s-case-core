@@ -543,8 +543,12 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection sel) {
-     // we ignore null selection, or if we are pinned, or our own selection or same selection
-        if (sel == null || sel.equals(currentSelection)) {
+     // we ignore null selection, or if we are pinned, or our own selection or same selection or if selection is empty
+        if (sel == null || sel.equals(currentSelection) || sel.isEmpty()) {
+            if (this.currentProject == null || !this.currentProject.exists()) {
+                this.currentProject = null;
+                setContentDescription("Please select a project");
+            }
             return;
         }
         
@@ -583,17 +587,19 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         if(selection instanceof IStructuredSelection) {
             IStructuredSelection sel = (IStructuredSelection) selection;
         
-            @SuppressWarnings("unchecked")
-            IProject project = getProjectOfSelectionList(sel.toList());
-            if (project != null) {
-                Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
-                this.currentProject = project;
-            }    
+            if (sel.getFirstElement() instanceof IResource){
+            	@SuppressWarnings("unchecked")
+            	IProject project = getProjectOfSelectionList(sel.toList());
+            	if (project != null) {
+            		Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
+            		this.currentProject = project;
+            	}    
+            }
         }
     }
     
     private void updateContentDescription() {
-        if (this.currentProject != null) {
+        if (this.currentProject != null && this.currentProject.exists()) {
             int projectDomain = getProjectDomainId(this.currentProject);
             DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, projectDomain);
             
