@@ -368,9 +368,8 @@
         </command>
      </group>
      <group
-           icon="icons/dashboardCodeBackground.png"
            name="Code">
-           <command
+        <command
               commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
               error="Code generation failed."
               label="Generate code"
@@ -388,9 +387,8 @@
         </command>
      </group>
      <group
-           icon="icons/dashboardRunBackground.png"
            name="Run">
-           <command
+        <command
               commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
               label="Deploy on YouREST">
         </command>
@@ -507,4 +505,30 @@
         </commonSorter>
      </navigatorContent>
   </extension>
+  <extension
+         point="org.eclipse.ui.intro">
+      <intro
+            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
+            icon="icons/s-case_16x16.png"
+            id="org.eclipse.intro.minimal"
+            label="Minimal Intro"/>
+      <introProductBinding
+            introId="org.eclipse.intro.minimal"
+            productId="org.eclipse.platform.ide">
+      </introProductBinding>
+   </extension>
+   <extension
+         point="org.eclipse.ui.intro.config">
+      <config
+            content="intropagecontent/introContent.xml"
+            id="org.eclipse.intro.minimal.config"
+            introId="org.eclipse.intro.minimal">
+         <presentation
+               home-page-id="root" standby-page-id="standby">
+            <implementation
+                  kind="html">
+            </implementation>
+         </presentation>
+      </config>
+   </extension>
 </plugin>
