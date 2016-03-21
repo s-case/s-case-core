@@ -18,9 +18,10 @@ public class StringHelpers {
 		String[] words = wordConstruct.split("_");
 		String camelCaseWordConstruct = "";
 		for (String word : words) {
-			if (!camelCaseWordConstruct.equals(""))
-				camelCaseWordConstruct += word.substring(0, 1).toUpperCase() + word.substring(1);
-			else
+			if (!camelCaseWordConstruct.equals("")) {
+				if (!word.equals(""))
+					camelCaseWordConstruct += word.substring(0, 1).toUpperCase() + word.substring(1);
+			} else
 				camelCaseWordConstruct += word;
 		}
 		return camelCaseWordConstruct;
