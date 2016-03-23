@@ -16,7 +16,6 @@ import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
-import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
 
 /**

@@ -16,14 +16,23 @@
 package eu.scasefp7.eclipse.core.ui.navigator;
 
 /**
- * @author "Marin Orlic"
- *
+ * Represents the requirement.
+ * 
+ * @author Marin Orlic
  */
 public class RequirementArtefact extends BaseArtefact {
 
     private String concept;
     private String id;
 
+    /**
+     * Creates the requirement artifact.
+     * @param name
+     * @param type
+     * @param parent
+     * @param concept
+     * @param id
+     */
     public RequirementArtefact(String name, String type, ArtefactGroup parent, String concept, String id) {
         super(name, type, parent);
         this.concept = concept;

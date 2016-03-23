@@ -18,7 +18,9 @@ package eu.scasefp7.eclipse.core.ui.navigator;
 import java.util.ArrayList;
 
 /**
- * @author "Marin Orlic"
+ * Represents the activity in the requirements.
+ * 
+ * @author Marin Orlic
  *
  */
 public class ActivityArtefact extends BaseArtefact {
@@ -26,6 +28,15 @@ public class ActivityArtefact extends BaseArtefact {
     private String kind;
     private ArrayList<String> properties = null;
 
+    /**
+     * Creates the activity artifact.
+     * 
+     * @param name
+     * @param type
+     * @param parent
+     * @param kind
+     * @param properties
+     */
     public ActivityArtefact(String name, String type, ArtefactGroup parent, String kind, ArrayList<String> properties) {
         super(name, type, parent);
         this.kind = kind;

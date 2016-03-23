@@ -18,7 +18,6 @@ public class BaseArtefact implements IArtefact {
      * @param name of the artifact
      * @param type of the artifact
      * @param parent group of the artifact
-     * @param data artefact data
      */
     public BaseArtefact(String name, String type, ArtefactGroup parent) {
         this.name = name;

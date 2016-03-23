@@ -51,7 +51,7 @@ public class DomainContentProvider implements ITreeContentProvider {
     @Override
     public boolean hasChildren(Object element) {
         DomainEntry de = (DomainEntry) element;
-        return (de.hasChildren() && ((DomainEntry) element).getChildren().length > 0);
+        return de.hasChildren() && ((DomainEntry) element).getChildren().length > 0;
     }
 
     @Override

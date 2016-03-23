@@ -18,18 +18,25 @@ package eu.scasefp7.eclipse.core.ui.navigator;
 import java.util.ArrayList;
 
 /**
- * @author "Marin Orlic"
- *
- */
-/**
- * @author "Marin Orlic"
- *
+ * Represents an object in the requirements.
+ * 
+ * @author Marin Orlic
  */
 public class ObjectArtefact extends BaseArtefact implements IArtefact {
 
     private ArrayList<String> actions = null;
     private ArrayList<String> properties = null;
 
+    
+    /**
+     * Create the object artifact.
+     * 
+     * @param name
+     * @param type
+     * @param parent
+     * @param actions
+     * @param properties
+     */
     public ObjectArtefact(String name, String type, ArtefactGroup parent, ArrayList<String> actions, ArrayList<String> properties) {
         super(name, type, parent);
         this.actions = actions;
@@ -37,6 +44,8 @@ public class ObjectArtefact extends BaseArtefact implements IArtefact {
     }
 
     /**
+     * Get the object actions.
+     * 
      * @return the actions
      */
     public ArrayList<String> getActions() {
@@ -44,6 +53,8 @@ public class ObjectArtefact extends BaseArtefact implements IArtefact {
     }
 
     /**
+     * Get the object properties.
+     * 
      * @return the properties
      */
     public ArrayList<String> getProperties() {
@@ -56,6 +67,14 @@ public class ObjectArtefact extends BaseArtefact implements IArtefact {
      */
     public boolean hasProperties() {
         return this.properties != null && !this.properties.isEmpty();
+    }
+
+    /**
+     * Checks if object has any related actions.
+     * @return true if object relates to actions
+     */
+    public boolean hasActions() {
+        return this.actions != null && !this.actions.isEmpty();
     }
 
 }

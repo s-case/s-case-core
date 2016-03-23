@@ -13,8 +13,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
 /**
- * @author "Marin Orlic"
- *
+ * @author Marin Orlic
  */
 public class DeployWizardPageOne extends WizardPage {
 	private String nextPage = "two";

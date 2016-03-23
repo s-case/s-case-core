@@ -1,10 +1,14 @@
 package eu.scasefp7.eclipse.core.ui.navigator;
 
-import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILabelProviderListener;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 
+/**
+ * Decorates the objects in the navigation.
+ * 
+ * @author Marin Orlic
+ */
 public class ArtefactDecorator implements ILightweightLabelDecorator {
 
     public void addListener(ILabelProviderListener listener) {
@@ -48,7 +52,9 @@ public class ArtefactDecorator implements ILightweightLabelDecorator {
     }
 
     private void decorateObject(ObjectArtefact obj, IDecoration decoration) {
-        decoration.addPrefix(obj.getActions().toString() + " ");
+        if(obj.hasActions()) {
+            decoration.addPrefix(obj.getActions().toString() + " ");
+        }
         if(obj.hasProperties()) {
             decoration.addSuffix(" " + obj.getProperties().toString());
         }
@@ -69,8 +75,7 @@ public class ArtefactDecorator implements ILightweightLabelDecorator {
     }
 
     private void decorateArtefact(IArtefact comp, IDecoration decoration) {
-        // decoration.addSuffix(" [" + comp.getTotalMappings() + "/" + comp.getOptionalMappings() + "/" +
-        // comp.getIncompleteMappings() + " matches]");
+       
     }
 
     private void decorateTransition(TransitionArtefact tran, IDecoration decoration) {
@@ -82,14 +87,7 @@ public class ArtefactDecorator implements ILightweightLabelDecorator {
     }
 
     private void decorateArtefactGroup(IArtefactGroup ref, IDecoration decoration) {
-        /*
-         * if (ref.isOptional()) {
-         * decoration.addSuffix(" [optional]");
-         * }
-         * else if (ref.isMissing()) {
-         * decoration.addSuffix(" [missing]");
-         * }
-         */
+       
     }
 }
 
