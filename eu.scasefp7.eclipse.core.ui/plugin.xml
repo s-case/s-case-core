@@ -424,46 +424,8 @@
         </bundle>
       </component>
    </extension>
-  <!--
-   <extension
-      point="org.eclipse.ui.decorators">
-      <decorator
-            adaptable="true"
-            class="eu.scasefp7.eclipse.core.ui.navigator.ProjectFolderLabelDecorator"
-            icon="icons/view32/s-case_32.png"
-            id="eu.scasefp7.eclipse.core.ui.folderDecorator"
-            label="S-CASE Folders"
-            lightweight="true"
-            location="TOP_RIGHT"
-            state="true">
-         <enablement>
-            <and>
-               <objectClass
-                     name="org.eclipse.core.resources.IFolder">
-               </objectClass>
-               <objectState
-                     name="projectNature"
-                     value="eu.scasefp7.eclipse.core.scaseNature">
-               </objectState>
-            </and>
-         </enablement>
-      </decorator>
-      <decorator
-            class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactDecorator"
-            id="eu.fp7.scase.tools.ui.navigator.artefactDecorator"
-            label="S-CASE Artefacts"
-            lightweight="true"
-            state="true">
-         <enablement>
-            <or>
-				<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefact"/>
-              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup"/>
-              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup"/>
-			</or>
-         </enablement>
-      </decorator>
-   </extension>
-     <extension
+  <!-- PROJECT_NAVIGATOR_START -->
+  <!-- <extension
         point="org.eclipse.ui.navigator.viewer">
      <viewerContentBinding
            viewerId="org.eclipse.jdt.ui.PackageExplorer">
@@ -538,32 +500,41 @@
            </or>
         </possibleChildren>
         <enablement>
-           <or>
-              <instanceof
-                    value="org.eclipse.core.resources.IWorkspaceRoot">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IProject">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IFolder">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
-              </instanceof>
-           </or>
+           <and>
+              <adapt
+                    type="org.eclipse.core.resources.IProject">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="eu.scasefp7.eclipse.core.scaseNature">
+                 </test>
+              </adapt>
+              <or>
+                 <instanceof
+                       value="org.eclipse.core.resources.IWorkspaceRoot">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IProject">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IFolder">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+                 </instanceof>
+              </or>
+           </and>
         </enablement>
         <commonSorter
               class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactSorter"
               id="eu.scasefp7.eclipse.core.ui.artefact.sorter">
         </commonSorter>
      </navigatorContent>
-  </extension>
-  -->
+  </extension> -->
+  <!-- PROJECT_NAVIGATOR_END -->
 </plugin>
