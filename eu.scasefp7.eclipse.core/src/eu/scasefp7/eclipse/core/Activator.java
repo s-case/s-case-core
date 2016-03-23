@@ -39,7 +39,7 @@ public class Activator extends Plugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
-        STARTING_TIME = this.oDateFormatter.format(new Date());
+        STARTING_TIME = oDateFormatter.format(new Date());
         errorID = 0;
     }
 
