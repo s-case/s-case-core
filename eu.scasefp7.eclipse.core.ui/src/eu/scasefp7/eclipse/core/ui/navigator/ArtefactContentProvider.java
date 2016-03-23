@@ -4,23 +4,18 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.Set;
 
-import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResourceChangeEvent;
 import org.eclipse.core.resources.IResourceChangeListener;
 import org.eclipse.core.resources.ResourcesPlugin;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.viewers.ITreeContentProvider;
 import org.eclipse.jface.viewers.Viewer;
 import org.eclipse.swt.widgets.Display;
 
 import eu.scasefp7.eclipse.core.ontology.DynamicOntologyAPI;
+import eu.scasefp7.eclipse.core.ontology.OntologyHelpers;
 import eu.scasefp7.eclipse.core.ontology.StaticOntologyAPI;
-import eu.scasefp7.eclipse.core.ui.Activator;
-import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
 /**
  * Adds ontology contents to navigation.
@@ -58,38 +53,15 @@ public class ArtefactContentProvider implements ITreeContentProvider, IResourceC
         return getChildren(inputElement);
     }
 
-	private boolean projectHasOntology(IProject project, String ontologyFilename) {
-		String modelsFolderLocation = null;
-		try {
-			modelsFolderLocation = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER));
-		} catch (CoreException e) {
-			Activator.log("Error retrieving project property (models folder location)", e);
-		}
-		IContainer container = project;
-		if (modelsFolderLocation != null) {
-			if (project.findMember(new Path(modelsFolderLocation)).exists())
-				container = (IContainer) project.findMember(new Path(modelsFolderLocation));
-		}
-		return container.getFile(new Path(ontologyFilename)).exists();
-	}
-
-	protected boolean projectHasStaticOntology(IProject project) {
-		return projectHasOntology(project, "StaticOntology.owl");
-	}
-
-	protected boolean projectHasDynamicOntology(IProject project) {
-		return projectHasOntology(project, "DynamicOntology.owl");
-	}
-    
     public Object[] getChildren(Object parentElement) {
 
         if ((parentElement instanceof IProject)) {
             initializeParents((IProject) parentElement);
 
-            if (projectHasStaticOntology((IProject) parentElement)) 
+            if (OntologyHelpers.projectHasStaticOntology((IProject) parentElement)) 
                 initializeStatic((IProject) parentElement);
 
-            if (projectHasDynamicOntology((IProject) parentElement)) 
+            if (OntologyHelpers.projectHasDynamicOntology((IProject) parentElement)) 
                 initializeDynamic((IProject) parentElement);
 
             initializeLinked((IProject) parentElement);
