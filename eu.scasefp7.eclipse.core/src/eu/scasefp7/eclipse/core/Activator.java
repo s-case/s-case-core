@@ -94,10 +94,11 @@ public class Activator extends Plugin {
         msg.append("\n!FUNCTION_NAME ").append(methodName);
         msg.append("\n!FAILURE_TIMESTAMP ").append(oDateFormatter.format(new Date()));
         errorID++;
-        if (plugin != null)
+        if (plugin != null) {
             plugin.getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, msg.toString(), exception));
-        else
+        } else {
             exception.printStackTrace();
+        }
     }
     
     /**
