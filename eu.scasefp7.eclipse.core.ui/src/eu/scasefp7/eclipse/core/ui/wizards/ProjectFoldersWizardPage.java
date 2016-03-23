@@ -91,7 +91,7 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
             	   Object[] res = dlg.getResult();
             	   if(res != null)
             	   {
-            		   resPath = (Path ) res[0];
+            		   resPath = (Path) res[0];
             		   models.setText(resPath.toString()); 
             		   modelsPath = resPath.toString();
             	   }

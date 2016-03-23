@@ -424,7 +424,6 @@
         </bundle>
       </component>
    </extension>
-  <!--
    <extension
       point="org.eclipse.ui.decorators">
       <decorator
@@ -458,7 +457,6 @@
             <or>
 				<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefact"/>
               	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup"/>
-              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup"/>
 			</or>
          </enablement>
       </decorator>
@@ -502,6 +500,37 @@
            id="eu.scasefp7.eclipse.core.ui.artefact.content"
            labelProvider="eu.scasefp7.eclipse.core.ui.navigator.ArtefactLabelProvider"
            name="S-CASE Artefacts">
+        <enablement>
+           <and>
+              <adapt
+                    type="org.eclipse.core.resources.IProject">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="eu.scasefp7.eclipse.core.scaseNature">
+                 </test>
+              </adapt>
+              <or>
+                 <instanceof
+                       value="org.eclipse.core.resources.IWorkspaceRoot">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IProject">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IFolder">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+                 </instanceof>
+              </or>
+           </and>
+        </enablement>
         <triggerPoints>
            <or>
               <instanceof
@@ -537,33 +566,10 @@
               </instanceof>
            </or>
         </possibleChildren>
-        <enablement>
-           <or>
-              <instanceof
-                    value="org.eclipse.core.resources.IWorkspaceRoot">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IProject">
-              </instanceof>
-              <instanceof
-                    value="org.eclipse.core.resources.IFolder">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
-              </instanceof>
-              <instanceof
-                    value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
-              </instanceof>
-           </or>
-        </enablement>
         <commonSorter
               class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactSorter"
               id="eu.scasefp7.eclipse.core.ui.artefact.sorter">
         </commonSorter>
      </navigatorContent>
   </extension>
-  -->
 </plugin>

@@ -18,7 +18,7 @@ package eu.scasefp7.eclipse.core.ui;
 /**
  * Convenience collection of constants to reference various IDs.
  * 
- * @author emaorli
+ * @author Marin Orlic
  *
  */
 public final class ScaseUiConstants {

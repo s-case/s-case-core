@@ -114,12 +114,12 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	 * 
 	 * @return the images
 	 */
-	public static SharedImages getImages() {
-		if (images == null) {
-			images = new SharedImages();
-		}
-
-		return images;
+	public synchronized static SharedImages getImages() {
+	    if(images == null) {
+	        images = new SharedImages();
+	    }
+	    
+	    return images;
 	}
 
 	/**
@@ -134,43 +134,48 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 	}
 
 	/**
-	 * Logs an exception to the Eclipse log file. This method detects the class and the method in which the exception
-	 * was caught automatically using the current stack trace. If required, the user can override these values by
-	 * calling {@link #log(String, String, String, Exception)} instead.
-	 * 
-	 * @param message a human-readable message about the exception.
-	 * @param exception the exception that will be logged.
-	 */
-	public static void log(String message, Exception exception) {
-		StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[2];
-		log(stackTraceElement.getClassName(), stackTraceElement.getMethodName(), message, exception);
-	}
+     * Logs an exception to the Eclipse log file. 
+     * 
+     * This method detects the class and the method in which the exception was caught automatically using
+     * the current stack trace. If required, the user can override these values by
+     * calling {@link #log(String, String, String, Exception)} instead.
+     * 
+     * @param message a human-readable message about the exception.
+     * @param exception the exception that will be logged.
+     */
+    public static void log(String message, Exception exception) {
+        StackTraceElement stackTraceElement = Thread.currentThread().getStackTrace()[2];
+        log(stackTraceElement.getClassName(), stackTraceElement.getMethodName(), message, exception);
+    }
 
-	/**
-	 * Logs an exception to the Eclipse log file. Note that in most cases you can use the
-	 * {@link #log(String, Exception)} method which automatically detects the class and the method in which the
-	 * exception was caught, so it requires as parameters only a human-readable message and the exception.
-	 * 
-	 * @param className the name of the class in which the exception was caught.
-	 * @param methodName the name of the method in which the exception was caught.
-	 * @param message a human-readable message about the exception.
-	 * @param exception the exception that will be logged.
-	 */
-	public static void log(String className, String methodName, String message, Exception exception) {
-		StringBuilder msg = new StringBuilder(message);
-		msg.append("\n!ERROR_ID t" + errorID);
-		msg.append("\n!SERVICE_NAME MDE UI Plugin");
-		msg.append("\n!SERVICE_VERSION 1.0.0-SNAPSHOT");
-		msg.append("\n!STARTING_TIME ").append(STARTING_TIME);
-		msg.append("\n!CLASS_NAME ").append(className);
-		msg.append("\n!FUNCTION_NAME ").append(methodName);
-		msg.append("\n!FAILURE_TIMESTAMP ").append(oDateFormatter.format(new Date()));
-		errorID++;
-		if (plugin != null)
-			plugin.getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, msg.toString(), exception));
-		else
-			exception.printStackTrace();
-	}
+    /**
+     * Logs an exception to the Eclipse log file. 
+     * 
+     * Note that in most cases you can use the {@link #log(String, Exception)} method which automatically 
+     * detects the class and the method in which the exception was caught, so it requires as parameters 
+     * only a human-readable message and the exception.
+     * 
+     * @param className the name of the class in which the exception was caught.
+     * @param methodName the name of the method in which the exception was caught.
+     * @param message a human-readable message about the exception.
+     * @param exception the exception that will be logged.
+     */
+    public static void log(String className, String methodName, String message, Exception exception) {
+        StringBuilder msg = new StringBuilder(message);
+        msg.append("\n!ERROR_ID t" + errorID);
+        msg.append("\n!SERVICE_NAME MDE UI Plugin");
+        msg.append("\n!SERVICE_VERSION 1.0.0-SNAPSHOT");
+        msg.append("\n!STARTING_TIME ").append(STARTING_TIME);
+        msg.append("\n!CLASS_NAME ").append(className);
+        msg.append("\n!FUNCTION_NAME ").append(methodName);
+        msg.append("\n!FAILURE_TIMESTAMP ").append(Activator.oDateFormatter.format(new Date()));
+        errorID++;
+        if (plugin != null) {
+            plugin.getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, msg.toString(), exception));
+        } else {
+            exception.printStackTrace();
+        }
+    }
 
 	/**
 	 * A UTC ISO 8601 date formatter used to log the time of errors.
