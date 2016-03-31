@@ -45,7 +45,7 @@ public class ArtefactLabelProvider implements ILabelProvider {
  
 
    public String getText(Object element) {
-     System.out.println("Label for: " + element);
+    // System.out.println("Label for: " + element);
      
      if ((element instanceof IArtefact)) 
        return ((IArtefact)element).getName();

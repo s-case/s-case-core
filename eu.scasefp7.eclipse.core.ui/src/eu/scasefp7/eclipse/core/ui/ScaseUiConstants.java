@@ -38,7 +38,7 @@ public final class ScaseUiConstants {
 	public static final String NEW_PROJECT_WIZARD = "eu.scasefp7.eclipse.core.ui.newProjectWizard"; //$NON-NLS-1$
 	
 	/** New S-CASE project wizard ID2. */
-	public static final String NEW_PROJECT_WIZARD2 = "eu.scasefp7.eclipse.core.ui.wizards.NewScaseProjectWizard2"; //$NON-NLS-1$
+	public static final String NEW_PROJECT_WIZARD2 = "eu.scasefp7.eclipse.core.ui.newProjectWizard2"; //$NON-NLS-1$
 	
 	/** S-CASE Dashboard view ID. */
 	public static final String DASHBOARD_VIEW = "eu.scasefp7.eclipse.core.ui.views.Dashboard"; //$NON-NLS-1$
@@ -46,20 +46,11 @@ public final class ScaseUiConstants {
 	/** Extension point used to contribute dashboard items. */
 	public static final String DASHBOARD_EXTENSION = "eu.scasefp7.eclipse.core.ui.dashboardItem"; //$NON-NLS-1$
 	
-	/** Extension point for new project wizard */
-	public static final String NEWPROJECT_EXTENSION = "eu.scasefp7.eclipse.core.ui.newSCaseProjectWizard"; //$NON-NLS-1$
-	
 	/** Extension point for new project wizard pages */
 	public static final String NEWPROJECTPAGES_EXTENSION = "eu.scasefp7.eclipse.core.ui.projectWizardPages"; //$NON-NLS-1$
 	
 	/** Link ontologies command ID. */
 	public static final String COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.core.commands.linkOntologies"; //$NON-NLS-1$
-	
-	/** Paths to project folders*/
-	public static final String REQUIREMENTS_FOLDER = "eu.scasefp7.eclipse.core.ui.rqsFolder"; //$NON-NLS-1$
-	public static final String COMPOSITIONS_FOLDER = "eu.scasefp7.eclipse.core.ui.compFolder"; //$NON-NLS-1$
-	public static final String MODELS_FOLDER = "eu.scasefp7.eclipse.core.ui.modelsFolder"; //$NON-NLS-1$
-	public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
 	
 	
 	/* These are external, included here for convenience */
@@ -76,6 +67,9 @@ public final class ScaseUiConstants {
 	/** Storyboards editor wizard ID. */
 	public static final String STORYBOARD_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID"; //$NON-NLS-1$
 	
+    /** Composition storyboards editor wizard ID. */
+    public static final String SC_STORYBOARD_EDITOR_NEWWIZARDID = "eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID"; //$NON-NLS-1$
+	
 	/** Storyboard editor ontology export command. */
 	public static final String STORYBOARD_EDITOR_COMMAND_EXPORTONTOLOGY = "eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology"; //$NON-NLS-1$
 
@@ -86,28 +80,36 @@ public final class ScaseUiConstants {
     public static final int PROP_PROJECT_DOMAIN_DEFAULT = -1;
     
     /* Links */
-    /**
-     * URL for the project homepage (http://www.scasefp7.eu/).
-     */
-    public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/"; //$NON-NLS-1$
+    /** URL for the project homepage (http://www.scasefp7.eu/). */
+    public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/";
 
-    /**
-     * URL for the project github (https://github.com/s-case).
-     */
-    public static final String PROJECT_GITHUB = "https://github.com/s-case"; //$NON-NLS-1$
+    /** URL for the tools homepage (http://s-case.github.io//). */
+    public static final String TOOLS_HOMEPAGE = "http://s-case.github.io//";
+    
+    /** URL for the project github (https://github.com/s-case). */
+    public static final String PROJECT_GITHUB = "https://github.com/s-case";
 
-    /**
-     * URL for the project Facebook page.
-     */
-    public static final String PROJECT_FACEBOOK = "http://bit.ly/SCasefb"; //$NON-NLS-1$
+    /** URL for the project Facebook page. */
+    public static final String PROJECT_FACEBOOK = "http://bit.ly/SCasefb";
 
-    /**
-     * URL for the project LinkedIn page.
-     */
-    public static final String PROJECT_LINKEDIN = "http://bit.ly/SCasegrp"; //$NON-NLS-1$
+    /** URL for the project LinkedIn page. */
+    public static final String PROJECT_LINKEDIN = "http://bit.ly/SCasegrp";
 
-    /**
-     * URL for the project Twitter.
-     */
-    public static final String PROJECT_TWITTER = "http://www.twitter.com/scasefp7"; //$NON-NLS-1$
+    /** URL for the project Twitter. */
+    public static final String PROJECT_TWITTER = "http://www.twitter.com/scasefp7";
+    
+    /** Hashtag #devtherightway. */
+    public static final String PROJECT_HASHTAG = "https://twitter.com/hashtag/devtherightway";
+    
+    /** Path to project folders for requirements. */
+    public static final String REQUIREMENTS_FOLDER = "eu.scasefp7.eclipse.core.ui.rqsFolder"; //NON-NLS-1$
+
+    /** Path to project folders for requirements. */
+    public static final String COMPOSITIONS_FOLDER = "eu.scasefp7.eclipse.core.ui.compFolder"; //$NON-NLS-1$
+
+    /** Path to project folders for requirements. */
+    public static final String MODELS_FOLDER = "eu.scasefp7.eclipse.core.ui.modelsFolder"; //$NON-NLS-1$
+    
+    /** Path to project folders for requirements. */
+    public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
 }

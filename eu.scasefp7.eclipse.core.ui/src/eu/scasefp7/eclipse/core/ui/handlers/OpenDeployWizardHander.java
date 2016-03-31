@@ -7,6 +7,12 @@ import org.eclipse.core.commands.IHandlerListener;
 import org.eclipse.jface.wizard.WizardDialog;
 import eu.scasefp7.eclipse.core.ui.wizards.DeployWizard;
 
+/**
+ * Opens the deployment wizard.
+ * 
+ * @author Leonora Gašpar
+ *
+ */
 public class OpenDeployWizardHander implements IHandler {
 
 	@Override

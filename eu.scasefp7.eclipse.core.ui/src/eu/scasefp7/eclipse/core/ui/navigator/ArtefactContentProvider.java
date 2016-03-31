@@ -39,7 +39,7 @@ public class ArtefactContentProvider  implements ITreeContentProvider, IResource
    }
 
    public Object[] getElements(Object inputElement) {
-     System.out.println("getElements: " + inputElement);
+     //System.out.println("getElements: " + inputElement);
      
      return getChildren(inputElement);
    }
@@ -76,7 +76,7 @@ public class ArtefactContentProvider  implements ITreeContentProvider, IResource
   
 
    public Object getParent(Object element) {
-     System.out.println("getParent: " + element);
+     //System.out.println("getParent: " + element);
      
      if ((element instanceof IArtefact)) 
        return ((IArtefact)element).getParent();

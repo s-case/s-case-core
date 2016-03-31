@@ -45,7 +45,7 @@ public class NewScaseProjectWizard2 extends Wizard implements INewWizard, IExecu
 
 	public NewScaseProjectWizard2() {
 		setWindowTitle(WIZARD_NAME);
-		RegistryFactory.getRegistry().addListener(this, ScaseUiConstants.NEWPROJECT_EXTENSION);
+		//RegistryFactory.getRegistry().addListener(this, ScaseUiConstants.NEWPROJECT_EXTENSION);
 	}
 	
 

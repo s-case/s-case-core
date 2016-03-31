@@ -59,7 +59,7 @@ public class ScasePerspective implements IPerspectiveFactory {
 		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET); //$NON-NLS-1$
 		
 		outputfolder.addView(ScaseUiConstants.DASHBOARD_VIEW); //$NON-NLS-1$
-		outputfolder.addView("eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView");
+		outputfolder.addView("eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView"); //$NON-NLS-1$
 
 		IFolderLayout outlineFolder = layout.createFolder(
 				"right", IPageLayout.RIGHT, (float) 0.75, editorArea); //$NON-NLS-1$
@@ -101,6 +101,7 @@ public class ScasePerspective implements IPerspectiveFactory {
         //----
         layout.addNewWizardShortcut(ScaseUiConstants.REQUIREMENTS_EDITOR_NEWWIZARDID);//$NON-NLS-1$
         layout.addNewWizardShortcut(ScaseUiConstants.STORYBOARD_EDITOR_NEWWIZARDID);//$NON-NLS-1$
+        layout.addNewWizardShortcut(ScaseUiConstants.SC_STORYBOARD_EDITOR_NEWWIZARDID);//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.folder");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.wizards.new.file");//$NON-NLS-1$
 		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");//$NON-NLS-1$
