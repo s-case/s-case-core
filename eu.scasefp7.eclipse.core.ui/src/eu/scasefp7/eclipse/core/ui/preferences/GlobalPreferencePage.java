@@ -41,7 +41,12 @@ import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.SharedImages;
 
 /**
- * @author emaorli
+ * The S-CASE category preference page showing project links.
+ * 
+ * Main purpose is to create a S-CASE category/group in preferences, 
+ * pages that configure something go under this one in hierarchy.
+ * 
+ * @author Marin Orlic
  *
  */
 public class GlobalPreferencePage extends PreferencePage implements IWorkbenchPreferencePage, IWorkbenchPropertyPage {

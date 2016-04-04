@@ -112,5 +112,19 @@ public final class ScaseUiConstants {
     
     /** Path to project folders for requirements. */
     public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
+    
+    // Source providers
+    
+    /** Source provider for the models folder. */
+    public static final String MODELS_FOLDER_SOURCE = "eu.scasefp7.eclipse.core.ui.sourceprovider.modelsFolderActive"; //$NON-NLS-1$ 
+    
+    /** Source provider for the compositions folder. */
+    public static final String COMPOSITIONS_FOLDER_SOURCE = "eu.scasefp7.eclipse.core.ui.sourceprovider.compositionsFolderActive"; //$NON-NLS-1$
+    
+    /** Source provider for the output folder. */
+    public static final String OUTPUT_FOLDER_SOURCE = "eu.scasefp7.eclipse.core.ui.sourceprovider.outputFolderActive"; //$NON-NLS-1$
+    
+    /** Source provider for the requirements folder. */
+    public static final String REQUIREMENTS_FOLDER_SOURCE = "eu.scasefp7.eclipse.core.ui.sourceprovider.requirementsFolderActive"; //$NON-NLS-1$
 }
 

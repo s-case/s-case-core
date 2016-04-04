@@ -86,7 +86,7 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
               case SWT.Selection:
 
             	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
-            	  dlg.setMessage("Select a directory");
+            	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
@@ -137,7 +137,7 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
               case SWT.Selection:
 
             	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
-            	  dlg.setMessage("Select a directory");
+            	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
@@ -189,7 +189,7 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
               case SWT.Selection:
 
             	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
-            	  dlg.setMessage("Select a directory");
+            	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
@@ -241,7 +241,7 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
               case SWT.Selection:
 
             	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
-            	  dlg.setMessage("Select a directory");
+            	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
