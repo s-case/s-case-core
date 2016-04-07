@@ -761,4 +761,41 @@
          </variable>
       </sourceProvider>
    </extension>
+   <extension
+          point="org.eclipse.core.runtime.adapters">
+       <factory
+             adaptableType="org.eclipse.ui.navigator.resources.ProjectExplorer"
+            class="org.eclipse.ui.internal.navigator.resources.workbench.TabbedPropertySheetAdapterFactory">
+         <adapter type="org.eclipse.ui.views.properties.IPropertySheetPage"/>
+      </factory>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+       <propertyContributor
+             contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertyCategory category="scase"/>
+       </propertyContributor>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+       <propertyTabs contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertyTab
+                category="scase"
+                id="CommonNavigator.tab.Resource2"
+                image="icons/s-case_16x16.png"
+                label="Project">
+          </propertyTab>
+       </propertyTabs>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertySections">
+       <propertySections contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertySection
+                class="eu.scasefp7.eclipse.core.ui.preferences.ScaseProjectPropertySection"
+                id="CommonNavigator.section.Resource2"
+                tab="CommonNavigator.tab.Resource2">
+             <input type="java.lang.Object"/>
+          </propertySection>
+       </propertySections>
+    </extension>
 </plugin>

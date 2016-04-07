@@ -23,9 +23,9 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 		IProject project = getProjectOfExecutionEvent(event);
 		//String projectName = event.getParameter("projectName");
 		String fileName = event.getParameter("fileName");
-		Path path = new Path(fileName);
 		//When handler is called from builder
 		if(fileName != null){
+			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			project = file.getProject();
 			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
