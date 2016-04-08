@@ -798,5 +798,33 @@
                priorityLevel="workbench">
          </variable>
       </sourceProvider>
-   </extension>
+   </extension>   
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
+       <propertyContributor contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertyCategory category="eu.scasefp7.eclipse.category"/>
+       </propertyContributor>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
+       <propertyTabs contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertyTab
+                category="eu.scasefp7.eclipse.category"
+                id="eu.scasefp7.eclipse.core.ui.properties.projecttab"
+                image="icons/view16/s-case_16.png"
+                label="%properties.tab">
+          </propertyTab>
+       </propertyTabs>
+    </extension>
+    <extension
+          point="org.eclipse.ui.views.properties.tabbed.propertySections">
+       <propertySections contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertySection
+                class="eu.scasefp7.eclipse.core.ui.preferences.ScaseProjectPropertySection"
+                id="eu.scasefp7.eclipse.core.ui.properties.projectsection"
+                tab="eu.scasefp7.eclipse.core.ui.properties.projecttab">
+             <input type="org.eclipse.core.resources.IResource"/>
+          </propertySection>
+       </propertySections>
+    </extension>
 </plugin>

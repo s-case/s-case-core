@@ -2,6 +2,7 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
@@ -16,6 +17,11 @@ import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
  */
 public class OntologyHelpers {
 
+    /** This class should not be instantiated. */
+    private OntologyHelpers()
+    {   
+    }
+    
 	/**
 	 * Checks whether the given project contains the ontology in the models folder location.
 	 * 
@@ -33,8 +39,10 @@ public class OntologyHelpers {
 		}
 		IContainer container = project;
 		if (modelsFolderLocation != null) {
-			if (project.findMember(new Path(modelsFolderLocation)).exists())
+		    IResource models = project.findMember(new Path(modelsFolderLocation)); 
+			if (models != null && models.exists()) {
 				container = (IContainer) project.findMember(new Path(modelsFolderLocation));
+			}
 		}
 		return container.getFile(new Path(ontologyFilename)).exists();
 	}

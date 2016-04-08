@@ -79,6 +79,9 @@ public final class ScaseUiConstants {
     /** Default project domain (unset). */
     public static final int PROP_PROJECT_DOMAIN_DEFAULT = -1;
     
+    /** Project nature */
+    public static final String PROJECT_NATURE = "eu.scasefp7.eclipse.core.scaseNature"; //$NON-NLS-1$
+    
     /* Links */
     /** URL for the project homepage (http://www.scasefp7.eu/). */
     public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/";
