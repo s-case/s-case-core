@@ -7,6 +7,7 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IAdaptable;
+import org.eclipse.core.runtime.IPath;
 import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.swt.SWT;
@@ -20,6 +21,7 @@ import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
+import org.eclipse.ui.dialogs.ISelectionValidator;
 import org.eclipse.ui.dialogs.PropertyPage;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
@@ -92,6 +94,20 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 
 
         IContainer root = ResourcesPlugin.getWorkspace().getRoot();
+        final IProject currentProject = project;
+		ISelectionValidator validator = new ISelectionValidator() {
+			@Override
+			public String isValid(Object selection) {
+				try {
+					IFolder folder = root.getFolder((IPath) selection);
+					if (!folder.getProject().equals(currentProject))
+						return "You must select a folder inside your project";
+				} catch (IllegalArgumentException e) {
+					return "You must select a folder inside your project";
+				}
+				return null;
+			}
+		};
         button.addListener(SWT.Selection, new Listener() {
         	@Override
             public void handleEvent(Event e) {
@@ -99,14 +115,21 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 			switch (e.type) {
               case SWT.Selection:
 
-            	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
+					ContainerSelectionDialog dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
+							.getFolder(new Path(modelsPath)), false, null);
+					dlg.setValidator(validator);
             	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null) {
-            		   resPath = (Path ) res[0];
-            		   models.setText(resPath.toString()); 
-            		   modelsPath = resPath.toString();
+						resPath = (Path) res[0];
+						String resPathString = "";
+						for (int i = 1; i < resPath.segmentCount(); i++) {
+							resPathString += resPath.segment(i) + "/";
+						}
+						resPathString = resPathString.substring(0, resPathString.length() - 1);
+						models.setText(resPathString);
+						modelsPath = resPathString;
             	   }
 
                 break;
@@ -149,14 +172,21 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 			switch (e.type) {
               case SWT.Selection:
 
-            	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
+					ContainerSelectionDialog dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
+							.getFolder(new Path(outputPath)), false, null);
+					dlg.setValidator(validator);
             	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null) {
-            		   resPath = (Path ) res[0];
-            		   output.setText(resPath.toString()); 
-            		   outputPath = resPath.toString();
+						resPath = (Path) res[0];
+						String resPathString = "";
+						for (int i = 1; i < resPath.segmentCount(); i++) {
+							resPathString += resPath.segment(i) + "/";
+						}
+						resPathString = resPathString.substring(0, resPathString.length() - 1);
+						output.setText(resPathString);
+						outputPath = resPathString;
             	   }
                 break;
               }
@@ -199,15 +229,22 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 			switch (e.type) {
               case SWT.Selection:
 
-            	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
+					ContainerSelectionDialog dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
+							.getFolder(new Path(reqPath)), false, null);
+					dlg.setValidator(validator);
             	  dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
             	   {
-            		   resPath = (Path ) res[0];
-            		   requirements.setText(resPath.toString()); 
-            		   reqPath = resPath.toString();
+						resPath = (Path) res[0];
+						String resPathString = "";
+						for (int i = 1; i < resPath.segmentCount(); i++) {
+							resPathString += resPath.segment(i) + "/";
+						}
+						resPathString = resPathString.substring(0, resPathString.length() - 1);
+						requirements.setText(resPathString);
+						reqPath = resPathString;
             	   }
 
                 break;
@@ -251,15 +288,22 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 			switch (e.type) {
               case SWT.Selection:
 
-            	  ContainerSelectionDialog  dlg = new ContainerSelectionDialog (parent.getShell(), root, true, null);
-            	  dlg.setMessage("Select a folder");
+					ContainerSelectionDialog dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
+							.getFolder(new Path(comPath)), false, null);
+					dlg.setValidator(validator);
+					dlg.setMessage("Select a folder");
             	   dlg.open();
             	   Object[] res = dlg.getResult();
             	   if(res != null)
             	   {
-            		   resPath = (Path ) res[0];
-            		   compositions.setText(resPath.toString()); 
-            		   comPath = resPath.toString();
+						resPath = (Path) res[0];
+						String resPathString = "";
+						for (int i = 1; i < resPath.segmentCount(); i++) {
+							resPathString += resPath.segment(i) + "/";
+						}
+						resPathString = resPathString.substring(0, resPathString.length() - 1);
+						compositions.setText(resPathString);
+						comPath = resPathString;
             	   }
 
                 break;
