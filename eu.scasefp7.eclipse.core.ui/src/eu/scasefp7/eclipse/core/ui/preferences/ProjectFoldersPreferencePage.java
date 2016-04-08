@@ -366,4 +366,36 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 		return super.performOk();
 	}
 
+	@Override
+	protected void performDefaults() {
+		IProject project = null;
+		IAdaptable element = getElement();
+		if (element instanceof IProject) {
+			project = (IProject) element;
+		} else {
+			Object resource = element.getAdapter(IResource.class);
+			if (resource instanceof IProject) {
+				project = (IProject) resource;
+			} else {
+				Activator.log("Unable to set project properties.", null); //$NON-NLS-1$
+			}
+		}
+		try {
+			modelsPath = project.getFolder("models").exists() ? "models" : "";
+			outputPath = project.getFolder("output").exists() ? "output" : "";
+			reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
+			comPath = project.getFolder("compositions").exists() ? "compositions" : "";
+			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
+			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
+			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
+			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
+			models.setText(modelsPath);
+			output.setText(outputPath);
+			requirements.setText(reqPath);
+			compositions.setText(comPath);
+		} catch (CoreException e) {
+			Activator.log("Unable to set project properties.", null); //$NON-NLS-1$
+		}
+		super.performDefaults();
+	}
 }
