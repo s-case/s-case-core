@@ -36,20 +36,7 @@
    <extension point="org.eclipse.ui.handlers">
       <handler class="eu.scasefp7.eclipse.core.handlers.CompileStaticRequirementsHandler" commandId="eu.scasefp7.eclipse.core.commands.compileStaticRequirements"/>
       <handler class="eu.scasefp7.eclipse.core.handlers.CompileDynamicRequirementsHandler" commandId="eu.scasefp7.eclipse.core.commands.compileDynamicRequirements"/>
-      <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.linkOntologies">
-	      <!--
-	      <enabledWhen>
-      	 	<with variable="selection">
-      	 		<iterate>
-                    <adapt type="org.eclipse.core.resources.IResource">
-                      <test property="org.eclipse.core.resources.projectNature" value="org.eclipse.jdt.core.javanature"/>
-                    </adapt>
-             	</iterate>
-                <count value="1" />
-		    </with>         
-		 </enabledWhen>
-		 -->
-      </handler>
+      <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"/>
       <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.testSetup">
       	 <enabledWhen>
       	 	<with variable="selection">
