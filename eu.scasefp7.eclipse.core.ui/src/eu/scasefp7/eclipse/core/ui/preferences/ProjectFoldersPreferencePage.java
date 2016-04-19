@@ -66,6 +66,26 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 		} catch (CoreException exc) {
 			Activator.log("Unable to read project properties.", exc); //$NON-NLS-1$
 		}
+		try {
+			if (modelsPath == null) {
+				modelsPath = project.getFolder("models").exists() ? "models" : "";
+				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
+			}
+			if (outputPath == null) {
+				outputPath = project.getFolder("output").exists() ? "output" : "";
+				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
+			}
+			if (reqPath == null) {
+				reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
+				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
+			}
+			if (comPath == null) {
+				comPath = project.getFolder("compositions").exists() ? "compositions" : "";
+				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
+			}
+		} catch (CoreException e4) {
+			e4.printStackTrace();
+		}
 
 		initializeDialogUnits(parent);
 
