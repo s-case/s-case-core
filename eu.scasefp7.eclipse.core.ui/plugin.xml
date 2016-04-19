@@ -519,14 +519,14 @@
       </menuContribution>
    </extension>
   
-  <extension point="org.eclipse.ui.menus">
+  <!-- <extension point="org.eclipse.ui.menus">
       <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
             <command commandId="eu.scasefp7.eclipse.core.commands.linkOntologies" id="eu.scasefp7.eclipse.core.menus.linkOntologies"/>
       </menuContribution>
       <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
             <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
       </menuContribution>
-   </extension>
+   </extension> -->
    
    <extension
          point="org.eclipse.ui.menus">
