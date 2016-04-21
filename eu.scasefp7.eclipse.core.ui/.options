@@ -1,4 +1,4 @@
-# Tracing options for the eu.scasefp7.eclipse.core.ui plug-in
-
-eu.scasefp7.eclipse.core.ui/debug=false
-eu.scasefp7.eclipse.core.ui/debug/userActions=false
+eu.scasefp7.eclipse.core.ui/dashboard=false
+eu.scasefp7.eclipse.core.ui/dashboard/executeCommand=false
+eu.scasefp7.eclipse.core.ui/dashboard/userActions=false
+eu.scasefp7.eclipse.core.ui/dashboard/selectedProjectChanged=false

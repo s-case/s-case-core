@@ -19,7 +19,6 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.m2e.core,
  org.eclipse.m2e.maven.runtime,
  org.eclipse.ui.navigator,
- Opal,
  org.eclipse.ui.intro,
  org.eclipse.core.expressions,
  org.eclipse.ui.views.properties.tabbed,
@@ -32,5 +31,4 @@ Bundle-Activator: eu.scasefp7.eclipse.core.ui.Activator
 Bundle-ActivationPolicy: lazy
 Import-Package: eu.scasefp7.eclipse.core.builder,
  eu.scasefp7.eclipse.core.ontology,
- org.eclipse.debug.internal.ui,
- org.mihalis.opal.obutton
+ org.eclipse.debug.internal.ui
