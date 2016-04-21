@@ -1,13 +1,9 @@
 package eu.scasefp7.eclipse.core.ui.perspectives;
 
-import org.eclipse.osgi.util.NLS;
 import org.eclipse.ui.IFolderLayout;
 import org.eclipse.ui.IPageLayout;
 import org.eclipse.ui.IPerspectiveFactory;
 import org.eclipse.ui.progress.IProgressConstants;
-
-
-
 
 //import org.eclipse.ui.console.IConsoleConstants;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;

@@ -113,15 +113,6 @@
      </super>
   </extension>
   <extension
-        name="Test"
-        point="org.eclipse.core.variables.dynamicVariables">
-     <variable
-           description="description"
-           name="argument1"
-           resolver="eu.scasefp7.eclipse.core.builder.TestDynamicVariableResolver">
-     </variable>
-  </extension>
-  <extension
         name="name1"
         point="eu.scasefp7.eclipse.core.builder">
      <buildStep

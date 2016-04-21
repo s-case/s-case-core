@@ -15,10 +15,6 @@
  */
 package eu.scasefp7.eclipse.core.ui.views;
 
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.time.format.DateTimeFormatter;
-import java.time.temporal.ChronoUnit;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -35,21 +31,18 @@ import org.eclipse.core.commands.Parameterization;
 import org.eclipse.core.commands.ParameterizedCommand;
 import org.eclipse.core.commands.common.CommandException;
 import org.eclipse.core.commands.common.NotDefinedException;
-import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
-import org.eclipse.core.runtime.ILog;
 import org.eclipse.core.runtime.IRegistryEventListener;
-import org.eclipse.core.runtime.IStatus;
 import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.RegistryFactory;
-import org.eclipse.core.runtime.Status;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
@@ -65,7 +58,7 @@ import org.eclipse.swt.events.MouseEvent;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
 import org.eclipse.swt.layout.RowLayout;
-import org.eclipse.swt.graphics.Image;
+import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
@@ -80,11 +73,8 @@ import org.eclipse.ui.PartInitException;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
-import org.eclipse.ui.menus.CommandContributionItem;
-import org.eclipse.ui.menus.CommandContributionItemParameter;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
-import org.eclipse.wb.swt.ResourceManager;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
@@ -113,7 +103,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static final String CONTRIBUTION_GROUP_NAME = "name";
     private static final String CONTRIBUTION_COMMAND = "command";
     private static final String CONTRIBUTION_COMMAND_ID = "commandId";
-    private static final String CONTRIBUTION_COMMAND_ICON = "icon";
     private static final String CONTRIBUTION_COMMAND_LABEL = "label";
     private static final String CONTRIBUTION_COMMAND_TOOLTIP = "tooltip";
     private static final String CONTRIBUTION_COMMAND_PARAM = "parameter";
@@ -123,9 +112,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static final String CONTRIBUTION_COMMAND_NOTIFICATION_FAIL = "error";
 
     protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
-    
-    private static ILog pluginLog =  Activator.getDefault().getLog();
-    static int incrementalId = 0;
       
     /**
      * The currently selected project
@@ -161,13 +147,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 */
 	public void createPartControl(Composite parent) {
 	    // Set the main layout
-		RowLayout rl_parent = new RowLayout(SWT.HORIZONTAL);
-		rl_parent.pack = false;
-		rl_parent.fill = true;
-		rl_parent.marginWidth = 10;
-		rl_parent.marginHeight = 10;
-		rl_parent.spacing = 10;
-		parent.setLayout(rl_parent);
+		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
+		layout.pack = false;
+		layout.fill = true;
+		layout.marginWidth = 10;
+		layout.marginHeight = 10;
+		layout.spacing = 10;
+		parent.setLayout(layout);
 		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		// Add menu and toolbar
@@ -184,7 +170,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 handleGroup(parent, elem);
             }
             if(elem.getName().equals(CONTRIBUTION_COMMAND)) {
-                handleButton(parent, elem, "");   
+                handleButton(parent, elem);   
             }
         }
 		
@@ -192,7 +178,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             @Override
             public void controlResized(ControlEvent e) {
                 parent.getShell().layout();
-                System.out.println("RESIZED");
             }
         });
         
@@ -284,11 +269,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private void fillLocalToolBar(IToolBarManager manager) {
 //      manager.add(action1);
 //      manager.add(action2);
-        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
-            "eu", new HashMap<Object, Object>(), null, null, null, "MENUUU", "C", 
-            "Shows the project properties pages", 
-            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
-        manager.add(new CommandContributionItem(param)); 
+//        CommandContributionItemParameter param = new CommandContributionItemParameter(getSite(), "eu.scasefp7.eclipse.core.ui.dashboard.menu1", 
+//            "eu", new HashMap<Object, Object>(), null, null, null, "MENUUU", "C", 
+//            "Shows the project properties pages", 
+//            CommandContributionItem.STYLE_PUSH, getContentDescription(), false);
+//        manager.add(new CommandContributionItem(param)); 
     }
 
     
@@ -300,19 +285,14 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * @throws InvalidRegistryObjectException
      */
     private void handleGroup(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {
-        Group group = createGroup(parent, "        "+elem.getAttribute(CONTRIBUTION_GROUP_NAME));
-
-        String icon = elem.getAttribute(CONTRIBUTION_COMMAND_ICON);
-        if(icon == null)
-        	icon = "";
-        Image img = ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", icon);
-        group.setBackgroundImage(img);
+        Group group = createGroup(parent, elem.getAttribute(CONTRIBUTION_GROUP_NAME));
+        
         for (IConfigurationElement child : elem.getChildren()) {
             if(child.getName().equals(CONTRIBUTION_GROUP)) {
                 handleGroup(group, child);
             }
             if(child.getName().equals(CONTRIBUTION_COMMAND)) {
-                handleButton(group, child, icon);    
+                handleButton(group, child);    
             }
         }
     }
@@ -324,22 +304,16 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * @param elem configuration element describing the button
      * @throws InvalidRegistryObjectException
      */
-    private void handleButton(Composite parent, IConfigurationElement elem, String icon) throws InvalidRegistryObjectException {       
+    private void handleButton(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {       
 
         String name = elem.getAttribute(CONTRIBUTION_COMMAND_LABEL);
         String tooltip = elem.getAttribute(CONTRIBUTION_COMMAND_TOOLTIP);
-        
         final String commandId = elem.getAttribute(CONTRIBUTION_COMMAND_ID);
         final String notificationSuccess = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS);
         final String notificationFail = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_FAIL);
         
-        ImageButton btn = new ImageButton(parent, SWT.NULL);
-
-       
-		Image img = ResourceManager.getPluginImage("eu.scasefp7.eclipse.core.ui", "icons/dashboardButton.png");
-		btn.setImage(img);
-        btn.setSize(150, 24);
-
+        Button btn = new Button(parent, SWT.NONE);
+        
         if(name != null) {
             btn.setText(name);
         }
@@ -359,18 +333,15 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
-                                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
                         try {
-                            Activator.trace.trace("/debug/userActions", "Button pressed: "+name); 
+                            // Trace user action
+                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
+                            
                             executeCommand(commandId);
                             notifyUser(commandId, notificationSuccess);     
-
-                        } catch ( CommandException ex) {  
+                        } catch (CommandException ex) {
+                            Activator.log("Unable to execute command " + commandId, ex);
                             notifyUser(commandId, notificationFail, ex);     
-                            ex.printStackTrace();
-                            String logEntry = failureFormater(name, startTimestamp, ex.getLocalizedMessage());
-                            pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
                         }
                     }
                 });
@@ -379,19 +350,15 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 btn.addMouseListener(new MouseAdapter() {
                     @Override
                     public void mouseDown(MouseEvent e) {
-                    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
-                                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
                         try {
-                        	
-                        	Activator.trace.trace("/debug/userActions", "Button pressed: "+name);  
-                            executeCommand(commandId, params);
-                            notifyUser(commandId, notificationSuccess);   
-                        } catch (CommandException ex) { 
-                            notifyUser(commandId, notificationFail, ex);     
-
-                            String logEntry = failureFormater(name, startTimestamp, ex.getLocalizedMessage());
-                            pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
+                            // Trace user action
+                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
                             
+                            executeCommand(commandId, params);
+                            notifyUser(commandId, notificationSuccess);     
+                        } catch (CommandException ex) {
+                            Activator.log("Unable to execute command " + commandId, ex);
+                            notifyUser(commandId, notificationFail, ex);     
                         }
                     }
                 });   
@@ -451,10 +418,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 				if(cmdEvent.isDefinedChanged() || cmdEvent.isEnabledChanged() || cmdEvent.isHandledChanged()) {
 					control.setEnabled(command.isDefined() && command.isEnabled() && command.isHandled());
 				}
-				if(command.getId().equals("eu.scasefp7.eclipse.core.commands.compileToOntology")) {
-				    System.out.println("cmdEvent def " + cmdEvent.isDefinedChanged() + " en " + cmdEvent.isEnabledChanged() + " hand " + cmdEvent.isHandledChanged());
-				    System.out.println("command " + command.getId() + " def " + command.isDefined() + " en " + command.isEnabled() + " hand " + command.isHandled());
-				}
 			}
 		}; 
 	    
@@ -470,20 +433,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId, Map<String, String> parameters) throws CommandException {
-		String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
-                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
-		String par ="";
-		
-		for (String key : parameters.keySet()) {
-		    System.out.println("Key = " + key);
-		    parameters.get(key);
-		    par+=key+" : " + parameters.get(key) + ", ";
-		}
-		Activator.trace.trace("/debug/userActions", "Command called: "+commandId+", parameters: " + par.substring(0,par.length()-2)); 
+
 		ICommandService commandService = (ICommandService)serviceLocator.getService(ICommandService.class);
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		
@@ -498,17 +452,18 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     				Parameterization param = new Parameterization(p, entry.getValue());
     				params.add(param);
 		        } else {
-		            System.out.println("Cannot find parameter: " + entry.getKey() + " of command " + commandId);
+		            Activator.TRACE.trace("/dashboard/executeCommand", "Cannot find parameter: " + entry.getKey() + " of command " + commandId);
 		        }
 		    }
+		    
+		    Activator.TRACE.trace("/dashboard/userActions", "Command called: " + commandId + ", parameters: " + params); 
+	        
 			ParameterizedCommand parametrizedCommand = new ParameterizedCommand(command, params.toArray(new Parameterization[params.size()]));
 		    handlerService.executeCommand(parametrizedCommand, null);
 		    
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-			String logEntry = failureFormater(commandId, startTimestamp, ex.getLocalizedMessage());
-        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
-	
+		    
 		   throw ex;
 		}
 	}
@@ -521,13 +476,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 * @throws CommandException if the command execution fails
 	 */
 	protected void executeCommand(String commandId) throws CommandException {
-		String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
-                .format( DateTimeFormatter.ISO_DATE_TIME );
 		// Obtain IServiceLocator implementer, e.g. from PlatformUI.getWorkbench():
 		IServiceLocator serviceLocator = getSite();
 		// or a site from within a editor or view:
 		// IServiceLocator serviceLocator = getSite();
-		Activator.trace.trace("/debug/userActions", "Command called: "+commandId); 
+
+		Activator.TRACE.trace("/dashboard/executeCommand", "Executing: " + commandId);
+		
 		IHandlerService handlerService = (IHandlerService)serviceLocator.getService(IHandlerService.class);
 		try  { 
 		    // Execute command via its ID
@@ -535,9 +490,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
 		} catch (ExecutionException | NotDefinedException |
 		        NotEnabledException | NotHandledException ex) {
-			String logEntry = failureFormater(commandId, startTimestamp, ex.getLocalizedMessage());
-        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, ex));
-			//pluginLog.log(new Status(IStatus.ERROR, ID, ex.getLocalizedMessage(), ex));
+		    
 		    throw ex;
 		}
 	}
@@ -590,8 +543,12 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection sel) {
-     // we ignore null selection, or if we are pinned, or our own selection or same selection
-        if (sel == null || sel.equals(currentSelection)) {
+     // we ignore null selection, or if we are pinned, or our own selection or same selection or if selection is empty
+        if (sel == null || sel.equals(currentSelection) || sel.isEmpty()) {
+            if (this.currentProject == null || !this.currentProject.exists()) {
+                this.currentProject = null;
+                setContentDescription("Please select a project");
+            }
             return;
         }
         
@@ -599,50 +556,50 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 //        if(part == null || !part.equals(currentPart)){
 //            return;
 //        }
-        
         updateSelection(sel);
         updateContentDescription();
     }
 
     protected IProject getProjectOfSelectionList(List<Object> selectionList) {
-        IProject project = null;
-        for (Object object : selectionList) {
-            IFile file = (IFile)Platform.getAdapterManager().getAdapter(object, IFile.class);
-            IProject theproject = null;
-            if (file != null) {
-                theproject = file.getProject();
-            } else {
-                theproject = (IProject)Platform.getAdapterManager().getAdapter(object, IProject.class);
-            }
-            if (theproject != null) {
-                if (project == null) {
-                    project = theproject;
-                } else {
-                    if (!project.equals(theproject)) {
-                        return null;
-                    }
-                }
-            }
-        }
-        
-        return project;
+		IProject project = null;
+		for (Object object : selectionList) {
+			IResource resource = (IResource) Platform.getAdapterManager().getAdapter(object, IResource.class);
+			IProject theproject = null;
+			if (resource != null) {
+				theproject = resource.getProject();
+			} else {
+				theproject = (IProject) Platform.getAdapterManager().getAdapter(object, IProject.class);
+			}
+			if (theproject != null) {
+				if (project == null) {
+					project = theproject;
+				} else {
+					if (!project.equals(theproject)) {
+						return null;
+					}
+				}
+			}
+		}
+		return project;
     }
     
     private void updateSelection(ISelection selection) {
         if(selection instanceof IStructuredSelection) {
             IStructuredSelection sel = (IStructuredSelection) selection;
         
-            @SuppressWarnings("unchecked")
-            IProject project = getProjectOfSelectionList(sel.toList());
-            if (project != null) {
-                this.currentProject = project;
-                System.out.println("Current project: " + project);
-            }    
+            if (sel.getFirstElement() instanceof IResource){
+            	@SuppressWarnings("unchecked")
+            	IProject project = getProjectOfSelectionList(sel.toList());
+            	if (project != null) {
+            		Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
+            		this.currentProject = project;
+            	}    
+            }
         }
     }
     
     private void updateContentDescription() {
-        if (this.currentProject != null) {
+        if (this.currentProject != null && this.currentProject.exists()) {
             int projectDomain = getProjectDomainId(this.currentProject);
             DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, projectDomain);
             
@@ -673,16 +630,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     }
     
     private static int getProjectDomainId(IProject project) {
-    	String startTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.MINUTES )
-                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
         try {
             String domain = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN));
             if(domain != null) {
                 return Integer.parseInt(domain);
             }
         } catch (CoreException | NumberFormatException e) {
-        	String logEntry = failureFormater("getProjectDomainId", startTimestamp, e.getLocalizedMessage());
-        	pluginLog.log(new Status(IStatus.ERROR, ID, logEntry, e));
+            Activator.log("Unable to load project domain", e);
         }
         return ScaseUiConstants.PROP_PROJECT_DOMAIN_DEFAULT;
     }
@@ -709,36 +663,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     public void removed(IExtensionPoint[] extensionPoints) {
         // TODO Auto-generated method stub
         
-    }
-    
-    private static String failureFormater(String name, String startTime, String message){
-    	
-    	//incremental id in the form t0, t1, t2, t3,...
-    	String Id = "t" + incrementalId;
-    	incrementalId++;
-    	//the name of the service we are monitoring and logging
-    	String serviceName = "S-Case Dashboard";
-    	//the version of the released service under execution/test
-    	String serviceVersion = "1.0.0-SNAPSHOT";
-    	//the UTC date when the service operational execution (re)started 
-    	String startingServiceOperationalTestingTime = startTime;
-    	//the component where the fault and error raise
-    	String className = "Dashboard";
-    	//the component where the fault and error raise
-    	String functionName = name;
-    	//the UTC date when the failure happen 
-    	String failureTimestamp = ZonedDateTime.now( ZoneId.systemDefault() ).truncatedTo( ChronoUnit.SECONDS )
-                .format( DateTimeFormatter.ISO_OFFSET_DATE_TIME );
-    	//a human-readable message about the detected error
-    	String errorMsg = message;
-    	return errorMsg + "\n"
-    			+ "ERROR_ID t " + Id + "\n"
-    			+ "SERVICE_NAME " + serviceName + "\n"
-    			+ "SERVICE_VERSION  " + serviceVersion +"\n"
-    			+ "STARTING_TIME: " + startingServiceOperationalTestingTime + "\n"
-    			+ "CLASS_NAME " + className + "\n"
-    			+ "FUNCTION_NAME  " + functionName + "\n"
-    			+ "FAILURE_TIMESTAMP " + failureTimestamp ;
     }
 
 }

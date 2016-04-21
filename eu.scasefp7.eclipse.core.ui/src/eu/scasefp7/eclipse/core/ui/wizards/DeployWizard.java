@@ -9,9 +9,9 @@ public class DeployWizard extends Wizard {
 	protected DeployWizardPageThree three;
 	
 	private static final String PAGE_ONE_NAME = "First page";
-	private static final String PAGE_TWO_NAME = "Second page";
+	private static final String PAGE_TWO_NAME = "Deploy generated service";
 	private static final String PAGE_THREE_NAME = "Third page";
-	private static final String WIZARD_NAME = "New S-CASE Project";
+	private static final String WIZARD_NAME = "Service deployment";
 	
 	
 	public DeployWizard() {
@@ -30,9 +30,9 @@ public class DeployWizard extends Wizard {
 	    one = new DeployWizardPageOne(PAGE_ONE_NAME);
 	    two = new DeployWizardPageTwo(PAGE_TWO_NAME);
 	    three = new DeployWizardPageThree(PAGE_THREE_NAME);
-	    addPage(one);
+//	    addPage(one);
 	    addPage(two);
-	    addPage(three);
+//	    addPage(three);
 	  }
 
 	

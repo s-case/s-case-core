@@ -12,6 +12,9 @@ import org.eclipse.swt.widgets.Event;
 import org.eclipse.swt.widgets.Label;
 import org.eclipse.swt.widgets.Listener;
 
+/**
+ * @author Marin Orlic
+ */
 public class DeployWizardPageOne extends WizardPage {
 	private String nextPage = "two";
 	protected DeployWizardPageOne(String pageName) {

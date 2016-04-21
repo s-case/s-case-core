@@ -3,6 +3,13 @@ package eu.scasefp7.eclipse.core.ui.navigator;
 import org.eclipse.core.resources.IFolder;
 import org.eclipse.jface.viewers.ViewerSorter;
 
+/**
+ * Sorts the artifacts by category order ( "Requirements", "Objects", "Activities", "Transitions" ).
+ * 
+ * @author Leonora Gaspar
+ * @author Marin Orlic
+ *
+ */
 public class ArtefactSorter extends ViewerSorter
 {
    public int category(Object element)

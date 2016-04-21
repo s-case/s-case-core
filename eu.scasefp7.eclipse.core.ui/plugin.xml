@@ -4,7 +4,6 @@
    <extension-point id="eu.scasefp7.eclipse.core.ui.dashboardItem" name="Dashboard command" schema="schema/eu.scasefp7.eclipse.core.ui.dashboardItem.exsd"/>
    <extension-point id="eu.scasefp7.eclipse.core.ui.projectWizardPages" name="S-CASE project wizard pages" schema="schema/eu.scasefp7.eclipse.core.ui.projectWizardPages.exsd"/>
 
-
    <extension
          point="org.eclipse.ui.perspectives">
       <perspective
@@ -129,25 +128,19 @@
            class="eu.scasefp7.eclipse.core.ui.preferences.ProjectFoldersPreferencePage"
            id="eu.scasefp7.eclipse.core.ui.preferencePages.ProjectFoldersPreferencePage"
            name="Project folders">
-        <enabledWhen>
-           <adapt
-                 type="org.eclipse.core.resources.IProject">
-              <test
-                    property="org.eclipse.core.resources.projectNature"
-                    value="eu.scasefp7.eclipse.core.scaseNature">
-              </test>
-           </adapt>
-        </enabledWhen>
-     </page>
+         <enabledWhen>
+             <adapt type="org.eclipse.core.resources.IProject">
+               		<test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.scaseNature" />
+            </adapt>
+         </enabledWhen>
+      </page>
   </extension>
-  <!--
   <extension
         point="org.eclipse.core.runtime.preferences">
      <initializer
            class="eu.scasefp7.eclipse.core.ui.preferences.PreferenceInitializer">
      </initializer>
   </extension>
-  -->
   <extension
         point="org.eclipse.ui.preferencePages">
      <page
@@ -163,6 +156,281 @@
   </extension>
   
   <!-- Dashboard commands -->
+  <extension
+        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
+ <!--    <group
+           name="Project setup">
+        <command
+              commandId="eu.scasefp7.eclipse.core.commands.addRemoveScaseNature"
+              error="Project configuration failed"
+              label="Configure project"
+              notification="Project successfully configured">
+        </command>
+     </group> -->
+     <group
+           name="Design">
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create requirements"
+              tooltip="Create a new textual requirements collection">
+              <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
+        </command>
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create storyboards"
+              tooltip="Create a new storyboard to describe system behaviour">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
+           </parameter>
+        </command>
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create mashups"
+              tooltip="Create a new storyboard to describe service composition">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
+           </parameter>
+        </command>
+        
+        <!--
+        <command
+              commandId="org.eclipse.ui.file.import"
+              label="Import UML Use case diagram"
+              tooltip="Import UML use case diagram from an image">
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizardDISABLE" />
+        </command>
+        -->
+     </group>
+      <group
+           name="Mashup">
+ <!--       <command
+              commandId="eu.scasefp7.eclipse.core.commands.compileToOntology"
+              error="Requrements compilation failed."
+              label="Compile"
+              notification="Requirements compiled successfully."
+              tooltip="Compile requirements in text or storyboards">
+        </command>-->
+        <command
+              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
+              error="Import storyboard failed."
+              label="Create service composition"
+              tooltip="Use a storyboard for service composition">
+        </command>
+     </group>
+     <group
+           name="Code">
+        <command
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              error="Code generation failed."
+              label="Generate code"
+              tooltip="Generate code for the web service">
+        </command>
+        <command
+              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
+              error="Code generation failed."
+              label="Re-generate code"
+              tooltip="Generate code for the web service using previous settings">
+           <parameter
+                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
+                 value="yes">
+           </parameter>
+        </command>
+     </group>
+     <group
+           name="Run">
+        <command
+              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
+              label="Deploy on YouREST">
+        </command>
+     </group>
+  </extension>
+  
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+            allPopups="false"
+            locationURI="popup:org.eclipse.ui.popup.any">
+         <menu
+               icon="icons/obj16/project-folder_16.png"
+               label="Project folders">
+               <visibleWhen
+                  checkEnabled="false">
+               <and>
+                  <with
+                        variable="activeMenuSelection">
+                     <iterate
+                           ifEmpty="false">
+                        <adapt
+                              type="org.eclipse.core.resources.IResource">
+                           <instanceof
+                                 value="org.eclipse.core.resources.IFolder">
+                           </instanceof>
+                           <test
+                                 property="org.eclipse.core.resources.projectNature"
+                                 value="eu.scasefp7.eclipse.core.scaseNature">
+                           </test>
+                        </adapt>
+                     </iterate>
+                  </with>
+               </and>
+            </visibleWhen>
+            <command
+                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
+                  icon="icons/obj16/project-folder_16.png"
+                  label="Configure as output folder"
+                  style="push">
+               <parameter
+                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+                     value="output">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <and>
+                     <with
+                           variable="activeMenuSelection">
+                        <iterate
+                              ifEmpty="false">
+                           <adapt
+                                 type="org.eclipse.core.resources.IResource">
+                              <instanceof
+                                    value="org.eclipse.core.resources.IFolder">
+                              </instanceof>
+                           </adapt>
+                        </iterate>
+                     </with>
+                     <with
+                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.outputFolderActive">
+                        <equals
+                              value="true">
+                        </equals>
+                     </with>
+                  </and>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
+                  icon="icons/obj16/project-folder_16.png"
+                  label="Configure as models folder"
+                  style="push">
+               <parameter
+                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+                     value="models">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <and>
+                     <with
+                           variable="activeMenuSelection">
+                        <iterate
+                              ifEmpty="false">
+                           <adapt
+                                 type="org.eclipse.core.resources.IResource">
+                              <instanceof
+                                    value="org.eclipse.core.resources.IFolder">
+                              </instanceof>
+                           </adapt>
+                        </iterate>
+                     </with>
+                     <with
+                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.modelsFolderActive">
+                        <equals
+                              value="true">
+                        </equals>
+                     </with>
+                  </and>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
+                  icon="icons/obj16/project-folder_16.png"
+                  label="Configure as requirements folder"
+                  style="push">
+               <parameter
+                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+                     value="requirements">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <and>
+                     <with
+                           variable="activeMenuSelection">
+                        <iterate
+                              ifEmpty="false">
+                           <adapt
+                                 type="org.eclipse.core.resources.IResource">
+                              <instanceof
+                                    value="org.eclipse.core.resources.IFolder">
+                              </instanceof>
+                           </adapt>
+                        </iterate>
+                     </with>
+                     <with
+                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.requirementsFolderActive">
+                        <equals
+                              value="true">
+                        </equals>
+                     </with>
+                  </and>
+               </visibleWhen>
+            </command>
+            <command
+                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
+                  icon="icons/obj16/project-folder_16.png"
+                  label="Configure as compositions folder"
+                  style="push">
+               <parameter
+                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+                     value="compositions">
+               </parameter>
+               <visibleWhen
+                     checkEnabled="false">
+                  <and>
+                     <with
+                           variable="activeMenuSelection">
+                        <iterate
+                              ifEmpty="false">
+                           <adapt
+                                 type="org.eclipse.core.resources.IResource">
+                              <instanceof
+                                    value="org.eclipse.core.resources.IFolder">
+                              </instanceof>
+                           </adapt>
+                        </iterate>
+                     </with>
+                     <with
+                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.compositionsFolderActive">
+                        <equals
+                              value="true">
+                        </equals>
+                     </with>
+                  </and>
+               </visibleWhen>
+            </command>
+         </menu>
+      </menuContribution>
+   </extension>
+   <extension
+         point="org.eclipse.ui.commands">
+      <command
+            description="Configure as models, compositions, requirements or output folders"
+            id="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
+            name="Configure as project folder">
+         <commandParameter
+               id="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+               name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
+               optional="false">
+         </commandParameter>
+      </command>
+   </extension>
+   <extension
+         point="org.eclipse.ui.handlers">
+      <handler
+            class="eu.scasefp7.eclipse.core.ui.handlers.ConvertToProjectFolderHandler"
+            commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder">
+      </handler>
+   </extension>
   
   <extension
         point="org.eclipse.ui.commands">
@@ -176,8 +444,8 @@
         </commandParameter>
      </command>
      <command
-           id="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
-           name="Open deploy wizard">
+              id="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
+              name="Generated service deployment wizard">
      </command>
   </extension>
 
@@ -192,64 +460,6 @@
            commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard">
      </handler>
   </extension>
-  
-  <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-            <command commandId="eu.scasefp7.eclipse.core.commands.linkOntologies" id="eu.scasefp7.eclipse.core.menus.linkOntologies">
-                  <visibleWhen>
-				           <with variable="activeMenuSelection">
-				            <iterate ifEmpty="false">
-				             <adapt type="org.eclipse.core.resources.IResource">
-				               <test property="org.eclipse.core.resources.name" value="*" />
-				             </adapt>
-				            </iterate>
-				           </with>
-                  </visibleWhen>
-            </command>
-      </menuContribution>
-      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
-            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
-      </menuContribution>
-   </extension>
-   
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-           allPopups="false"
-           locationURI="toolbar:org.eclipse.ui.main.toolbar">
-        <toolbar
-              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
-              label="S-CASE project website">
-           <command
-                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
-                 icon="icons/view16/s-case_16.png"
-                 label="S-CASE project website"
-                 style="push"
-                 tooltip="S-CASE project website">
-              <parameter
-                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
-                    value="http://www.scasefp7.eu/">
-              </parameter>
-           </command>
-        </toolbar>
-        <toolbar
-              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
-              label="S-CASE Github">
-           <command
-                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
-                 icon="icons/view16/s-case_16.png"
-                 label="S-CASE Github"
-                 style="push"
-                 tooltip="S-CASE Github">
-              <parameter
-                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
-                    value="https://github.com/s-case">
-              </parameter>
-           </command>
-        </toolbar>
-     </menuContribution>
-   </extension>
   
   <extension
          point="org.eclipse.ui.menus">
@@ -308,37 +518,86 @@
          </command>
       </menuContribution>
    </extension>
-   <!--
+  
+  <!-- <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.linkOntologies" id="eu.scasefp7.eclipse.core.menus.linkOntologies"/>
+      </menuContribution>
+      <menuContribution locationURI="popup:org.eclipse.jdt.ui.PackageExplorer">
+            <command commandId="eu.scasefp7.eclipse.core.commands.exportToYaml" id="eu.scasefp7.eclipse.core.menus.exportToYaml"/>
+      </menuContribution>
+   </extension> -->
+   
+   <extension
+         point="org.eclipse.ui.menus">
+      <menuContribution
+           allPopups="false"
+           locationURI="toolbar:org.eclipse.ui.main.toolbar">
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE project website">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE project website"
+                 style="push"
+                 tooltip="S-CASE tools website">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="http://s-case.github.io/">
+              </parameter>
+           </command>
+        </toolbar>
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE project website">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE project website"
+                 style="push"
+                 tooltip="S-CASE project website">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="http://www.scasefp7.eu/">
+              </parameter>
+           </command>
+        </toolbar>
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE Github">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/obj16/GitHub-Mark-16px.png"
+                 label="S-CASE Github"
+                 style="push"
+                 tooltip="S-CASE Github">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="https://github.com/s-case">
+              </parameter>
+           </command>
+        </toolbar>
+     </menuContribution>
+   </extension>
+  
+  
   <extension
         point="eu.scasefp7.eclipse.core.ui.projectWizardPages">
-     <page
-           class="eu.scasefp7.eclipse.core.ui.wizards.ScaseProjectWizardPageTwo"
-           description="Select new folders or use the defaults"
-           id="eu.scasefp7.eclipse.core.ui.page1"
-           title="S-Case project folders">
-     </page>
      <page
            class="eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage"
            description="Select a domain that best describes your project"
            id="eu.scasefp7.eclipse.core.ui.page2"
-           title="S-Case project domain">
+           title="Project domain">
+     </page>
+     <page
+           class="eu.scasefp7.eclipse.core.ui.preferences.XtraWizardPageFromFieldOverlayPage"
+           description="Select a domain that best describes your project"
+           id="eu.scasefp7.eclipse.core.ui.page2"
+           title="Project domain">
      </page>
   </extension>
-  -->
   <extension
-        point="org.eclipse.ui.decorators">
-     <decorator
-           class="eu.scasefp7.eclipse.core.ui.navigator.ScaseLabel"
-           icon="icons/view32/s-case_32.png"
-           id="eu.scasefp7.eclipse.core.ui.decorator1"
-           label="label"
-           lightweight="true"
-           location="TOP_RIGHT"
-           objectClass="org.eclipse.core.resources.IFolder"
-           state="true">
-     </decorator>
-  </extension>
-<extension
         id="eu.scasefp7.eclipse.core.ui.tracing"
         name="S-CASE Core UI tracing"
         point="org.eclipse.ui.trace.traceComponents">
@@ -350,69 +609,44 @@
         </bundle>
       </component>
    </extension>
-  <extension
-        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
-     <group
-           icon="icons/dashboardDesignBackground.png"
-           name="Design">
-        <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create requirements"
-              tooltip="Create a new textual requirements collection">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard">
-           </parameter>
-        </command>
-         <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create storyboards"
-              tooltip="Create a new storyboard to describe system behaviour">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.storyboards.diagram.part.StoryboardsCreationWizardID">
-           </parameter>
-        </command>
-     </group>
-     <group
-           icon="icons/dashboardMashupBackground.png"
-           name="Mashup">
-           <command
-              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
-              error="Import storyboard failed."
-              label="Create service composition"
-              notification="Storyboard imported successfully."
-              tooltip="Use a storyboard for service composition">
-        </command>
-     </group>
-     <group
-           name="Code">
-        <command
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              label="Generate code"
-              tooltip="Generate code for the web service">
-        </command>
-        <command
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              label="Re-generate code"
-              tooltip="Generate code for the web service using previous settings">
-           <parameter
-                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
-                 value="yes">
-           </parameter>
-        </command>
-     </group>
-     <group
-           name="Run">
-        <command
-              commandId="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
-              label="Deploy on YouREST">
-        </command>
-     </group>
-  </extension>
-  <extension
+   <extension
+      point="org.eclipse.ui.decorators">
+      <decorator
+            adaptable="true"
+            class="eu.scasefp7.eclipse.core.ui.navigator.ProjectFolderLabelDecorator"
+            icon="icons/view32/s-case_32.png"
+            id="eu.scasefp7.eclipse.core.ui.folderDecorator"
+            label="S-CASE Folders"
+            lightweight="true"
+            location="TOP_RIGHT"
+            state="true">
+         <enablement>
+            <and>
+               <objectClass
+                     name="org.eclipse.core.resources.IFolder">
+               </objectClass>
+               <objectState
+                     name="projectNature"
+                     value="eu.scasefp7.eclipse.core.scaseNature">
+               </objectState>
+            </and>
+         </enablement>
+      </decorator>
+      <decorator
+            class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactDecorator"
+            id="eu.fp7.scase.tools.ui.navigator.artefactDecorator"
+            label="S-CASE Artefacts"
+            lightweight="true"
+            state="true">
+         <enablement>
+            <or>
+				<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefact"/>
+              	<objectClass name="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup"/>
+			</or>
+         </enablement>
+      </decorator>
+   </extension>
+     <extension
         point="org.eclipse.ui.navigator.viewer">
      <viewerContentBinding
            viewerId="org.eclipse.jdt.ui.PackageExplorer">
@@ -451,6 +685,37 @@
            id="eu.scasefp7.eclipse.core.ui.artefact.content"
            labelProvider="eu.scasefp7.eclipse.core.ui.navigator.ArtefactLabelProvider"
            name="S-CASE Artefacts">
+        <enablement>
+           <and>
+              <adapt
+                    type="org.eclipse.core.resources.IProject">
+                 <test
+                       property="org.eclipse.core.resources.projectNature"
+                       value="eu.scasefp7.eclipse.core.scaseNature">
+                 </test>
+              </adapt>
+              <or>
+                 <instanceof
+                       value="org.eclipse.core.resources.IWorkspaceRoot">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IProject">
+                 </instanceof>
+                 <instanceof
+                       value="org.eclipse.core.resources.IFolder">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
+                 </instanceof>
+                 <instanceof
+                       value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
+                 </instanceof>
+              </or>
+           </and>
+        </enablement>
         <triggerPoints>
            <or>
               <instanceof
@@ -486,37 +751,6 @@
               </instanceof>
            </or>
         </possibleChildren>
-        <enablement>
-           <and>
-              <adapt
-                    type="org.eclipse.core.resources.IProject">
-                 <test
-                       property="org.eclipse.core.resources.projectNature"
-                       value="eu.scasefp7.eclipse.core.scaseNature">
-                 </test>
-              </adapt>
-              <or>
-                 <instanceof
-                       value="org.eclipse.core.resources.IWorkspaceRoot">
-                 </instanceof>
-                 <instanceof
-                       value="org.eclipse.core.resources.IProject">
-                 </instanceof>
-                 <instanceof
-                       value="org.eclipse.core.resources.IFolder">
-                 </instanceof>
-                 <instanceof
-                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefact">
-                 </instanceof>
-                 <instanceof
-                       value="eu.scasefp7.eclipse.core.ui.navigator.IArtefactGroup">
-                 </instanceof>
-                 <instanceof
-                       value="eu.scasefp7.eclipse.core.ui.navigator.ArtefactGroup">
-                 </instanceof>
-              </or>
-           </and>
-        </enablement>
         <commonSorter
               class="eu.scasefp7.eclipse.core.ui.navigator.ArtefactSorter"
               id="eu.scasefp7.eclipse.core.ui.artefact.sorter">
@@ -524,216 +758,6 @@
      </navigatorContent>
   </extension>
   <extension
-         point="org.eclipse.ui.intro">
-      <intro
-            class="org.eclipse.ui.intro.config.CustomizableIntroPart"
-            icon="icons/s-case_16x16.png"
-            id="org.eclipse.intro.minimal"
-            label="Minimal Intro"/>
-      <introProductBinding
-            introId="org.eclipse.intro.minimal"
-            productId="org.eclipse.platform.ide">
-      </introProductBinding>
-   </extension>
-   <extension
-         point="org.eclipse.ui.intro.config">
-      <config
-            content="intropagecontent/introContent.xml"
-            id="org.eclipse.intro.minimal.config"
-            introId="org.eclipse.intro.minimal">
-         <presentation
-               home-page-id="root" standby-page-id="standby">
-            <implementation
-                  kind="html">
-            </implementation>
-         </presentation>
-      </config>
-   </extension>
-   <extension
-         point="org.eclipse.ui.menus">
-      <menuContribution
-            allPopups="false"
-            locationURI="popup:org.eclipse.ui.popup.any">
-         <menu
-               icon="icons/scaseFolder.png"
-               label="Project folders">
-               <visibleWhen
-                  checkEnabled="false">
-               <and>
-                  <with
-                        variable="activeMenuSelection">
-                     <iterate
-                           ifEmpty="false">
-                        <adapt
-                              type="org.eclipse.core.resources.IResource">
-                           <instanceof
-                                 value="org.eclipse.core.resources.IFolder">
-                           </instanceof>
-                           <test
-                                 property="org.eclipse.core.resources.projectNature"
-                                 value="eu.scasefp7.eclipse.core.scaseNature">
-                           </test>
-                        </adapt>
-                     </iterate>
-                  </with>
-               </and>
-            </visibleWhen>
-            <command
-                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
-                  icon="icons/scaseFolder.png"
-                  label="Convert to output folder"
-                  style="push">
-               <parameter
-                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-                     value="output">
-               </parameter>
-               <visibleWhen
-                     checkEnabled="false">
-                  <and>
-                     <with
-                           variable="activeMenuSelection">
-                        <iterate
-                              ifEmpty="false">
-                           <adapt
-                                 type="org.eclipse.core.resources.IResource">
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFolder">
-                              </instanceof>
-                           </adapt>
-                        </iterate>
-                     </with>
-                     <with
-                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.outputFolderActive">
-                        <equals
-                              value="true">
-                        </equals>
-                     </with>
-                  </and>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
-                  icon="icons/scaseFolder.png"
-                  label="Convert to models folder"
-                  style="push">
-               <parameter
-                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-                     value="models">
-               </parameter>
-               <visibleWhen
-                     checkEnabled="false">
-                  <and>
-                     <with
-                           variable="activeMenuSelection">
-                        <iterate
-                              ifEmpty="false">
-                           <adapt
-                                 type="org.eclipse.core.resources.IResource">
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFolder">
-                              </instanceof>
-                           </adapt>
-                        </iterate>
-                     </with>
-                     <with
-                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.modelsFolderActive">
-                        <equals
-                              value="true">
-                        </equals>
-                     </with>
-                  </and>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
-                  icon="icons/scaseFolder.png"
-                  label="Convert to requirements folder"
-                  style="push">
-               <parameter
-                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-                     value="requirements">
-               </parameter>
-               <visibleWhen
-                     checkEnabled="false">
-                  <and>
-                     <with
-                           variable="activeMenuSelection">
-                        <iterate
-                              ifEmpty="false">
-                           <adapt
-                                 type="org.eclipse.core.resources.IResource">
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFolder">
-                              </instanceof>
-                           </adapt>
-                        </iterate>
-                     </with>
-                     <with
-                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.requirementsFolderActive">
-                        <equals
-                              value="true">
-                        </equals>
-                     </with>
-                  </and>
-               </visibleWhen>
-            </command>
-            <command
-                  commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
-                  icon="icons/scaseFolder.png"
-                  label="Convert to compositions folder"
-                  style="push">
-               <parameter
-                     name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-                     value="compositions">
-               </parameter>
-               <visibleWhen
-                     checkEnabled="false">
-                  <and>
-                     <with
-                           variable="activeMenuSelection">
-                        <iterate
-                              ifEmpty="false">
-                           <adapt
-                                 type="org.eclipse.core.resources.IResource">
-                              <instanceof
-                                    value="org.eclipse.core.resources.IFolder">
-                              </instanceof>
-                           </adapt>
-                        </iterate>
-                     </with>
-                     <with
-                           variable="eu.scasefp7.eclipse.core.ui.sourceprovider.compositionsFolderActive">
-                        <equals
-                              value="true">
-                        </equals>
-                     </with>
-                  </and>
-               </visibleWhen>
-            </command>
-         </menu>
-      </menuContribution>
-   </extension>
-   <extension
-         point="org.eclipse.ui.commands">
-      <command
-            description="Convert to models, compositions, requirements or output folder"
-            id="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder"
-            name="Convert to project folder">
-         <commandParameter
-               id="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-               name="eu.scasefp7.eclipse.core.ui.commands.convertToFolder.type"
-               optional="false">
-         </commandParameter>
-      </command>
-   </extension>
-   <extension
-         point="org.eclipse.ui.handlers">
-      <handler
-            class="eu.scasefp7.eclipse.core.ui.handlers.ConvertToProjectFolderHandler"
-            commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder">
-      </handler>
-   </extension>
-   <extension
          point="org.eclipse.ui.services">
       <sourceProvider
             provider="eu.scasefp7.eclipse.core.ui.sourceprovider.OutputFolderActive">
@@ -763,30 +787,21 @@
                priorityLevel="workbench">
          </variable>
       </sourceProvider>
-   </extension>
-   <extension
-          point="org.eclipse.core.runtime.adapters">
-       <factory
-             adaptableType="org.eclipse.ui.navigator.resources.ProjectExplorer"
-            class="org.eclipse.ui.internal.navigator.resources.workbench.TabbedPropertySheetAdapterFactory">
-         <adapter type="org.eclipse.ui.views.properties.IPropertySheetPage"/>
-      </factory>
-    </extension>
+   </extension>   
     <extension
           point="org.eclipse.ui.views.properties.tabbed.propertyContributor">
-       <propertyContributor
-             contributorId="org.eclipse.ui.navigator.ProjectExplorer">
-          <propertyCategory category="scase"/>
+       <propertyContributor contributorId="org.eclipse.ui.navigator.ProjectExplorer">
+          <propertyCategory category="eu.scasefp7.eclipse.category"/>
        </propertyContributor>
     </extension>
     <extension
           point="org.eclipse.ui.views.properties.tabbed.propertyTabs">
        <propertyTabs contributorId="org.eclipse.ui.navigator.ProjectExplorer">
           <propertyTab
-                category="scase"
-                id="CommonNavigator.tab.Resource2"
-                image="icons/s-case_16x16.png"
-                label="Project">
+                category="eu.scasefp7.eclipse.category"
+                id="eu.scasefp7.eclipse.core.ui.properties.projecttab"
+                image="icons/view16/s-case_16.png"
+                label="%properties.tab">
           </propertyTab>
        </propertyTabs>
     </extension>
@@ -795,9 +810,9 @@
        <propertySections contributorId="org.eclipse.ui.navigator.ProjectExplorer">
           <propertySection
                 class="eu.scasefp7.eclipse.core.ui.preferences.ScaseProjectPropertySection"
-                id="CommonNavigator.section.Resource2"
-                tab="CommonNavigator.tab.Resource2">
-             <input type="java.lang.Object"/>
+                id="eu.scasefp7.eclipse.core.ui.properties.projectsection"
+                tab="eu.scasefp7.eclipse.core.ui.properties.projecttab">
+             <input type="org.eclipse.core.resources.IResource"/>
           </propertySection>
        </propertySections>
     </extension>

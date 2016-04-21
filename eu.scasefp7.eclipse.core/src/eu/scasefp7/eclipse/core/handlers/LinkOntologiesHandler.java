@@ -21,14 +21,13 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IProject project = getProjectOfExecutionEvent(event);
-		//String projectName = event.getParameter("projectName");
 		String fileName = event.getParameter("fileName");
+		
 		//When handler is called from builder
 		if(fileName != null){
 			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			project = file.getProject();
-			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		}
 		if (project != null) {
 
@@ -59,7 +58,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 	 * @param dynamicOntology an instantiation of the static ontology.
 	 * @param linkedOntology the linked ontology that is instantiated.
 	 */
-	public void linkOntologies(StaticOntologyAPI staticOntology, DynamicOntologyAPI dynamicOntology,
+public void linkOntologies(StaticOntologyAPI staticOntology, DynamicOntologyAPI dynamicOntology,
 			LinkedOntologyAPI linkedOntology) {
 
 		// Iterate over all objects of the static ontology
@@ -114,7 +113,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 			if (object != null) {
 				linkedOntology.addResource(object);
 				for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-					linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
+					linkedOntology.addActivityDiagram(diagram, dynamicOntology.getTextOfActivityDiagram(diagram));
 					linkedOntology.connectActivityDiagramToElement(diagram, object);
 				}
 
@@ -126,7 +125,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 							dynamicOntology.getActivityTypeOfActivity(dynactivity));
 					linkedOntology.addActionToActivity(activity, action);
 					for (String diagram : dynamicOntology.getDiagramsOfConcept(dynactivity)) {
-						linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
+						linkedOntology.addActivityDiagram(diagram, dynamicOntology.getTextOfActivityDiagram(diagram));
 						linkedOntology.connectActivityDiagramToElement(diagram, object);
 						linkedOntology.connectActivityDiagramToElement(diagram, action);
 						linkedOntology.connectActivityDiagramToElement(diagram, activity);
@@ -134,10 +133,10 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 				}
 
 				// Iterate over all properties of activity and add them as properties of object to the ontology
-				for (String property : dynamicOntology.getPropertiesOfActivity(object)) {
+				for (String property : dynamicOntology.getPropertiesOfActivity(dynactivity)) {
 					linkedOntology.addPropertyToResource(object, property);
 					for (String diagram : dynamicOntology.getDiagramsOfConcept(property)) {
-						linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
+						linkedOntology.addActivityDiagram(diagram, dynamicOntology.getTextOfActivityDiagram(diagram));
 						linkedOntology.connectActivityDiagramToElement(diagram, property);
 					}
 				}
@@ -170,7 +169,7 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 			if (condition != null && taction != null && saction != null) {
 				linkedOntology.addConditionToActivity(tactivity, condition);
 				for (String diagram : dynamicOntology.getDiagramsOfConcept(condition)) {
-					linkedOntology.addActivityDiagram(diagram, staticOntology.getTextOfRequirement(diagram));
+					linkedOntology.addActivityDiagram(diagram, dynamicOntology.getTextOfActivityDiagram(diagram));
 					linkedOntology.connectActivityDiagramToElement(diagram, condition);
 				}
 			}
@@ -178,3 +177,4 @@ public class LinkOntologiesHandler extends ProjectAwareHandler {
 	}
 
 }
+

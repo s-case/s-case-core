@@ -12,6 +12,7 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 
 import eu.scasefp7.eclipse.core.builder.ScaseNature;
+import eu.scasefp7.eclipse.core.ui.Activator;
 
 /**
  * @author Leonora Gašpar
@@ -40,7 +41,7 @@ public class ScaseProjectSupport {
              * addToProjectStructure(project, paths);
              */
         } catch (CoreException e) {
-            e.printStackTrace();
+            Activator.log("Unable to add project nature.", e);
             project = null;
         }
 
@@ -71,7 +72,7 @@ public class ScaseProjectSupport {
                     newProject.open(null);
                 }
             } catch (CoreException e) {
-                e.printStackTrace();
+                Activator.log("Unable to create project.", e);
             }
         }
 

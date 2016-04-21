@@ -169,6 +169,24 @@ public final class SharedImages implements IDisposable {
         /** Project folder. */
         DECORATOR_SCASE(obj16("s-case_8.png")), //$NON-NLS-1$
         
+        /** Activity artifact. */
+        OBJ_ACTIVITY(obj16("action_16.png")), //$NON-NLS-1$
+        
+        /** Object artifact. */
+        OBJ_OBJECT(obj16("object_16.png")), //$NON-NLS-1$
+        
+        /** Requirement artifact. */
+        OBJ_REQUIREMENT(obj16("requirement_16.png")), //$NON-NLS-1$
+        
+        /** Transition artifact. */
+        OBJ_TRANSITION(obj16("transition_16.png")), //$NON-NLS-1$
+        
+        /** Artifacts root. */
+        OBJ_ARTF_ROOT(obj16("root_16.png")), //$NON-NLS-1$
+        
+        /** Generic artefact. */
+        OBJ_ARTEFACT(obj16("artefact-text_16.png")), //$NON-NLS-1$
+        
         /** 
          * S-CASE logo
          */

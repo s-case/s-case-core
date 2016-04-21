@@ -9,6 +9,7 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui,
  org.eclipse.mylyn.commons.ui;bundle-version="[3.0.0,4.0.0)",
  org.eclipse.ui.ide,
+ org.eclipse.ui.views.properties.tabbed,
  org.eclipse.mylyn.commons.notifications.ui,
  org.eclipse.mylyn.commons.workbench,
  org.eclipse.ui.forms,
@@ -22,7 +23,8 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.intro,
  org.eclipse.core.expressions,
  org.eclipse.ui.views.properties.tabbed,
- org.eclipse.ui.navigator.resources
+ org.eclipse.ui.navigator.resources,
+ org.eclipse.equinox.security;bundle-version="[1.2.0,2.0.0)"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.scasefp7.eclipse.core.ui
 Bundle-Vendor: %Bundle-Vendor

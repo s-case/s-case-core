@@ -1,6 +1,5 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
-import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.ISelectionChangedListener;
 import org.eclipse.jface.viewers.IStructuredSelection;
@@ -155,9 +154,9 @@ public class ProjectDomainWizardPage extends WizardPage implements IWizardPage {
 	
 	private void createDomainLabel(Composite parent, Object data) {
 		cmpLabels = new Composite(parent, SWT.NONE);
-		GridLayout gl_cmpLabels = new GridLayout(2, false);
-		gl_cmpLabels.marginWidth = 0;
-		cmpLabels.setLayout(gl_cmpLabels);
+		GridLayout layout = new GridLayout(2, false);
+		layout.marginWidth = 0;
+		cmpLabels.setLayout(layout);
 		cmpLabels.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		// Add label
@@ -175,10 +174,10 @@ public class ProjectDomainWizardPage extends WizardPage implements IWizardPage {
 	 */
 	protected Control createContents(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
-		GridLayout gl_composite = new GridLayout();
-		gl_composite.marginWidth = 0;
-		gl_composite.marginHeight = 0;
-		composite.setLayout(gl_composite);
+		GridLayout layout = new GridLayout();
+		layout.marginWidth = 0;
+		layout.marginHeight = 0;
+		composite.setLayout(layout);
 		GridData data = new GridData(GridData.FILL);
 		data.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(data);
@@ -226,7 +225,7 @@ public class ProjectDomainWizardPage extends WizardPage implements IWizardPage {
 	{
 	  if (!selection.isEmpty()) {
 	    IStructuredSelection structured = (IStructuredSelection)selection;
-	    if ((structured.getFirstElement() instanceof DomainEntry)) {
+	    if (structured.getFirstElement() instanceof DomainEntry) {
 	      return (DomainEntry)structured.getFirstElement();
 	    }
 	  }
@@ -274,8 +273,9 @@ public class ProjectDomainWizardPage extends WizardPage implements IWizardPage {
 	 * @param selection
 	 */
 	private void updateDomainLabel(DomainEntry domain) {
-		if(domain == null)
+		if(domain == null) {
 			return; 
+		}
 		
 		DomainEntry parent = domain.getParent();
 		

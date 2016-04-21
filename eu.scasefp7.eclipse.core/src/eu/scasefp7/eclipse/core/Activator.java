@@ -39,7 +39,7 @@ public class Activator extends Plugin {
     public void start(BundleContext context) throws Exception {
         super.start(context);
         plugin = this;
-        STARTING_TIME = this.oDateFormatter.format(new Date());
+        STARTING_TIME = oDateFormatter.format(new Date());
         errorID = 0;
     }
 
@@ -94,10 +94,11 @@ public class Activator extends Plugin {
         msg.append("\n!FUNCTION_NAME ").append(methodName);
         msg.append("\n!FAILURE_TIMESTAMP ").append(oDateFormatter.format(new Date()));
         errorID++;
-        if (plugin != null)
+        if (plugin != null) {
             plugin.getLog().log(new Status(Status.ERROR, PLUGIN_ID, Status.OK, msg.toString(), exception));
-        else
+        } else {
             exception.printStackTrace();
+        }
     }
     
     /**

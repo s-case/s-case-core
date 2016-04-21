@@ -14,7 +14,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -41,14 +40,12 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		IProject project = getProjectOfExecutionEvent(event);
-		//String projectName = event.getParameter("projectName");
 		String fileName = event.getParameter("fileName");
 		//When handler is called from builder
 		if(fileName != null){
 			Path path = new Path(fileName);
 			IFile file = ResourcesPlugin.getWorkspace().getRoot().getFile(path);
 			project = file.getProject();
-			//project = ResourcesPlugin.getWorkspace().getRoot().getProject(projectName);
 		}
 		if (project != null) {
 			// Load the ontology
@@ -194,12 +191,10 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 		} catch (CoreException e) {
 			Activator.log("Error retrieving project property (models folder location)", e);
 		}
-		IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 		IContainer container = project;
-		String workspacePath = project.getFullPath().toPortableString()+"/"+ modelsFolderLocation;
-		if (workspacePath != null) {
-			if (root.findMember(new Path(workspacePath)) != null)
-				container = (IContainer) root.findMember(new Path(workspacePath));
+		if (modelsFolderLocation != null) {
+			if (project.findMember(new Path(modelsFolderLocation))!=null)
+				container = (IContainer) project.findMember(new Path(modelsFolderLocation));
 		}
 		IFile file = container.getFile(new Path("service.yml"));
 		if (file.exists()) {

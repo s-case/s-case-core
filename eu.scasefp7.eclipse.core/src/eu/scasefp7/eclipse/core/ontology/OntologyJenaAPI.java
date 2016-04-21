@@ -17,7 +17,6 @@ import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IResource;
-import org.eclipse.core.resources.IWorkspaceRoot;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
@@ -139,13 +138,10 @@ public class OntologyJenaAPI {
 				} catch (CoreException e) {
 					Activator.log("Error retrieving project property (models folder location)", e);
 				}
-				IWorkspaceRoot root = ResourcesPlugin.getWorkspace().getRoot();
 				IContainer container = project;
 				if (modelsFolderLocation != null) {
-					String workspacePath = project.getFullPath().toPortableString()+"/"+ modelsFolderLocation;
-					
-					if (root.findMember(new Path(workspacePath)) != null) 
-						container = (IContainer) root.findMember(new Path(workspacePath));
+					if (project.findMember(new Path(modelsFolderLocation)) != null)
+						container = (IContainer) project.findMember(new Path(modelsFolderLocation));
 				}
 				file = container.getFile(new Path(filename));
 			}
@@ -164,7 +160,7 @@ public class OntologyJenaAPI {
 	 * @param ontologyType the type of the ontology.
 	 * @return the ontology filename.
 	 */
-	private String getFilenameForOntologyType(OntologyType ontologyType) {
+	public static String getFilenameForOntologyType(OntologyType ontologyType) {
 		String filename = null;
 		switch (ontologyType) {
 		case STATIC:

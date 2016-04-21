@@ -30,8 +30,9 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
 /**
- * @author emaorli
- *
+ * Configures the semantic domain of the project.
+ * 
+ * @author Marin Orlic
  */
 public class ProjectDomainPropertyPage extends PropertyPage {
 

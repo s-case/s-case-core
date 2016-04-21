@@ -348,10 +348,8 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
             page.setImageDescriptor(image);
             // and show it
             showPreferencePage(pageId, page);
-        } catch (InstantiationException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
+        } catch (InstantiationException | IllegalAccessException e) {
+            Activator.log("Unable to show preference page.", e);
         }
     }
 

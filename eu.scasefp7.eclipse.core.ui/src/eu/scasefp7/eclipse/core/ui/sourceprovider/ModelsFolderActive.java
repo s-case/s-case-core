@@ -20,10 +20,19 @@ import org.eclipse.ui.services.IServiceLocator;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
+/**
+ * Resolves the models folder for the currently selected project.
+ * 
+ * @author Leonora Gaspar
+ */
 public class ModelsFolderActive extends AbstractSourceProvider implements ISelectionListener, IWindowListener   {
-	public final static String MY_STATE = "eu.scasefp7.eclipse.core.ui.sourceprovider.modelsFolderActive";
+	
+    private final static String MY_STATE = ScaseUiConstants.MODELS_FOLDER_SOURCE;
 	private boolean enabled = true;
 
+	/**
+     * Constructs the source provider.
+     */
 	public ModelsFolderActive() {
 	}
 	

@@ -2,6 +2,12 @@ package eu.scasefp7.eclipse.core.ui.navigator;
 
 import org.eclipse.core.resources.IProject;
 
+/**
+ * Group of artifacts in the project.
+ * 
+ * @author Leonora Gaspar
+ * @author Marin Orlic
+ */
 public class ArtefactGroup implements IArtefactGroup {
 	
 	protected String name;

@@ -28,7 +28,8 @@ public class ConvertToProjectFolderHandler extends AbstractHandler {
 		
 		if (selection instanceof IStructuredSelection) {
 			IStructuredSelection structuredSelection = (IStructuredSelection) selection;
-			List<Object> selectionList = structuredSelection.toList();
+			@SuppressWarnings("unchecked")
+            List<Object> selectionList = structuredSelection.toList();
 	
 			for (Object object : selectionList) {
 				IFolder folder = (IFolder) Platform.getAdapterManager().getAdapter(object, IFolder.class);
