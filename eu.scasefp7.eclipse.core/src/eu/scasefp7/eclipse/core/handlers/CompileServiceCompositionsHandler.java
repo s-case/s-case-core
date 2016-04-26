@@ -19,7 +19,7 @@ public class CompileServiceCompositionsHandler extends CommandExecutorHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		if (getProjectOfExecutionEvent(event) != null) {
-			// executeCommand("eu.scasefp7.eclipse.servicecomposition.commands.exportAllToOntology");
+			executeCommand("eu.scasefp7.eclipse.servicecomposition.commands.exportAllToOntology");
 			return null;
 		} else {
 			throw new ExecutionException("No project selected");
