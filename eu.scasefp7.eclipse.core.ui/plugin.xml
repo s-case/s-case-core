@@ -185,23 +185,11 @@
            </parameter>
         </command>
         <command
-              commandId="org.eclipse.ui.newWizard"
-              label="Create mashups"
-              tooltip="Create a new storyboard to describe service composition">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
-           </parameter>
-        </command>
-        
-        <!--
-        <command
               commandId="org.eclipse.ui.file.import"
-              label="Import UML Use case diagram"
-              tooltip="Import UML use case diagram from an image">
-              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizardDISABLE" />
+              label="Import UML diagram"
+              tooltip="Import UML diagram from an image">
+              <parameter name="importWizardId" value="eu.scasefp7.eclipse.umlrec.importWizard" />
         </command>
-        -->
      </group>
       <group
            name="Mashup">
@@ -212,6 +200,15 @@
               notification="Requirements compiled successfully."
               tooltip="Compile requirements in text or storyboards">
         </command>-->
+        <command
+              commandId="org.eclipse.ui.newWizard"
+              label="Create mashups"
+              tooltip="Create a new storyboard to describe service composition">
+           <parameter
+                 name="newWizardId"
+                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
+           </parameter>
+        </command>
         <command
               commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
               error="Import storyboard failed."
