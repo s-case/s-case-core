@@ -17,6 +17,11 @@
       </command>
       <command
             categoryId="eu.scasefp7.eclipse.core.commands.category"
+            id="eu.scasefp7.eclipse.core.commands.compileServiceCompositions"
+            name="Add Service Compositions">
+      </command>
+      <command
+            categoryId="eu.scasefp7.eclipse.core.commands.category"
             id="eu.scasefp7.eclipse.core.commands.linkOntologies"
             name="Link Ontologies">
          <commandParameter
@@ -60,6 +65,8 @@
 		 </enabledWhen>
 		 -->
       </handler>
+      <handler class="eu.scasefp7.eclipse.core.handlers.CompileServiceCompositionsHandler" commandId="eu.scasefp7.eclipse.core.commands.compileServiceCompositions"/>
+      <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.linkOntologies"/>
       <handler class="eu.scasefp7.eclipse.core.handlers.LinkOntologiesHandler" commandId="eu.scasefp7.eclipse.core.commands.testSetup">
       	 <enabledWhen>
       	 	<with variable="selection">

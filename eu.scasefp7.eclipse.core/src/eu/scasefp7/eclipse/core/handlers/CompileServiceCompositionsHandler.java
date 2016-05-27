@@ -4,14 +4,14 @@ import org.eclipse.core.commands.ExecutionEvent;
 import org.eclipse.core.commands.ExecutionException;
 
 /**
- * A command handler for exporting all Storyboards and Activity Diagram XMI files to the dynamic ontology.
+ * A command handler for exporting all service compositions to the linked ontology.
  * 
  * @author themis
  */
-public class CompileDynamicRequirementsHandler extends CommandExecutorHandler {
+public class CompileServiceCompositionsHandler extends CommandExecutorHandler {
 
 	/**
-	 * This function is called when the user selects the menu item. It populates the dynamic ontology.
+	 * This function is called when the user selects the menu item. It populates the linked ontology.
 	 * 
 	 * @param event the event containing the information about which file was selected.
 	 * @return the result of the execution which must be {@code null}.
@@ -19,11 +19,11 @@ public class CompileDynamicRequirementsHandler extends CommandExecutorHandler {
 	@Override
 	public Object execute(ExecutionEvent event) throws ExecutionException {
 		if (getProjectOfExecutionEvent(event) != null) {
-			executeCommand("eu.scasefp7.eclipse.storyboards.commands.exportAllToOntology");
-			executeCommand("eu.scasefp7.eclipse.umlrec.commands.exportActivityDiagramsToOntology");
+			executeCommand("eu.scasefp7.eclipse.servicecomposition.commands.exportAllToOntology");
 			return null;
 		} else {
 			throw new ExecutionException("No project selected");
 		}
 	}
+
 }
