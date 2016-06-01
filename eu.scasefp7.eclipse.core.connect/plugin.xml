@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?eclipse version="3.4"?>
+<plugin>
+
+   <extension point="org.eclipse.ui.commands">
+      <category id="eu.scasefp7.eclipse.core.connect.commands.category" name="Core Commands Category"/>
+      <command
+            categoryId="eu.scasefp7.eclipse.core.connect.commands.category"
+            id="eu.scasefp7.eclipse.core.connect.commands.uploadProject"
+            name="Upload Project">
+      </command>
+   </extension>
+
+   <extension point="org.eclipse.ui.handlers">
+      <handler class="eu.scasefp7.eclipse.core.connect.handlers.UploadProject" commandId="eu.scasefp7.eclipse.core.connect.commands.uploadProject">
+      	 <enabledWhen>
+      	 	<with variable="selection">
+      	 		<iterate>
+                    <adapt type="org.eclipse.core.resources.IProject">
+                         <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.scaseNature"/>
+                    </adapt>
+             	</iterate>
+                <count value="1" />
+		    </with>         
+		 </enabledWhen>
+      </handler>
+   </extension>
+
+   <extension point="org.eclipse.ui.menus">
+      <menuContribution locationURI="popup:org.eclipse.ui.popup.any">
+         <command commandId="eu.scasefp7.eclipse.core.connect.commands.uploadProject" id="eu.scasefp7.eclipse.reqeditor.menus.uploadProject">
+      	    <visibleWhen>
+      	 	   <with variable="selection">
+      	          <iterate>
+      	             <adapt type="org.eclipse.core.resources.IProject">
+      	                <test property="org.eclipse.core.resources.projectNature" value="eu.scasefp7.eclipse.core.scaseNature"/>
+      	             </adapt>
+      	          </iterate>
+      	          <count value="1" />
+      	       </with>         
+            </visibleWhen>
+         </command>
+      </menuContribution>
+   </extension>
+
+</plugin>
