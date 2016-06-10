@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
-<?pde version="3.8"?><target name="Development platform" sequenceNumber="102">
+<?pde version="3.8"?><target name="Development platform" sequenceNumber="103">
 <locations>
 <location path="${eclipse_home}" type="Profile"/>
 <location includeAllPlatforms="false" includeConfigurePhase="true" includeMode="slicer" includeSource="true" type="InstallableUnit">
@@ -35,7 +35,7 @@
 <unit id="net.sf.jung.api" version="2.0.1"/>
 <unit id="org.glassfish.jersey.bundles.repackaged.jersey-guava" version="2.22.2"/>
 <unit id="org.hamcrest.core" version="1.1.0"/>
-<unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20160526123027"/>
+<unit id="eu.scasefp7.scase-wsparser-osgi" version="1.0.0.20160610161421"/>
 <unit id="com.github.jsonld-java" version="0.5.1"/>
 <unit id="slf4j.log4j12" version="1.7.6"/>
 <unit id="javax.ws.rs-api" version="2.0.1"/>
@@ -45,6 +45,7 @@
 <unit id="javax.annotation-api" version="1.2.0"/>
 <unit id="org.jvnet.mimepull" version="1.9.6"/>
 <unit id="org.yaml.snakeyaml" version="1.16.0"/>
+<unit id="com.auth0.java-jwt" version="2.1.0"/>
 <repository location="http://s-case.github.io/s-case_dev_site_wo_core/"/>
 </location>
 </locations>
