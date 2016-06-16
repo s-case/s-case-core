@@ -15,10 +15,12 @@
  */
 package eu.scasefp7.eclipse.core.ui.views;
 
+import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Map.Entry;
 
 import org.eclipse.core.commands.Command;
 import org.eclipse.core.commands.CommandEvent;
@@ -39,7 +41,6 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IRegistryEventListener;
-import org.eclipse.core.runtime.InvalidRegistryObjectException;
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.RegistryFactory;
@@ -101,10 +102,15 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 */
     private static final String CONTRIBUTION_GROUP = "group";
     private static final String CONTRIBUTION_GROUP_NAME = "name";
+    private static final String CONTRIBUTION_GROUP_ID = "id";
+    private static final String CONTRIBUTION_GROUP_BEFORE = "appearsBefore";
     private static final String CONTRIBUTION_COMMAND = "command";
     private static final String CONTRIBUTION_COMMAND_ID = "commandId";
+    private static final String CONTRIBUTION_COMMAND_BUTTON_ID = "buttonId";
+    private static final String CONTRIBUTION_COMMAND_GROUP = "groupId";
     private static final String CONTRIBUTION_COMMAND_LABEL = "label";
     private static final String CONTRIBUTION_COMMAND_TOOLTIP = "tooltip";
+    private static final String CONTRIBUTION_COMMAND_BEFORE = "appearsBefore";
     private static final String CONTRIBUTION_COMMAND_PARAM = "parameter";
     private static final String CONTRIBUTION_COMMAND_PARAM_NAME = "name";
     private static final String CONTRIBUTION_COMMAND_PARAM_VALUE = "value";
@@ -112,14 +118,34 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static final String CONTRIBUTION_COMMAND_NOTIFICATION_FAIL = "error";
 
     protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
-      
+    
     /**
-     * The currently selected project
+     * Composite containing the dashboard view.
+     */
+    private Composite dashboardComposite;
+    
+    /**
+     * Name of the group and group of buttons.
+     */
+    private HashMap<String, Group> groups = new HashMap<String, Group>();
+    
+    /**
+     * Button ID and buttons.
+     */
+    private HashMap<String, Button> buttons = new HashMap<String, Button>();
+    
+    /**
+     * First button is above the button with given string ID.
+     */
+    private List<Entry<Control,String>> ordering = new ArrayList<Entry<Control,String>>();
+    
+    /**
+     * The currently selected project.
      */
     private IProject currentProject;
 
     /**
-     * The current selection
+     * The current selection.
      */
     private ISelection currentSelection;
     
@@ -174,6 +200,22 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             }
         }
 		
+        // Sort the contributions
+        if(!ordering.isEmpty()){
+            for(Entry<Control, String> e : ordering){
+                String id = e.getValue();
+                Control first = e.getKey();
+                Control second = null;
+                if (buttons.get(id) != null) {
+                    second = buttons.get(id);
+                } else if (groups.get(id) != null) {
+                    second = groups.get(id);
+                }
+                
+                first.moveAbove(second);
+            }
+        }
+        
         parent.addControlListener(new ControlAdapter() {
             @Override
             public void controlResized(ControlEvent e) {
@@ -181,20 +223,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             }
         });
         
-        
-		// Project setup
-        /*int startR = 95,
-        stopR = 0,
-        startG = 197,
-        stopG = 61,
-        startB = 186,
-        stopB = 92;
-        int steps = 4;
-        int step = 0;
-         */
-		//groupProject.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
-		// Increment gradient step
-		//step++;
+        this.dashboardComposite = parent;
 	}
 
     /**
@@ -282,10 +311,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * 
      * @param parent control
      * @param elem configuration element describing the button
-     * @throws InvalidRegistryObjectException
      */
-    private void handleGroup(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {
+    private void handleGroup(Composite parent, IConfigurationElement elem) {
         Group group = createGroup(parent, elem.getAttribute(CONTRIBUTION_GROUP_NAME));
+        String appearsBefore = elem.getAttribute(CONTRIBUTION_GROUP_BEFORE);
+        groups.put(elem.getAttribute(CONTRIBUTION_GROUP_ID), group);
         
         for (IConfigurationElement child : elem.getChildren()) {
             if(child.getName().equals(CONTRIBUTION_GROUP)) {
@@ -295,6 +325,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
                 handleButton(group, child);    
             }
         }
+        
+        if(appearsBefore!= null && !appearsBefore.isEmpty()){
+            Entry<Control, String> entry = new AbstractMap.SimpleEntry<Control, String>(group, appearsBefore);
+            ordering.add(entry);
+        }
     }
 
     /**
@@ -302,17 +337,26 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * 
      * @param parent control
      * @param elem configuration element describing the button
-     * @throws InvalidRegistryObjectException
      */
-    private void handleButton(Composite parent, IConfigurationElement elem) throws InvalidRegistryObjectException {       
+    private void handleButton(Composite parent, IConfigurationElement elem) {       
 
+        Composite buttonParent = parent;
         String name = elem.getAttribute(CONTRIBUTION_COMMAND_LABEL);
         String tooltip = elem.getAttribute(CONTRIBUTION_COMMAND_TOOLTIP);
+        String group = elem.getAttribute(CONTRIBUTION_COMMAND_GROUP);
+        
+        if(group != null && !group.isEmpty()) {
+            buttonParent = groups.get(group);
+        }
+        
+        String appearsBefore = elem.getAttribute(CONTRIBUTION_COMMAND_BEFORE);
+        String buttonId = elem.getAttribute(CONTRIBUTION_COMMAND_BUTTON_ID);
+        
         final String commandId = elem.getAttribute(CONTRIBUTION_COMMAND_ID);
         final String notificationSuccess = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_SUCCESS);
         final String notificationFail = elem.getAttribute(CONTRIBUTION_COMMAND_NOTIFICATION_FAIL);
         
-        Button btn = new Button(parent, SWT.NONE);
+        Button btn = new Button(buttonParent, SWT.NONE);
         
         if(name != null) {
             btn.setText(name);
@@ -328,41 +372,33 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             // Setup execution
             final Map<String,String> params = getParameters(elem);
             
-            if(params.isEmpty()) {
-                // No parameters
-                btn.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseDown(MouseEvent e) {
-                        try {
-                            // Trace user action
-                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
-                            
+            // Setup listener
+            btn.addMouseListener(new MouseAdapter() {
+                @Override
+                public void mouseDown(MouseEvent e) {
+                    try {
+                        // Trace user action
+                        Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
+                        
+                        if (params == null || params.isEmpty()) {
                             executeCommand(commandId);
-                            notifyUser(commandId, notificationSuccess);     
-                        } catch (CommandException ex) {
-                            Activator.log("Unable to execute command " + commandId, ex);
-                            notifyUser(commandId, notificationFail, ex);     
-                        }
-                    }
-                });
-            } else {
-                // Copy parameters
-                btn.addMouseListener(new MouseAdapter() {
-                    @Override
-                    public void mouseDown(MouseEvent e) {
-                        try {
-                            // Trace user action
-                            Activator.TRACE.trace("/dashboard/userActions", "Button pressed: " + name);
-                            
+                        } else {
                             executeCommand(commandId, params);
-                            notifyUser(commandId, notificationSuccess);     
-                        } catch (CommandException ex) {
-                            Activator.log("Unable to execute command " + commandId, ex);
-                            notifyUser(commandId, notificationFail, ex);     
                         }
+                        notifyUser(commandId, notificationSuccess);     
+                    } catch (CommandException ex) {
+                        Activator.log("Unable to execute command " + commandId, ex);
+                        notifyUser(commandId, notificationFail, ex);     
                     }
-                });   
-            }
+                }
+            });
+        }
+        
+        buttons.put(buttonId, btn);
+        
+        if(appearsBefore!= null && !appearsBefore.isEmpty()){
+            Entry<Control, String> entry = new AbstractMap.SimpleEntry<Control, String>(btn, appearsBefore);
+            ordering.add(entry);
         }
     }
 
@@ -376,15 +412,14 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private static Group createGroup(Composite parent, String name) {
         Group group;
         group = new Group(parent, SWT.NONE);
-        //group.setBackground(SWTResourceManager.getColor(startR-(step*(startR-stopR)/steps), startG-(step*(startG-stopG)/steps), startB-(step*(startB-stopB)/steps)));
         group.setText(name);
         
         // Configure layout
-        FillLayout fl_group = new FillLayout(SWT.VERTICAL);
-        fl_group.spacing = 10;
-        fl_group.marginWidth = 10;
-        fl_group.marginHeight = 10;
-        group.setLayout(fl_group);
+        FillLayout layout = new FillLayout(SWT.VERTICAL);
+        layout.spacing = 10;
+        layout.marginWidth = 10;
+        layout.marginHeight = 10;
+        group.setLayout(layout);
         
         return group;
     }
@@ -643,26 +678,22 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     
     @Override
     public void added(IExtension[] extensions) {
-        // TODO Auto-generated method stub
-        
+        dashboardComposite.update();
     }
 
     @Override
     public void removed(IExtension[] extensions) {
-        // TODO Auto-generated method stub
-        
+        dashboardComposite.update();
     }
 
     @Override
     public void added(IExtensionPoint[] extensionPoints) {
-        // TODO Auto-generated method stub
-        
+        dashboardComposite.update();
     }
 
     @Override
     public void removed(IExtensionPoint[] extensionPoints) {
-        // TODO Auto-generated method stub
-        
+        dashboardComposite.update();
     }
 
 }
