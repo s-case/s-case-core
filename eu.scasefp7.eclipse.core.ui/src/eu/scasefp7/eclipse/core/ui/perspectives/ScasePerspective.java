@@ -103,7 +103,7 @@ public class ScasePerspective implements IPerspectiveFactory {
 		layout.addNewWizardShortcut("org.eclipse.ui.editors.wizards.UntitledTextFileWizard");//$NON-NLS-1$
         
 		// 'Window' > 'Open Perspective' contributions
-        layout.addPerspectiveShortcut("eu.scasefp7.eclipse.core.ui.ScasePerspective");//$NON-NLS-1$
+        layout.addPerspectiveShortcut(ScaseUiConstants.PERSPECTIVE);//$NON-NLS-1$
         layout.addPerspectiveShortcut("org.eclipse.jdt.ui.JavaPerspective");//$NON-NLS-1$
 
 	}

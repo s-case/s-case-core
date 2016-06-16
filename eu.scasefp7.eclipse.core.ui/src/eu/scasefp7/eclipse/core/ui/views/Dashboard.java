@@ -313,9 +313,14 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * @param elem configuration element describing the button
      */
     private void handleGroup(Composite parent, IConfigurationElement elem) {
-        Group group = createGroup(parent, elem.getAttribute(CONTRIBUTION_GROUP_NAME));
+        String groupId = elem.getAttribute(CONTRIBUTION_GROUP_ID); 
         String appearsBefore = elem.getAttribute(CONTRIBUTION_GROUP_BEFORE);
-        groups.put(elem.getAttribute(CONTRIBUTION_GROUP_ID), group);
+
+        Group group = groups.get(groupId);
+        if(group == null) {
+            group = createGroup(parent, elem.getAttribute(CONTRIBUTION_GROUP_NAME));
+            groups.put(groupId, group);
+        }
         
         for (IConfigurationElement child : elem.getChildren()) {
             if(child.getName().equals(CONTRIBUTION_GROUP)) {
