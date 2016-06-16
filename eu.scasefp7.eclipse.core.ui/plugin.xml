@@ -157,75 +157,7 @@
   
   <!-- Dashboard commands -->
   <extension
-        point="eu.scasefp7.eclipse.core.ui.dashboardItem">
-        <group
-               id="eu.scasefp7.eclipse.core.ui.dashboard.groups.design"
-               name="Design" />
-       	<command
-              buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.createrqs"
-              commandId="org.eclipse.ui.newWizard"
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.design"
-              label="Create requirements"
-              tooltip="Create a new textual requirements collection">
-              <parameter name="newWizardId" value="eu.scasefp7.eclipse.reqeditor.wizards.CreateRqsWizard" />
-        </command>
-        <command
-              buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.createmashups"
-              commandId="org.eclipse.ui.newWizard"
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.design"
-              label="Create mashups"
-              tooltip="Create a new storyboard to describe service composition">
-           <parameter
-                 name="newWizardId"
-                 value="eu.scasefp7.eclipse.storyboards.diagram.part.ServiceCompositionStoryboardsCreationWizardID">
-           </parameter>
-        </command>
-        <command
-        	  buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.importUML"
-              commandId="org.eclipse.ui.file.import"
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.design"
-              label="Import UML diagram"
-              tooltip="Import UML diagram from an image">
-           <parameter 
-           		name="importWizardId" 
-              	value="eu.scasefp7.eclipse.umlrec.importWizard" />
-        </command>
-        
-      	<group
-            id="eu.scasefp7.eclipse.core.ui.dashboard.groups.mashup"
-            name="Mashup" />
-        <command
-              buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.createsvccomposition"
-              commandId="eu.scasefp7.eclipse.servicecomposition.importSBD"
-              error="Import storyboard failed."
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.mashup"
-              label="Create service composition"
-              tooltip="Use a storyboard for service composition">
-        </command>
-     	<group
-           id="eu.scasefp7.eclipse.core.ui.dashboard.groups.code"
-           name="Code" />
-        <command
-              buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.gencode"
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.code"
-              label="Generate code"
-              tooltip="Generate code for the web service">
-        </command>
-        <command
-              appearsBefore="eu.scasefp7.eclipse.core.ui.dashboard.buttons.gencode"
-              buttonId="eu.scasefp7.eclipse.core.ui.dashboard.buttons.regencode"
-              commandId="eu.scasefp7.eclipse.mde.ui.generateCode"
-              error="Code generation failed."
-              groupId="eu.scasefp7.eclipse.core.ui.dashboard.groups.code"
-              label="Re-generate code"
-              tooltip="Generate code for the web service using previous settings">
-           <parameter
-                 name="eu.scasefp7.eclipse.mde.ui.generateCode.reload"
-                 value="yes">
-           </parameter>
-        </command>
+        point="eu.scasefp7.eclipse.core.ui.dashboardItem">               
      	<group
         	id="eu.scasefp7.eclipse.core.ui.dashboard.groups.run"
            	name="Run" />
