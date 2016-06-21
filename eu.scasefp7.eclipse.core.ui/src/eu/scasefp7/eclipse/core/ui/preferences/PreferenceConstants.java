@@ -28,6 +28,12 @@ public final class PreferenceConstants {
     /** Endpoint for the Control tower. */
     public static final String P_CONTROLTOWER_ENDPOINT = "controlTowerServiceURI"; //$NON-NLS-1$
 
+    /** Endpoint for the Control tower. */
+    public static final String P_CONTROLTOWER_TOKEN = "controlTowerServiceToken"; //$NON-NLS-1$
+
+    /** Endpoint for the Control tower. */
+    public static final String P_CONTROLTOWER_SECRET = "controlTowerServiceSecret"; //$NON-NLS-1$
+
     /** Project semantic domain. */
     public static final String P_PROJECT_DOMAIN = "projectDomain"; //$NON-NLS-1$
     
