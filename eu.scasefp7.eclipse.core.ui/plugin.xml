@@ -425,6 +425,10 @@
             class="eu.scasefp7.eclipse.core.ui.handlers.ConvertToProjectFolderHandler"
             commandId="eu.scasefp7.eclipse.core.ui.commands.convertToProjectFolder">
       </handler>
+      <handler
+            class="eu.scasefp7.eclipse.core.ui.handlers.SwitchViewHandler"
+            commandId="eu.scasefp7.eclipse.core.ui.switchToSCView">
+      </handler>
    </extension>
   
   <extension
@@ -442,6 +446,10 @@
               id="eu.scasefp7.eclipse.core.ui.commands.openDeployWizard"
               name="Generated service deployment wizard">
      </command>
+     <command
+            id="eu.scasefp7.eclipse.core.ui.switchToSCView"
+            name="Switch to Service Composition View">
+      </command>
   </extension>
 
   <extension
