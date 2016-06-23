@@ -55,6 +55,10 @@ public final class ScaseUiConstants {
 	
 	/* These are external, included here for convenience */
 	
+	/**
+	 * The Service Composition View ID. */
+	public static final String SC_VIEW_ID = "eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView";
+	
 	/** UML recognizer wizard ID. */
 	public static final String UML_RECOGNIZER_NEWWIZARDID = "eu.scasefp7.eclipse.umlrec.importWizard"; //$NON-NLS-1$
 
