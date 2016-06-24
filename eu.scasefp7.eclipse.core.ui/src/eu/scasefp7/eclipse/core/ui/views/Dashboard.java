@@ -220,6 +220,9 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         });
         
         this.dashboardComposite = parent;
+        currentProject = null;
+        updateContentDescription();
+        updateButtons();
 	}
 
     /**
