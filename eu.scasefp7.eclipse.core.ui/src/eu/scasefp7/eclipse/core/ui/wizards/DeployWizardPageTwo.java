@@ -18,7 +18,6 @@ import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.browser.IWebBrowser;
 
 import eu.scasefp7.eclipse.core.ui.Activator;
-import org.eclipse.swt.widgets.Text;
 
 /**
  * Wizard intended to help users deploy generated services.
@@ -48,13 +47,14 @@ public class DeployWizardPageTwo extends WizardPage {
 		new Label(composite, SWT.NONE);
 		
 		StyledText styledText = new StyledText (composite,  SWT.MULTI);
+		styledText.setCaret(null);
 		styledText.setEditable(false);
 		//styledText.setBackground(SWTResourceManager.getColor(SWT.COLOR_WIDGET_BACKGROUND));
-		styledText.setText("To start the generated web service, create a WAR file using Maven with the goal 'package'.\n "
+		styledText.setText("To start the generated web service, create a WAR file using Maven with the goal 'package'.\n"
 				+ "The created WAR file is ready to be deployed on a web server that supports Java JAX-RS web service.\n"
-				+ "Your web service will connect to the database using credentials configured in the project.\n");
+				+ "Your web service will connect to the database using credentials configured in the project.");
 		
-		String url = "http://s-case.github.io/webbook.html";
+		String url = "http://s-case.github.io/webbook.html#7";
 		this.setControl(composite);
 		new Label(composite, SWT.NONE);
 		
