@@ -143,11 +143,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * The currently selected project.
      */
     private IProject currentProject;
-
-    /**
-     * The current selection.
-     */
-    private ISelection currentSelection;
     
     /**
 	 * The constructor.
@@ -162,6 +157,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         if (page != null) {
             updateSelection(page.getSelection());
             updateContentDescription();
+			updateButtons();
         }
         site.getPage().addPostSelectionListener(this);
         super.init(site);
@@ -253,7 +249,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         RegistryFactory.getRegistry().removeListener(this);
         
         currentProject = null;
-        currentSelection = null;
     }
 
     /**
@@ -583,21 +578,9 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection sel) {
-     // we ignore null selection, or if we are pinned, or our own selection or same selection or if selection is empty
-        if (sel == null || sel.equals(currentSelection) || sel.isEmpty()) {
-            if (this.currentProject == null || !this.currentProject.exists()) {
-                this.currentProject = null;
-                setContentDescription("Please select a project");
-            }
-            return;
-        }
-        
-        // we ignore selection if we are hidden OR selection is coming from another source as the last one
-//        if(part == null || !part.equals(currentPart)){
-//            return;
-//        }
         updateSelection(sel);
         updateContentDescription();
+		updateButtons();
     }
 
     protected IProject getProjectOfSelectionList(List<Object> selectionList) {
@@ -622,37 +605,56 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		}
 		return project;
     }
+
+	private boolean isSCASEProject(IProject project) {
+		boolean isSCASEProject = false;
+		try {
+			isSCASEProject = currentProject.hasNature(ScaseUiConstants.PROJECT_NATURE);
+		} catch (CoreException e) {
+			Activator.log("Error setting the current project in the dashboard", e);
+		}
+		return isSCASEProject;
+	}
     
-    private void updateSelection(ISelection selection) {
-        if(selection instanceof IStructuredSelection) {
-            IStructuredSelection sel = (IStructuredSelection) selection;
-        
-            if (sel.getFirstElement() instanceof IResource){
-            	@SuppressWarnings("unchecked")
-            	IProject project = getProjectOfSelectionList(sel.toList());
-            	if (project != null) {
-            		Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
-            		this.currentProject = project;
-            	}    
-            }
-        }
-    }
-    
+	@SuppressWarnings("unchecked")
+	private void updateSelection(ISelection selection) {
+		if (selection instanceof IStructuredSelection) {
+			IProject project = getProjectOfSelectionList(((IStructuredSelection) selection).toList());
+			if (project != null) {
+				Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
+				currentProject = project;
+			} else {
+				// This condition is experimental and can be used to retain selection when selecting other views.
+				// if (currentProject == null || !currentProject.exists())
+				currentProject = null;
+			}
+		}
+	}
+
     private void updateContentDescription() {
-        if (this.currentProject != null && this.currentProject.exists()) {
-            int projectDomain = getProjectDomainId(this.currentProject);
-            DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, projectDomain);
-            
-            if(de != null) {
-                setContentDescription("Active project: " + this.currentProject.getName() + " (" + de.getName() + ")");
-            } else {
-                setContentDescription("Active project: " + this.currentProject.getName() + " (domain unset)");                
-            }
-        } else {
-            setContentDescription("Please select a project");
-        }   
+		if (currentProject != null) {
+			if (isSCASEProject(currentProject)) {
+				DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, getProjectDomainId(currentProject));
+				setContentDescription("Active project: " + currentProject.getName() + " ("
+						+ (de == null ? "domain unset" : de.getName()) + ")");
+			} else
+				setContentDescription("Active project: " + currentProject.getName() + " (non-S-CASE project)");
+		} else
+			setContentDescription("Please select a project");
     }
 
+    private void updateButtons() {
+		if (buttons != null) {
+			if (currentProject != null && currentProject.exists() && isSCASEProject(currentProject)) {
+				for (Button button : buttons.values())
+					button.setEnabled(true);
+			} else {
+				for (Button button : buttons.values())
+					button.setEnabled(false);
+			}
+		}
+    }
+   
     private DomainEntry findDomainById(DomainEntry[] domains, int domainId) {
         for (DomainEntry de : domains) {
             if (de.getId() == domainId) {
