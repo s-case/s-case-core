@@ -25,6 +25,18 @@
          <showInPart id="org.eclipse.team.ui.GenericHistoryView"/>
          <showInPart id="org.eclipse.ui.views.ResourceNavigator"/>
          <showInPart id="org.eclipse.ui.navigator.ProjectExplorer"/>
+         <view
+               id="org.eclipse.ui.console.ConsoleView"
+               minimized="false"
+               relationship="stack"
+               relative="eu.scasefp7.eclipse.core.ui.views.Dashboard">
+         </view>
+         <view
+               id="org.eclipse.ui.views.PropertySheet"
+               minimized="false"
+               relationship="stack"
+               relative="eu.scasefp7.eclipse.core.ui.views.Dashboard">
+         </view>
       </perspectiveExtension>
       
       <perspectiveExtension targetID="org.eclipse.debug.ui.DebugPerspective">
