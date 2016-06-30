@@ -16,16 +16,16 @@ import eu.scasefp7.eclipse.core.connect.Activator;
 public class ProjectFileLoader {
 
 	private static IContainer getProjectFolder(IProject project, String folderId) {
-		String requirementsFolderLocation = null;
+		String folderLocation = null;
 		try {
-			requirementsFolderLocation = project.getPersistentProperty(new QualifiedName("", folderId));
+			folderLocation = project.getPersistentProperty(new QualifiedName("", folderId));
 		} catch (CoreException e) {
-			Activator.log("Error retrieving project property (requirements folder location)", e);
+			Activator.log("Error retrieving project property (folder location)", e);
 		}
 		IContainer container = project;
-		if (requirementsFolderLocation != null) {
-			if (project.findMember(new Path(requirementsFolderLocation)).exists())
-				container = (IContainer) project.findMember(new Path(requirementsFolderLocation));
+		if (folderLocation != null) {
+			if (project.findMember(new Path(folderLocation)).exists())
+				container = (IContainer) project.findMember(new Path(folderLocation));
 		}
 		return container;
 	}
@@ -63,12 +63,14 @@ public class ProjectFileLoader {
 	protected static ArrayList<IFile> getFilesOfProject(IProject project, String extension) {
 		ArrayList<IFile> files = new ArrayList<IFile>();
 		IContainer container = null;
-		if (extension.equals("rqs") || extension.equals("sbd"))
+		if (extension.equals("rqs") || extension.equals("sbd") || extension.equals("uml"))
 			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.rqsFolder");
 		else if (extension.equals("scd") || extension.equals("sc") || extension.equals("cservice"))
 			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.compFolder");
 		else if (extension.equals("owl") || extension.equals("yaml"))
 			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.modelsFolder");
+		else if (extension.equals("xmi"))
+			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.outputFolder");
 		processContainer(container, files, extension);
 		return files;
 	}
