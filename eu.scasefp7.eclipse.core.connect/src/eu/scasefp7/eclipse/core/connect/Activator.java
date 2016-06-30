@@ -89,7 +89,7 @@ public class Activator extends AbstractUIPlugin {
 	public static void log(String className, String methodName, String message, Exception exception) {
 		StringBuilder msg = new StringBuilder(message);
 		msg.append("\n!ERROR_ID t" + errorID);
-		msg.append("\n!SERVICE_NAME MDE UI Plugin");
+		msg.append("\n!SERVICE_NAME CoreConnect");
 		msg.append("\n!SERVICE_VERSION 1.0.0-SNAPSHOT");
 		msg.append("\n!STARTING_TIME ").append(STARTING_TIME);
 		msg.append("\n!CLASS_NAME ").append(className);
