@@ -51,18 +51,25 @@ import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
 import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
+import org.eclipse.swt.custom.StackLayout;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
 import org.eclipse.swt.events.MouseAdapter;
 import org.eclipse.swt.events.MouseEvent;
+import org.eclipse.swt.events.SelectionEvent;
+import org.eclipse.swt.events.SelectionListener;
 import org.eclipse.swt.layout.FillLayout;
 import org.eclipse.swt.layout.GridData;
+import org.eclipse.swt.layout.GridLayout;
 import org.eclipse.swt.layout.RowLayout;
 import org.eclipse.swt.widgets.Button;
 import org.eclipse.swt.widgets.Composite;
 import org.eclipse.swt.widgets.Control;
 import org.eclipse.swt.widgets.Group;
+import org.eclipse.swt.widgets.Label;
+import org.eclipse.swt.widgets.Link;
 import org.eclipse.ui.IActionBars;
 import org.eclipse.ui.ISelectionListener;
 import org.eclipse.ui.ISharedImages;
@@ -77,8 +84,10 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
+import eu.scasefp7.eclipse.core.ui.SharedImages;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
@@ -95,7 +104,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	/**
 	 * The ID of the view as specified by the extension.
 	 */
-	public static final String ID = "eu.scasefp7.eclipse.core.ui.views.Dashboard";
+	public static final String ID = ScaseUiConstants.DASHBOARD_VIEW;
 
 	/**
 	 * The element names defining the contribution.
@@ -123,6 +132,26 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      * Composite containing the dashboard view.
      */
     private Composite dashboardComposite;
+    
+    /**
+     * Composite containing the 'please select a project' message.
+     */
+    private Composite noProjectSelectedMessage;
+    
+    /**
+     * Composite containing the 'configure as an S-CASE project' message.
+     */   
+    private Composite noScaseProjectMessage;
+    
+    /**
+     * Main composite of the view.
+     */
+    private Composite viewComposite;
+    
+    /**
+     * Layout of the main view.
+     */
+    private StackLayout viewLayout;
     
     /**
      * Name of the group and group of buttons.
@@ -168,6 +197,27 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 	 * to create the viewer and initialize it.
 	 */
 	public void createPartControl(Composite parent) {
+	    this.viewComposite = parent;
+        this.viewLayout = new StackLayout();
+        this.viewComposite.setLayout(this.viewLayout);
+	    
+	    this.dashboardComposite = createDashboard(this.viewComposite);
+	    this.noProjectSelectedMessage = createNoProjectSelectedMessage(this.viewComposite);
+	    this.noScaseProjectMessage = createProjectConfigMessage(this.viewComposite);
+	    
+        this.viewLayout.topControl = this.dashboardComposite;
+        this.viewComposite.layout();	    
+	}
+	
+	/**
+	 * Creates the dashboard composite.
+	 * 
+	 * @param composite to contain the dashboard
+	 * @return dashboard composite
+	 */
+	private Composite createDashboard(Composite parent) {
+	    Composite composite = new Composite(parent, SWT.NONE);
+	    
 	    // Set the main layout
 		RowLayout layout = new RowLayout(SWT.HORIZONTAL);
 		layout.pack = false;
@@ -175,8 +225,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 		layout.marginWidth = 10;
 		layout.marginHeight = 10;
 		layout.spacing = 10;
-		parent.setLayout(layout);
-		parent.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
+		composite.setLayout(layout);
+		composite.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, true));
 		
 		// Add menu and toolbar
 		hookContextMenu();
@@ -189,10 +239,10 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         // Create the configured items
         for (IConfigurationElement elem : contributions) {
             if(elem.getName().equals(CONTRIBUTION_GROUP)) {
-                handleGroup(parent, elem);
+                handleGroup(composite, elem);
             }
             if(elem.getName().equals(CONTRIBUTION_COMMAND)) {
-                handleButton(parent, elem);   
+                handleButton(composite, elem);   
             }
         }
 		
@@ -212,17 +262,17 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             }
         }
         
-        parent.addControlListener(new ControlAdapter() {
+        composite.addControlListener(new ControlAdapter() {
             @Override
             public void controlResized(ControlEvent e) {
-                parent.getShell().layout();
+                composite.getShell().layout();
             }
         });
         
-        this.dashboardComposite = parent;
-        currentProject = null;
         updateContentDescription();
         updateButtons();
+        
+        return composite;
 	}
 
     /**
@@ -625,11 +675,25 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 			IProject project = getProjectOfSelectionList(((IStructuredSelection) selection).toList());
 			if (project != null) {
 				Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
+				
 				currentProject = project;
+				
+                if(isSCASEProject(project)) {
+                    this.viewLayout.topControl = this.dashboardComposite;
+                } else {
+                    this.viewLayout.topControl = this.noScaseProjectMessage;
+                }
+                this.viewComposite.layout();
 			} else {
 				// This condition is experimental and can be used to retain selection when selecting other views.
 				// if (currentProject == null || !currentProject.exists())
-				currentProject = null;
+			    Activator.TRACE.trace("/dashboard/selectedProjectChanged", "No project selected.");
+                
+			    currentProject = null;
+			    if(this.viewLayout != null && this.viewComposite != null) {
+			        this.viewLayout.topControl = this.noProjectSelectedMessage;
+			        this.viewComposite.layout();
+			    }
 			}
 		}
 	}
@@ -704,6 +768,93 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     @Override
     public void removed(IExtensionPoint[] extensionPoints) {
         dashboardComposite.update();
+    }
+
+    /**
+     * Creates a 'Please select a project' message.
+     * 
+     * @param parent to contain the message
+     * @return message composite
+     */
+    private Composite createNoProjectSelectedMessage(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(1, false));
+        
+        Composite c1 = new Composite(composite, SWT.NONE);
+        c1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+        GridLayout gl_composite1 = new GridLayout(2, false);
+        gl_composite1.horizontalSpacing = 20;
+        gl_composite1.marginWidth = 20;
+        gl_composite1.marginHeight = 20;
+        c1.setLayout(gl_composite1);
+        
+        Label lblNewLabel = new Label(c1, SWT.NONE);
+        lblNewLabel.setImage(Activator.getImages().getImage(SharedImages.Images.VIEW_SCASE32));
+        lblNewLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 1));
+        lblNewLabel.setImage(Activator.getImages().getImage(SharedImages.Images.VIEW_SCASE32));
+        
+        Label lblProjectNotScase = new Label(c1, SWT.NONE);
+        lblProjectNotScase.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+        lblProjectNotScase.setText("Please select a project to start.");
+        
+        return composite;
+    }
+
+    /**
+     * Creates a 'Configure as an S-CASE project' message.
+     * 
+     * @param parent to contain the message
+     * @return message composite
+     */
+    private Composite createProjectConfigMessage(Composite parent) {
+        Composite composite = new Composite(parent, SWT.NONE);
+        composite.setLayout(new GridLayout(1, false));
+        
+        Composite c1 = new Composite(composite, SWT.NONE);
+        c1.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, true, true, 1, 1));
+        GridLayout gl_composite1 = new GridLayout(2, false);
+        gl_composite1.horizontalSpacing = 20;
+        gl_composite1.marginWidth = 20;
+        gl_composite1.marginHeight = 20;
+        c1.setLayout(gl_composite1);
+        
+        Label lblNewLabel = new Label(c1, SWT.NONE);
+        lblNewLabel.setImage(Activator.getImages().getImage(SharedImages.Images.VIEW_SCASE32));
+        lblNewLabel.setLayoutData(new GridData(SWT.CENTER, SWT.CENTER, false, false, 1, 2));
+        lblNewLabel.setImage(Activator.getImages().getImage(SharedImages.Images.VIEW_SCASE32));
+        
+        Label lblProjectNotScase = new Label(c1, SWT.NONE);
+        lblProjectNotScase.setLayoutData(new GridData(SWT.LEFT, SWT.CENTER, true, false, 1, 1));
+        lblProjectNotScase.setText("The selected project is not configured for S-CASE.");
+        
+        Link link = new Link(c1, SWT.NONE);
+        link.setLayoutData(new GridData(SWT.FILL, SWT.CENTER, true, false, 1, 1));
+        link.setText("<a>Configure as an S-CASE project</a>");
+        new Label(c1, SWT.NONE);
+        new Label(c1, SWT.NONE);
+        link.addSelectionListener(new SelectionListener() {
+            
+            private void configureProject() {
+                try {
+                    if(currentProject != null) {
+                        ProjectUtils.addNature(currentProject, null);
+                        selectionChanged(Dashboard.this, new StructuredSelection(currentProject));
+                    }
+                } catch (CoreException ex) {
+                    Activator.log("Error when configuring project.", ex);                        
+                }
+            }
+            
+            public void widgetSelected(SelectionEvent e) {
+                configureProject();
+            }
+    
+            public void widgetDefaultSelected(SelectionEvent e) {
+                configureProject();
+            }
+        });
+        
+        return composite;
     }
 
 }
