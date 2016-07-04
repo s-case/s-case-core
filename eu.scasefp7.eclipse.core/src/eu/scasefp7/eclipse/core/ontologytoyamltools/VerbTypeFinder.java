@@ -44,7 +44,7 @@ public class VerbTypeFinder {
 
 		UPDATE_VERBS = new HashSet<String>();
 		ArrayList<String> updateverbs = new ArrayList<String>(Arrays.asList(new String[] { "perform", "mark",
-				"evaluate", "update", "set", "change" }));
+				"evaluate", "update", "set", "change", "edit" }));
 		for (String verb : updateverbs)
 			UPDATE_VERBS.add(Stemmer.stemVerb(verb));
 
