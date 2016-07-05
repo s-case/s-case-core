@@ -46,11 +46,33 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 		// TODO Auto-generated method stub
 
 	}
+	
 	@Override
 	public void addPages() {
 	    super.addPages();
 	 
-	    pageOne = new WizardNewProjectCreationPage(PAGE_NAME);
+	    pageOne = new WizardNewProjectCreationPage(PAGE_NAME) {
+
+            /**
+             * Adds a check to force project name to be a valid Java identifier.
+             * 
+             * {@inheritDoc}
+             * @see org.eclipse.ui.dialogs.WizardNewProjectCreationPage#validatePage()
+             */
+            @Override
+            protected boolean validatePage() {
+                if(super.validatePage()) {
+                    if (!isValidProjectName(getProjectName())) {
+                        setErrorMessage("Project name must be a valid Java identifier");
+                        return false;
+                    }
+                }
+
+                return true;                
+            }
+	        
+	    };
+	    
 	    pageOne.setTitle("Create a S-Case Project");
 	    pageOne.setDescription("Enter project name.");
 	    
@@ -96,7 +118,32 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 		return true;
 	}
 	
+	/**
+	 * Checks if project name is valid (must be a valid Java identifier).
+	 * 
+	 * @param name
+	 * @return true if project name is valid
+	 */
+	public final static boolean isValidProjectName(String name) {
+	     // an empty or null string cannot be a valid identifier
+	     if (name == null || name.length() == 0) {
+	         return false;
+	     }
 
+	     char[] c = name.toCharArray();
+	     if (!Character.isJavaIdentifierStart(c[0])) {
+	         return false;
+	     }
+
+	     for (int i = 1; i < c.length; i++) {
+	         if (!Character.isJavaIdentifierPart(c[i])) {
+	             return false;
+	         }
+	     }
+
+	     return true;
+	}
+	
 	@Override
 	public void setInitializationData(IConfigurationElement config,
 			String propertyName, Object data) throws CoreException {
