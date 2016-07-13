@@ -45,11 +45,21 @@ public class ProjectUploader {
 		monitor.done();
 	}
 
+	private static void printProgress(String message, int total, int completed) {
+		System.out.print(message + " [");
+		for (int i = 0; i < completed; i++)
+			System.out.print("=");
+		for (int i = 0; i < total - completed; i++)
+			System.out.print(" ");
+		System.out.println("]");
+	}
+
 	public static void uploadProject(String projectFolder) {
 		String projectName = new File(projectFolder).getName();
 
 		// Find the files of the project
 		ArrayList<File> files = ProjectFileLoader.getFilesOfProject(projectFolder, "rqs", "sbd", "uml", "owl", "xmi");
+		printProgress("Uploading artefacts", files.size(), 0);
 
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
@@ -58,8 +68,11 @@ public class ProjectUploader {
 		createOrUpdateProject(client, projectName);
 
 		// Create all files
-		for (File file : files)
+		int i = 0;
+		for (File file : files) {
 			uploadFile(client, projectName, file);
+			printProgress("Uploading artefacts", files.size(), ++i);
+		}
 	}
 
 	private static Client connectToAssetsRegistry() {
