@@ -113,7 +113,7 @@ public class ProjectUploader {
 	}
 
 	/**
-	 * Returns the diagram type of an XMI file.
+	 * Returns the diagram type of a UML file.
 	 * 
 	 * @param fileContents the contents of the file of which the type is returned.
 	 * @return the diagram type, either "UseCaseDiagram" or "ActivityDiagram" (or "Error" if there is a parsing error).
@@ -140,6 +140,23 @@ public class ProjectUploader {
 		return "Error";
 	}
 
+	/**
+	 * Returns the model type of an XMI file.
+	 * 
+	 * @param filename the name of the file of which the type is returned.
+	 * @return the diagram type, "CIM", "PIM" or "PSM" (or "Other").
+	 */
+	private static String getModelType(String filename) {
+		if (filename.endsWith("CIM.xmi"))
+			return "CIM";
+		else if (filename.endsWith("PIM.xmi"))
+			return "PIM";
+		if (filename.endsWith("PSM.xmi"))
+			return "PSM";
+		else
+			return "Other";
+	}
+
 	private static void uploadFile(Client client, String projectName, String filename, String fileContents) {
 		@SuppressWarnings("unused")
 		Response response;
@@ -152,7 +169,7 @@ public class ProjectUploader {
 					+ "	\"name\": \"" + filename + "\","
 					+ "	\"projectName\": \"" + projectName + "\","
 					+ "	\"type\": \"TEXTUAL\","
-					+ "	\"description\": \"" + filename + "\","
+					+ "	\"description\": \"" + fileContents + "\","
 					+ "	\"payload\": ["
 					+ "		{"
 					+ "			\"type\": \"TEXTUAL\","
@@ -169,7 +186,7 @@ public class ProjectUploader {
 					+ "	\"name\": \"" + filename + "\","
 					+ "	\"projectName\": \"" + projectName + "\","
 					+ "	\"type\": \"STORYBOARD\","
-					+ "	\"description\": \"" + filename + "\","
+					+ "	\"description\": \"" + fileContents + "\","
 					+ "	\"payload\": ["
 					+ "		{"
 					+ "			\"type\": \"TEXTUAL\","
@@ -186,11 +203,28 @@ public class ProjectUploader {
 					+ "	\"name\": \"" + filename + "\","
 					+ "	\"projectName\": \"" + projectName + "\","
 					+ "	\"type\": \"" + (getDiagramType(fileContents).equals("UseCaseDiagram") ? "USE_CASE":"ACTIVITY_DIAGRAM") + "\","
-					+ "	\"description\": \"" + filename + "\","
+					+ "	\"description\": \"" + fileContents + "\","
 					+ "	\"payload\": ["
 					+ "		{"
 					+ "			\"type\": \"TEXTUAL\","
 					+ "			\"name\": \"uml_diagram\","
+					+ "			\"format\": \"TEXT_UTF8\","
+					+ "			\"payload\": [" + byteArray + "]"
+					+ "		}"
+					+ "	]"
+					+ "}";
+			// @formatter:on
+		} else if (extension.equals("xmi") && !getModelType(filename).equals("Other")) {
+			// @formatter:off
+			json =  "{"
+					+ "	\"name\": \"" + filename + "\","
+					+ "	\"projectName\": \"" + projectName + "\","
+					+ "	\"type\": \"" + getModelType(filename) + "\","
+					+ "	\"description\": \"" + fileContents + "\","
+					+ "	\"payload\": ["
+					+ "		{"
+					+ "			\"type\": \"TEXTUAL\","
+					+ "			\"name\": \"xmi_model\","
 					+ "			\"format\": \"TEXT_UTF8\","
 					+ "			\"payload\": [" + byteArray + "]"
 					+ "		}"
