@@ -2,6 +2,7 @@ package eu.scasefp7.eclipse.core.connect.uploader;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -13,6 +14,7 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.runtime.IProgressMonitor;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
@@ -22,8 +24,12 @@ public class ProjectUploader {
 
 	private static final String baseURL = "http://109.231.121.125:8080/s-case/assetregistry";
 
-	public static void uploadProject(IProject project) {
+	public static void uploadProject(IProject project, IProgressMonitor monitor) {
 		String projectName = project.getName();
+
+		// Find the files of the project
+		ArrayList<IFile> files = ProjectFileLoader.getFilesOfProject(project, "rqs", "sbd", "uml", "xmi");
+		monitor.beginTask("Uploading artefacts", files.size());
 
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
@@ -31,49 +37,29 @@ public class ProjectUploader {
 		// Create or update project
 		createOrUpdateProject(client, projectName);
 
-		// Create rqs files
-		for (IFile rqsFile : ProjectFileLoader.getFilesOfProject(project, "rqs"))
-			uploadFile(client, projectName, rqsFile);
-
-		// Create sbd files
-		for (IFile sbdFile : ProjectFileLoader.getFilesOfProject(project, "sbd"))
-			uploadFile(client, projectName, sbdFile);
-
-		// Create uml files
-		for (IFile umlFile : ProjectFileLoader.getFilesOfProject(project, "uml"))
-			uploadFile(client, projectName, umlFile);
-
-		// Create xmi files
-		for (IFile xmiFile : ProjectFileLoader.getFilesOfProject(project, "xmi"))
-			uploadFile(client, projectName, xmiFile);
-
+		// Create all files
+		for (IFile file : files) {
+			monitor.worked(1);
+			uploadFile(client, projectName, file);
+		}
+		monitor.done();
 	}
 
 	public static void uploadProject(String projectFolder) {
 		String projectName = new File(projectFolder).getName();
 
+		// Find the files of the project
+		ArrayList<File> files = ProjectFileLoader.getFilesOfProject(projectFolder, "rqs", "sbd", "uml", "xmi");
+
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
 
 		// Create or update project
 		createOrUpdateProject(client, projectName);
 
-		// Create rqs files
-		for (File rqsFile : ProjectFileLoader.getFilesOfProject(projectFolder, "rqs"))
-			uploadFile(client, projectName, rqsFile);
-
-		// Create sbd files
-		for (File sbdFile : ProjectFileLoader.getFilesOfProject(projectFolder, "sbd"))
-			uploadFile(client, projectName, sbdFile);
-
-		// Create uml files
-		for (File umlFile : ProjectFileLoader.getFilesOfProject(projectFolder, "uml"))
-			uploadFile(client, projectName, umlFile);
-
-		// Create xmi files
-		for (File xmiFile : ProjectFileLoader.getFilesOfProject(projectFolder, "xmi"))
-			uploadFile(client, projectName, xmiFile);
-
+		// Create all files
+		for (File file : files)
+			uploadFile(client, projectName, file);
 	}
 
 	private static Client connectToAssetsRegistry() {

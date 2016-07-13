@@ -57,22 +57,26 @@ public class ProjectFileLoader {
 	 * Returns the files of the given project.
 	 * 
 	 * @param project the project of which the files are returned.
-	 * @param extension the extension of the returned files.
+	 * @param extensions the extensions of the returned files.
 	 * @return a list of the files of the project with the given extension.
 	 */
-	protected static ArrayList<IFile> getFilesOfProject(IProject project, String extension) {
-		ArrayList<IFile> files = new ArrayList<IFile>();
-		IContainer container = null;
-		if (extension.equals("rqs") || extension.equals("sbd") || extension.equals("uml"))
-			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.rqsFolder");
-		else if (extension.equals("scd") || extension.equals("sc") || extension.equals("cservice"))
-			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.compFolder");
-		else if (extension.equals("owl") || extension.equals("yaml"))
-			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.modelsFolder");
-		else if (extension.equals("xmi"))
-			container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.outputFolder");
-		processContainer(container, files, extension);
-		return files;
+	protected static ArrayList<IFile> getFilesOfProject(IProject project, String... extensions) {
+		ArrayList<IFile> allfiles = new ArrayList<IFile>();
+		for (String extension : extensions) {
+			ArrayList<IFile> files = new ArrayList<IFile>();
+			IContainer container = null;
+			if (extension.equals("rqs") || extension.equals("sbd") || extension.equals("uml"))
+				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.rqsFolder");
+			else if (extension.equals("scd") || extension.equals("sc") || extension.equals("cservice"))
+				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.compFolder");
+			else if (extension.equals("owl") || extension.equals("yaml"))
+				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.modelsFolder");
+			else if (extension.equals("xmi"))
+				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.outputFolder");
+			processContainer(container, files, extension);
+			allfiles.addAll(files);
+		}
+		return allfiles;
 	}
 
 	private static void processContainer(File container, ArrayList<File> files, String extension) {
@@ -86,10 +90,14 @@ public class ProjectFileLoader {
 		}
 	}
 
-	public static ArrayList<File> getFilesOfProject(String projectFolder, String extension) {
-		ArrayList<File> files = new ArrayList<File>();
-		processContainer(new File(projectFolder), files, extension);
-		return files;
+	public static ArrayList<File> getFilesOfProject(String projectFolder, String... extensions) {
+		ArrayList<File> allfiles = new ArrayList<File>();
+		for (String extension : extensions) {
+			ArrayList<File> files = new ArrayList<File>();
+			processContainer(new File(projectFolder), files, extension);
+			allfiles.addAll(files);
+		}
+		return allfiles;
 	}
 
 }
