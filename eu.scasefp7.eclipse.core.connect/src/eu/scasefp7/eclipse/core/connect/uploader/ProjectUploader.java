@@ -28,7 +28,7 @@ public class ProjectUploader {
 		String projectName = project.getName();
 
 		// Find the files of the project
-		ArrayList<IFile> files = ProjectFileLoader.getFilesOfProject(project, "rqs", "sbd", "uml", "xmi");
+		ArrayList<IFile> files = ProjectFileLoader.getFilesOfProject(project, "rqs", "sbd", "uml", "owl", "xmi");
 		monitor.beginTask("Uploading artefacts", files.size());
 
 		// Initialize connection to the assets registry
@@ -49,7 +49,7 @@ public class ProjectUploader {
 		String projectName = new File(projectFolder).getName();
 
 		// Find the files of the project
-		ArrayList<File> files = ProjectFileLoader.getFilesOfProject(projectFolder, "rqs", "sbd", "uml", "xmi");
+		ArrayList<File> files = ProjectFileLoader.getFilesOfProject(projectFolder, "rqs", "sbd", "uml", "owl", "xmi");
 
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
@@ -102,7 +102,7 @@ public class ProjectUploader {
 	 * Returns the diagram type of a UML file.
 	 * 
 	 * @param fileContents the contents of the file of which the type is returned.
-	 * @return the diagram type, either "UseCaseDiagram" or "ActivityDiagram" (or "Error" if there is a parsing error).
+	 * @return the diagram type, either "USE_CASE" or "ACTIVITY_DIAGRAM" (or "Error" if there is a parsing error).
 	 */
 	private static String getDiagramType(String fileContents) {
 		Document doc = null;
@@ -116,14 +116,31 @@ public class ProjectUploader {
 				Element eElement = (Element) packagedElement;
 				String type = eElement.getAttribute("xmi:type");
 				if (type.equalsIgnoreCase("uml:Use Case"))
-					return "UseCaseDiagram";
+					return "USE_CASE";
 				else if (type.equalsIgnoreCase("uml:Activity"))
-					return "ActivityDiagram";
+					return "ACTIVITY_DIAGRAM";
 			}
 		} catch (ParserConfigurationException | SAXException | IOException e) {
 			e.printStackTrace();
 		}
 		return "Error";
+	}
+
+	/**
+	 * Returns the ontology type of an OWL file.
+	 * 
+	 * @param filename the name of the file of which the type is returned.
+	 * @return the ontology type, "STATIC_ONTOLOGY", "DYNAMIC_ONTOLOGY" or "AGGREGATED_ONTOLOGY" (or "Other").
+	 */
+	private static String getOntologyType(String filename) {
+		if (filename.startsWith("Static"))
+			return "STATIC_ONTOLOGY";
+		else if (filename.startsWith("Dynamic"))
+			return "DYNAMIC_ONTOLOGY";
+		if (filename.startsWith("Linked"))
+			return "AGGREGATED_ONTOLOGY";
+		else
+			return "Other";
 	}
 
 	/**
@@ -183,17 +200,34 @@ public class ProjectUploader {
 					+ "	]"
 					+ "}";
 			// @formatter:on
-		} else if (extension.equals("uml")) {
+		} else if (extension.equals("uml") && !getDiagramType(fileContents).equals("Error")) {
 			// @formatter:off
 			json =  "{"
 					+ "	\"name\": \"" + filename + "\","
 					+ "	\"projectName\": \"" + projectName + "\","
-					+ "	\"type\": \"" + (getDiagramType(fileContents).equals("UseCaseDiagram") ? "USE_CASE":"ACTIVITY_DIAGRAM") + "\","
+					+ "	\"type\": \"" + getDiagramType(fileContents) + "\","
 					+ "	\"description\": \"" + fileContents + "\","
 					+ "	\"payload\": ["
 					+ "		{"
 					+ "			\"type\": \"TEXTUAL\","
 					+ "			\"name\": \"uml_diagram\","
+					+ "			\"format\": \"TEXT_UTF8\","
+					+ "			\"payload\": [" + byteArray + "]"
+					+ "		}"
+					+ "	]"
+					+ "}";
+			// @formatter:on
+		} else if (extension.equals("owl") && !getOntologyType(filename).equals("Other")) {
+			// @formatter:off
+			json =  "{"
+					+ "	\"name\": \"" + filename + "\","
+					+ "	\"projectName\": \"" + projectName + "\","
+					+ "	\"type\": \"" + getOntologyType(filename)  + "\","
+					+ "	\"description\": \"" + fileContents + "\","
+					+ "	\"payload\": ["
+					+ "		{"
+					+ "			\"type\": \"TEXTUAL\","
+					+ "			\"name\": \"owl_specification\","
 					+ "			\"format\": \"TEXT_UTF8\","
 					+ "			\"payload\": [" + byteArray + "]"
 					+ "		}"
