@@ -31,20 +31,21 @@ public class VerbTypeFinder {
 	public VerbTypeFinder() {
 		CREATE_VERBS = new HashSet<String>();
 		ArrayList<String> createverbs = new ArrayList<String>(Arrays.asList(new String[] { "create", "add", "produce",
-				"make", "put", "write", "pay", "create", "send", "build", "raise", "develop", "produce", "register" }));
+				"make", "put", "write", "pay", "create", "send", "build", "raise", "develop", "produce", "register",
+				"post" }));
 		for (String verb : createverbs)
 			CREATE_VERBS.add(Stemmer.stemVerb(verb));
 
 		READ_VERBS = new HashSet<String>();
 		ArrayList<String> readverbs = new ArrayList<String>(Arrays.asList(new String[] { "retrieve", "check", "choose",
 				"return", "search", "provide", "contact", "get", "take", "see", "find", "ask", "show", "watch", "read",
-				"open", "reach", "return", "receive", "view" }));
+				"open", "reach", "return", "receive", "view", "load" }));
 		for (String verb : readverbs)
 			READ_VERBS.add(Stemmer.stemVerb(verb));
 
 		UPDATE_VERBS = new HashSet<String>();
 		ArrayList<String> updateverbs = new ArrayList<String>(Arrays.asList(new String[] { "perform", "mark",
-				"evaluate", "update", "set", "change" }));
+				"evaluate", "update", "set", "change", "edit" }));
 		for (String verb : updateverbs)
 			UPDATE_VERBS.add(Stemmer.stemVerb(verb));
 

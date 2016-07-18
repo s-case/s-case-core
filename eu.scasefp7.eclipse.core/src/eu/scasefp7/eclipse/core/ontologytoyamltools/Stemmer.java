@@ -123,7 +123,8 @@ public class Stemmer {
 				|| word.endsWith("lles"))
 			return word.substring(0, wordLength - 2);
 		else if (word.endsWith("ces") || word.endsWith("ses") || word.endsWith("tes") || word.endsWith("nges")
-				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des") || word.endsWith("ges"))
+				|| word.endsWith("mes") || word.endsWith("nes") || word.endsWith("des") || word.endsWith("ges")
+				|| word.endsWith("les"))
 			return word.substring(0, wordLength - 1);
 		else if (word.endsWith("ves"))
 			return word.substring(0, wordLength - 3) + "fe";
@@ -197,7 +198,7 @@ public class Stemmer {
 				|| word.endsWith("ring") || word.endsWith("ying") || word.endsWith("wing") || word.endsWith("ning")
 				|| word.endsWith("king") || word.endsWith("oing") || word.endsWith("oping") || word.endsWith("lping")
 				|| word.endsWith("eting") || word.endsWith("uting") || word.endsWith("iting") || word.endsWith("ating")
-				|| word.endsWith("lding") || word.endsWith("nding") || word.endsWith("ading") || word.endsWith("ling")
+				|| word.endsWith("lding") || word.endsWith("nding") || word.endsWith("ading")
 				|| word.endsWith("eeming") || word.endsWith("eeping"))
 			return word.substring(0, wordLength - 3);
 		else if (word.endsWith("ing"))

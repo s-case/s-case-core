@@ -39,10 +39,9 @@ public class OntologyHelpers {
 		}
 		IContainer container = project;
 		if (modelsFolderLocation != null) {
-		    IResource models = project.findMember(new Path(modelsFolderLocation)); 
-			if (models != null && models.exists()) {
-				container = (IContainer) project.findMember(new Path(modelsFolderLocation));
-			}
+		    IResource modelsFolder = project.findMember(new Path(modelsFolderLocation)); 
+			if (modelsFolder != null && modelsFolder.exists())
+				container = (IContainer) modelsFolder;
 		}
 		return container.getFile(new Path(ontologyFilename)).exists();
 	}

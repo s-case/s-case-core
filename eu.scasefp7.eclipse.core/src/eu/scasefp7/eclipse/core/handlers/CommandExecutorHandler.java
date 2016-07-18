@@ -20,19 +20,26 @@ import eu.scasefp7.eclipse.core.Activator;
 public abstract class CommandExecutorHandler extends ProjectAwareHandler {
 
 	/**
-	 * Executes an existing command.
+	 * Executes a command if it exists. Returns {@code true} if the command exists or {@code false} otherwise. Note that
+	 * if the command exists but is not executed correctly (e.g. it is not enabled), this function still returns
+	 * {@code true}.
 	 * 
 	 * @param commandId the id of the command to be executed, which can reside in other plugins.
+	 * @return {@code true} if the command exists or {@code false} otherwise.
 	 */
-	protected void executeCommand(String commandId) {
+	protected boolean executeCommand(String commandId) {
 		IServiceLocator serviceLocator = PlatformUI.getWorkbench();
 		ICommandService commandService = (ICommandService) serviceLocator.getService(ICommandService.class);
-		try {
-			Command command = commandService.getCommand(commandId);
-			command.executeWithChecks(new ExecutionEvent());
-		} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
-		    Activator.log("Unable to execute command " + commandId, e);
-		}
+		if (commandService.getDefinedCommandIds().contains(commandId)) {
+			try {
+				Command command = commandService.getCommand(commandId);
+				command.executeWithChecks(new ExecutionEvent());
+			} catch (ExecutionException | NotDefinedException | NotEnabledException | NotHandledException e) {
+				Activator.log("Unable to execute command " + commandId, e);
+			}
+			return true;
+		} else
+			return false;
 	}
 
 }

@@ -187,10 +187,11 @@ public final class SharedImages implements IDisposable {
         /** Generic artefact. */
         OBJ_ARTEFACT(obj16("artefact-text_16.png")), //$NON-NLS-1$
         
-        /** 
-         * S-CASE logo
-         */
-        VIEW_SCASE(view16("s-case_16.png")); //$NON-NLS-1$
+        /** S-CASE logo */
+        VIEW_SCASE(view16("s-case_16.png")), //$NON-NLS-1$
+        
+        /** S-CASE logo (large) */ 
+        VIEW_SCASE32(view32("s-case_32.png")); //$NON-NLS-1$
         // @formatter:on
 
         private final String name;

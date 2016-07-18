@@ -140,8 +140,9 @@ public class OntologyJenaAPI {
 				}
 				IContainer container = project;
 				if (modelsFolderLocation != null) {
-					if (project.findMember(new Path(modelsFolderLocation)).exists())
-						container = (IContainer) project.findMember(new Path(modelsFolderLocation));
+				    IResource modelsFolder = project.findMember(new Path(modelsFolderLocation)); 
+					if (modelsFolder != null && modelsFolder.exists())
+						container = (IContainer) modelsFolder;
 				}
 				file = container.getFile(new Path(filename));
 			}

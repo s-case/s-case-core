@@ -1,0 +1,4 @@
+eu.scasefp7.eclipse.core/builder=false
+eu.scasefp7.eclipse.core/builder/steps=false
+eu.scasefp7.eclipse.core/builder/steps/build=false
+eu.scasefp7.eclipse.core/builder/steps/clean=false

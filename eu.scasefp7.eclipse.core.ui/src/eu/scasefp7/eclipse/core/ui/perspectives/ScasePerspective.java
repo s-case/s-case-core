@@ -51,11 +51,8 @@ public class ScasePerspective implements IPerspectiveFactory {
 		
 		outputfolder.addView(IPageLayout.ID_PROBLEM_VIEW);
 		outputfolder.addPlaceholder("org.eclipse.search.ui.views.SearchView"); //$NON-NLS-1$
-		outputfolder.addPlaceholder("org.eclipse.ui.console.ConsoleView"); //$NON-NLS-1$
-		outputfolder.addPlaceholder(IPageLayout.ID_PROP_SHEET); //$NON-NLS-1$
 		
-		outputfolder.addView(ScaseUiConstants.DASHBOARD_VIEW); //$NON-NLS-1$
-		outputfolder.addView("eu.scasefp7.eclipse.servicecomposition.views.ServiceCompositionView"); //$NON-NLS-1$
+		outputfolder.addView(ScaseUiConstants.DASHBOARD_VIEW);
 
 		IFolderLayout outlineFolder = layout.createFolder(
 				"right", IPageLayout.RIGHT, (float) 0.75, editorArea); //$NON-NLS-1$
@@ -69,6 +66,10 @@ public class ScasePerspective implements IPerspectiveFactory {
 		layout.addActionSet("org.eclipse.search.searchActionSet"); //$NON-NLS-1$
 		layout.addActionSet(IPageLayout.ID_NAVIGATE_ACTION_SET);
 
+		// views - scase
+        layout.addShowViewShortcut(ScaseUiConstants.DASHBOARD_VIEW); 		
+        layout.addShowViewShortcut(ScaseUiConstants.SC_VIEW_ID); 
+		
 		// views - java
 /*		layout.addShowViewShortcut(JavaUI.ID_PACKAGES);
 		layout.addShowViewShortcut(JavaUI.ID_TYPE_HIERARCHY);
