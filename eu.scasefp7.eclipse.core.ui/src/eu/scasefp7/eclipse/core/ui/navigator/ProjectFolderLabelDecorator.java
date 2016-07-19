@@ -8,6 +8,7 @@ import org.eclipse.jface.viewers.IDecoration;
 import org.eclipse.jface.viewers.ILightweightLabelDecorator;
 import org.eclipse.jface.viewers.LabelProvider;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
@@ -30,19 +31,14 @@ public class ProjectFolderLabelDecorator extends LabelProvider implements ILight
 			String comPath = "";
 			String resourcePath = ((IFolder) resource).getProjectRelativePath().toString();
 			
-			try {
-				comPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER));
-				reqPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER));
-				modelsPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER));
-				outputPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER));
-			} catch (CoreException e) {
-				Activator.log("Unable to get project properties.", e);
-			}
+			comPath = ProjectUtils.getProjectCompositionsPath(project);
+			reqPath = ProjectUtils.getProjectRequirementsPath(project); 
+			modelsPath = ProjectUtils.getProjectModelsPath(project); 
+			outputPath = ProjectUtils.getProjectOutputPath(project); 
+
 			if(resourcePath.equals(comPath) || resourcePath.equals(reqPath) || resourcePath.equals(modelsPath) || resourcePath.equals(outputPath) ){
 				decoration.addOverlay(Activator.getImageDescriptor("icons/obj16/s-case_8.png"), IDecoration.TOP_RIGHT);
 			}
 		}
-		
 	}
-
 }

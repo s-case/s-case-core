@@ -24,6 +24,7 @@ import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 import org.eclipse.ui.dialogs.ISelectionValidator;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
@@ -58,35 +59,29 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				Activator.log("Unable to read project properties.", null); //$NON-NLS-1$
 			}
 		}
-		try {
-			modelsPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER)); //$NON-NLS-1$
-			outputPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER)); //$NON-NLS-1$
-			reqPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER)); //$NON-NLS-1$
-			comPath = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER)); //$NON-NLS-1$
-		} catch (CoreException exc) {
-			Activator.log("Unable to read project properties.", exc); //$NON-NLS-1$
+		
+		modelsPath = ProjectUtils.getProjectModelsPath(project);
+		outputPath = ProjectUtils.getProjectOutputPath(project);
+		reqPath = ProjectUtils.getProjectRequirementsPath(project);
+		comPath = ProjectUtils.getProjectCompositionsPath(project);
+		
+		if (modelsPath == null) {
+			modelsPath = project.getFolder("models").exists() ? "models" : "";
+			ProjectUtils.setProjectModelsPath(project, modelsPath);
 		}
-		try {
-			if (modelsPath == null) {
-				modelsPath = project.getFolder("models").exists() ? "models" : "";
-				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
-			}
-			if (outputPath == null) {
-				outputPath = project.getFolder("output").exists() ? "output" : "";
-				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
-			}
-			if (reqPath == null) {
-				reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
-				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
-			}
-			if (comPath == null) {
-				comPath = project.getFolder("compositions").exists() ? "compositions" : "";
-				project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
-			}
-		} catch (CoreException e4) {
-			e4.printStackTrace();
+		if (outputPath == null) {
+			outputPath = project.getFolder("output").exists() ? "output" : "";
+            ProjectUtils.setProjectOutputPath(project, outputPath);
 		}
-
+		if (reqPath == null) {
+			reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
+            ProjectUtils.setProjectRequirementsPath(project, reqPath);
+		}
+		if (comPath == null) {
+			comPath = project.getFolder("compositions").exists() ? "compositions" : "";
+            ProjectUtils.setProjectCompositionsPath(project, comPath);
+		}
+	
 		initializeDialogUnits(parent);
 
 		final Composite composite = new Composite(parent, SWT.NULL);
@@ -124,11 +119,13 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 			public String isValid(Object selection) {
 				try {
 					IFolder folder = root.getFolder((IPath) selection);
-					if (!folder.getProject().equals(currentProject))
+					if (!folder.getProject().equals(currentProject)) {
 						return "You must select a folder inside your project";
+					}
 				} catch (IllegalArgumentException e) {
-					if (!currentProject.getFullPath().equals(selection))
+					if (!currentProject.getFullPath().equals(selection)) {
 						return "You must select a folder inside your project";
+					}
 				}
 				return null;
 			}
@@ -141,11 +138,11 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				case SWT.Selection:
 
 					ContainerSelectionDialog dlg;
-					if (modelsPath.equals(""))
+					if (modelsPath.equals("")) {
 						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject, false, null);
-					else
-						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject.getFolder(new Path(
-								modelsPath)), false, null);
+					} else {
+						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject.getFolder(new Path(modelsPath)), false, null);
+					}
 					dlg.setValidator(validator);
 					dlg.setMessage("Select a folder");
 					dlg.open();
@@ -156,8 +153,9 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 						for (int i = 1; i < resPath.segmentCount(); i++) {
 							resPathString += resPath.segment(i) + "/";
 						}
-						if (resPathString.length() > 0)
+						if (resPathString.length() > 0) {
 							resPathString = resPathString.substring(0, resPathString.length() - 1);
+						}
 						models.setText(resPathString);
 						modelsPath = resPathString;
 					}
@@ -203,11 +201,11 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				case SWT.Selection:
 
 					ContainerSelectionDialog dlg;
-					if (outputPath.equals(""))
+					if (outputPath.equals("")) {
 						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject, false, null);
-					else
-						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject.getFolder(new Path(
-								outputPath)), false, null);
+					} else {
+						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject.getFolder(new Path(outputPath)), false, null);
+					}
 					dlg.setValidator(validator);
 					dlg.setMessage("Select a folder");
 					dlg.open();
@@ -218,8 +216,9 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 						for (int i = 1; i < resPath.segmentCount(); i++) {
 							resPathString += resPath.segment(i) + "/";
 						}
-						if (resPathString.length() > 0)
+						if (resPathString.length() > 0) {
 							resPathString = resPathString.substring(0, resPathString.length() - 1);
+						}
 						output.setText(resPathString);
 						outputPath = resPathString;
 					}
@@ -265,11 +264,11 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				case SWT.Selection:
 
 					ContainerSelectionDialog dlg;
-					if (reqPath.equals(""))
+					if (reqPath.equals("")) {
 						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject, false, null);
-					else
-						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
-								.getFolder(new Path(reqPath)), false, null);
+					} else {
+						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject.getFolder(new Path(reqPath)), false, null);
+					}
 					dlg.setValidator(validator);
 					dlg.setMessage("Select a folder");
 					dlg.open();
@@ -280,8 +279,9 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 						for (int i = 1; i < resPath.segmentCount(); i++) {
 							resPathString += resPath.segment(i) + "/";
 						}
-						if (resPathString.length() > 0)
+						if (resPathString.length() > 0) {
 							resPathString = resPathString.substring(0, resPathString.length() - 1);
+						}
 						requirements.setText(resPathString);
 						reqPath = resPathString;
 					}
@@ -328,11 +328,12 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				case SWT.Selection:
 
 					ContainerSelectionDialog dlg;
-					if (comPath.equals(""))
+					if (comPath.equals("")) {
 						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject, false, null);
-					else
+					} else {
 						dlg = new ContainerSelectionDialog(parent.getShell(), currentProject
 								.getFolder(new Path(comPath)), false, null);
+					}
 					dlg.setValidator(validator);
 					dlg.setMessage("Select a folder");
 					dlg.open();
@@ -343,8 +344,9 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 						for (int i = 1; i < resPath.segmentCount(); i++) {
 							resPathString += resPath.segment(i) + "/";
 						}
-						if (resPathString.length() > 0)
+						if (resPathString.length() > 0) {
 							resPathString = resPathString.substring(0, resPathString.length() - 1);
+						}
 						compositions.setText(resPathString);
 						comPath = resPathString;
 					}
@@ -373,15 +375,11 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				Activator.log("Unable to set project properties.", null); //$NON-NLS-1$
 			}
 		}
-		try {
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
-
-		} catch (CoreException e) {
-			Activator.log("Unable to set project properties.", e);
-		}
+		
+		ProjectUtils.setProjectModelsPath(project, modelsPath);
+        ProjectUtils.setProjectOutputPath(project, outputPath);
+        ProjectUtils.setProjectRequirementsPath(project, reqPath);
+        ProjectUtils.setProjectCompositionsPath(project, comPath);
 
 		return super.performOk();
 	}
@@ -400,22 +398,22 @@ public class ProjectFoldersPreferencePage extends PropertyPage {
 				Activator.log("Unable to set project properties.", null); //$NON-NLS-1$
 			}
 		}
-		try {
-			modelsPath = project.getFolder("models").exists() ? "models" : "";
-			outputPath = project.getFolder("output").exists() ? "output" : "";
-			reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
-			comPath = project.getFolder("compositions").exists() ? "compositions" : "";
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
-			models.setText(modelsPath);
-			output.setText(outputPath);
-			requirements.setText(reqPath);
-			compositions.setText(comPath);
-		} catch (CoreException e) {
-			Activator.log("Unable to set project properties.", null); //$NON-NLS-1$
-		}
+	
+		modelsPath = project.getFolder("models").exists() ? "models" : "";
+		outputPath = project.getFolder("output").exists() ? "output" : "";
+		reqPath = project.getFolder("requirements").exists() ? "requirements" : "";
+		comPath = project.getFolder("compositions").exists() ? "compositions" : "";
+		
+		ProjectUtils.setProjectModelsPath(project, modelsPath);
+        ProjectUtils.setProjectOutputPath(project, outputPath);
+        ProjectUtils.setProjectRequirementsPath(project, reqPath);
+        ProjectUtils.setProjectCompositionsPath(project, comPath);
+        
+		models.setText(modelsPath);
+		output.setText(outputPath);
+		requirements.setText(reqPath);
+		compositions.setText(comPath);
+
 		super.performDefaults();
 	}
 }

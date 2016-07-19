@@ -67,19 +67,23 @@ public class ProjectResourcePropertySource extends ResourcePropertySource {
     	    try {
     	        String result = project.getPersistentProperty(new QualifiedName("",(String) id)); //$NON-NLS-1$
     	    
-    	        if (id.equals(ScaseUiConstants.PROP_PROJECT_DOMAIN)) {
-    				try {
-    					if(result == null || result.equals("-1")) //$NON-NLS-1$
-    						result = "(not set)";
-    					else{
-    						DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, Integer.parseInt(result));
-    						result = de.getParent().getName() + "/" + de.getName();
-    					}
-    					
-    				} catch (NumberFormatException e) {
-    				    Activator.log("Unable to read project domain.", e);
-    				}
-    		    } 
+    	        if(result == null) {
+                    result = "(not set)";
+                } else {
+        	        if (id.equals(ScaseUiConstants.PROP_PROJECT_DOMAIN)) {
+        				try {
+        					if(result.equals("-1")) { //$NON-NLS-1$
+        						result = "(not set)";
+        					} else {
+        						DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, Integer.parseInt(result));
+        						result = de.getParent().getName() + "/" + de.getName();
+        					}
+        					
+        				} catch (NumberFormatException e) {
+        				    Activator.log("Unable to read project domain.", e);
+        				}
+        		    } 
+                }
     	        
     	        return result;
     		} catch (CoreException e) {

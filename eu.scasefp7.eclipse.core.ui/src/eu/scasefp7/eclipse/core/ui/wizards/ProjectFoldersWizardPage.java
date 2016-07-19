@@ -9,7 +9,6 @@ import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IProgressMonitor;
 import org.eclipse.core.runtime.NullProgressMonitor;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.wizard.IWizardPage;
 import org.eclipse.jface.wizard.WizardPage;
 import org.eclipse.swt.SWT;
@@ -23,8 +22,8 @@ import org.eclipse.swt.widgets.Listener;
 import org.eclipse.swt.widgets.Text;
 import org.eclipse.ui.dialogs.ContainerSelectionDialog;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
-import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
 
 /**
@@ -284,23 +283,24 @@ public class ProjectFoldersWizardPage extends WizardPage implements IWizardPage{
 		    Activator.log("Unable to create project folders.", e);
 		}
 		
-		if(modelsPath.equals(""))
+		if(modelsPath.equals("")) {
 			modelsPath = models.getProjectRelativePath().toPortableString();
-		if(outputPath.equals(""))
-			outputPath = output.getProjectRelativePath().toPortableString();
-		if(reqPath.equals(""))
-			reqPath = requirements.getProjectRelativePath().toPortableString();
-		if(comPath.equals(""))
-			comPath = compositions.getProjectRelativePath().toPortableString();
-		
-		try {
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), modelsPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), outputPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), reqPath);
-			project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), comPath);
-		} catch (CoreException e) {
-			Activator.log("Unable to set project properties.", e);
 		}
+		if(outputPath.equals("")) {
+			outputPath = output.getProjectRelativePath().toPortableString();
+		}
+		if(reqPath.equals("")) {
+			reqPath = requirements.getProjectRelativePath().toPortableString();
+		}
+		if(comPath.equals("")) {
+			comPath = compositions.getProjectRelativePath().toPortableString();
+		}
+		
+		ProjectUtils.setProjectModelsPath(project, modelsPath);
+		ProjectUtils.setProjectOutputPath(project, outputPath);
+		ProjectUtils.setProjectRequirementsPath(project, reqPath);
+		ProjectUtils.setProjectCompositionsPath(project, comPath);
+		
 		return false;
 	}
 

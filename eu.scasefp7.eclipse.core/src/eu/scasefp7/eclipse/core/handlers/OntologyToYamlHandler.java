@@ -19,6 +19,7 @@ import org.eclipse.core.runtime.Path;
 import org.eclipse.core.runtime.QualifiedName;
 
 import eu.scasefp7.eclipse.core.Activator;
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ontology.LinkedOntologyAPI;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Operation;
 import eu.scasefp7.eclipse.core.ontologytoyamltools.Property;
@@ -176,19 +177,7 @@ public class OntologyToYamlHandler extends ProjectAwareHandler {
 	 */
 	private void writeYamlFile(IProject project, Resources resources) throws ExecutionException {
 		// Open a new YAML file in the project
-		String modelsFolderLocation = null;
-		try {
-			modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
-					"eu.scasefp7.eclipse.core.ui.modelsFolder"));
-		} catch (CoreException e) {
-			Activator.log("Error retrieving project property (models folder location)", e);
-		}
-		IContainer container = project;
-		if (modelsFolderLocation != null) {
-			IResource modelsFolder = project.findMember(new Path(modelsFolderLocation));
-			if (modelsFolder != null && modelsFolder.exists())
-				container = (IContainer) modelsFolder;
-		}
+		IContainer container = ProjectUtils.getProjectModelsFolder(project);
 		IFile file = container.getFile(new Path("service.yml"));
 		if (file.exists()) {
 			try {

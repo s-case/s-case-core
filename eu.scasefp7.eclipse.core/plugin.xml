@@ -3,7 +3,7 @@
 <plugin>
 
    <extension point="org.eclipse.ui.commands">
-      <category id="eu.scasefp7.eclipse.core.commands.category" name="Core Commands Category"/>
+      <category id="eu.scasefp7.eclipse.core.commands.category" name="S-CASE commands"/>
       <command categoryId="eu.scasefp7.eclipse.core.commands.category" id="eu.scasefp7.eclipse.core.commands.testSetup" name="Test project setup"/>
       <command
             categoryId="eu.scasefp7.eclipse.core.commands.category"
@@ -86,13 +86,16 @@
   
   <extension
         id="problemMarker"
-        name="Requirements problem"
+        name="Requirements Problem"
         point="org.eclipse.core.resources.markers">
-     <persistent
-           value="true">
-     </persistent>
-     <super
-           type="org.eclipse.core.resources.problemmarker">
-     </super>
+     <persistent value="true" />
+     <super type="org.eclipse.core.resources.problemmarker" />
+  </extension>
+  <extension
+        id="configurationMarker"
+        name="S-CASE Problem"
+        point="org.eclipse.core.resources.markers">
+     <persistent value="true" />
+     <super type="org.eclipse.core.resources.problemmarker" />
   </extension>
 </plugin>

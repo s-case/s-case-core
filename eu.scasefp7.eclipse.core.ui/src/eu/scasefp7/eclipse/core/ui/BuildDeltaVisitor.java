@@ -8,7 +8,8 @@ import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IResourceDelta;
 import org.eclipse.core.resources.IResourceDeltaVisitor;
 import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
+
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 
 /**
  * Visitor class used for checking whether a folder has been renamed or removed.
@@ -77,17 +78,13 @@ public class BuildDeltaVisitor implements IResourceDeltaVisitor {
 		IResource resource = delta.getResource();
 		if (resource instanceof IProject) {
 			IProject project = (IProject) resource;
-			if (project.isOpen() && project.hasNature("eu.scasefp7.eclipse.core.scaseNature")) {
+			if (project.isOpen() && ProjectUtils.hasNature(project)) {
 
 				// Set some variables
-				QualifiedName modelsFolder = new QualifiedName("", ScaseUiConstants.MODELS_FOLDER);
-				QualifiedName outputFolder = new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER);
-				QualifiedName requirementsFolder = new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER);
-				QualifiedName compositionsFolder = new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER);
-				String modelsPath = project.getPersistentProperty(modelsFolder);
-				String outputPath = project.getPersistentProperty(outputFolder);
-				String reqPath = project.getPersistentProperty(requirementsFolder);
-				String comPath = project.getPersistentProperty(compositionsFolder);
+				String modelsPath = ProjectUtils.getProjectModelsPath(project);
+				String outputPath = ProjectUtils.getProjectOutputPath(project);
+				String reqPath = ProjectUtils.getProjectRequirementsPath(project);
+				String comPath = ProjectUtils.getProjectCompositionsPath(project);
 
 				// Check all possible cases
 				if (delta.getKind() == IResourceDelta.ADDED) {
@@ -100,33 +97,35 @@ public class BuildDeltaVisitor implements IResourceDeltaVisitor {
 					// A child of a project has been added, removed, or renamed
 					IResourceDelta[] childrenDeltas = delta.getAffectedChildren();
 					if (childrenDeltas != null && childrenDeltas.length > 0) {
-						// Get the folder(s) that have been changed and split them according to the typoe of change
+						// Get the folder(s) that have been changed and split them according to the type of change
 						HashSet<IResource> addedFolders = new HashSet<IResource>();
 						HashSet<IResource> removedFolders = new HashSet<IResource>();
 						HashSet<IResource> changedFolders = new HashSet<IResource>();
 						for (IResourceDelta childDelta : childrenDeltas) {
 							IResource childResource = childDelta.getResource();
 							if (childResource instanceof IFolder) {
-								if (childDelta.getKind() == IResourceDelta.ADDED)
+								if (childDelta.getKind() == IResourceDelta.ADDED) {
 									addedFolders.add(childResource);
-								else if (childDelta.getKind() == IResourceDelta.REMOVED)
+								} else if (childDelta.getKind() == IResourceDelta.REMOVED) {
 									removedFolders.add(childResource);
-								else if (childDelta.getKind() == IResourceDelta.CHANGED)
+								} else if (childDelta.getKind() == IResourceDelta.CHANGED) {
 									changedFolders.add(childResource);
+								}
 							}
 						}
 						// If there are one removed folders and no added folders, then some folders have been deleted
 						if (removedFolders.size() > 0 && addedFolders.isEmpty()) {
 							for (IResource removedFolder : removedFolders) {
 								String removedFolderPath = removedFolder.getProjectRelativePath().toString();
-								if (removedFolderPath.equals(modelsPath))
-									project.setPersistentProperty(modelsFolder, "");
-								else if (removedFolderPath.equals(outputPath))
-									project.setPersistentProperty(outputFolder, "");
-								else if (removedFolderPath.equals(reqPath))
-									project.setPersistentProperty(requirementsFolder, "");
-								else if (removedFolderPath.equals(comPath))
-									project.setPersistentProperty(compositionsFolder, "");
+								if (removedFolderPath.equals(modelsPath)) {
+									ProjectUtils.setProjectModelsPath(project, "");
+								} else if (removedFolderPath.equals(outputPath)) {
+									ProjectUtils.setProjectOutputPath(project, "");
+								} else if (removedFolderPath.equals(reqPath)) {
+								    ProjectUtils.setProjectRequirementsPath(project, "");
+								} else if (removedFolderPath.equals(comPath)) {
+								    ProjectUtils.setProjectCompositionsPath(project, "");
+								}
 							}
 						}
 						// If there is exactly one removed folder and one added folder, then a folder has been renamed
@@ -135,14 +134,15 @@ public class BuildDeltaVisitor implements IResourceDeltaVisitor {
 							IResource removedFolder = removedFolders.iterator().next();
 							String removedFolderPath = removedFolder.getProjectRelativePath().toString();
 							String addedFolderPath = addedFolder.getProjectRelativePath().toString();
-							if (removedFolderPath.equals(modelsPath))
-								project.setPersistentProperty(modelsFolder, addedFolderPath);
-							else if (removedFolderPath.equals(outputPath))
-								project.setPersistentProperty(outputFolder, addedFolderPath);
-							else if (removedFolderPath.equals(reqPath))
-								project.setPersistentProperty(requirementsFolder, addedFolderPath);
-							else if (removedFolderPath.equals(comPath))
-								project.setPersistentProperty(compositionsFolder, addedFolderPath);
+							if (removedFolderPath.equals(modelsPath)) {
+							    ProjectUtils.setProjectModelsPath(project, addedFolderPath);
+							} else if (removedFolderPath.equals(outputPath)) {
+                                ProjectUtils.setProjectOutputPath(project, addedFolderPath);
+							} else if (removedFolderPath.equals(reqPath)) {
+							    ProjectUtils.setProjectRequirementsPath(project, addedFolderPath);
+							} else if (removedFolderPath.equals(comPath)) {
+							    ProjectUtils.setProjectCompositionsPath(project, addedFolderPath);
+							}
 						}
 
 						// For changed folders it means that a resource inside a folder has been added/deleted/changed

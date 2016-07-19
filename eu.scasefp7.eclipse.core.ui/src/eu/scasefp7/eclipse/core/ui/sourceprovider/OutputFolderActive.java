@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
@@ -71,21 +72,13 @@ public class OutputFolderActive extends AbstractSourceProvider implements ISelec
 		if(element != null && element instanceof IFolder) {
 			 IFolder folder = (IFolder)element;
 			 IProject project = folder.getProject();
-			 String outputPath = "";
-			try {
-				outputPath = project.getPersistentProperty(new QualifiedName("",ScaseUiConstants.OUTPUT_FOLDER));
-			} catch (CoreException e) {
-				Activator.log("Unable to read output folder path", e);
-			}
-
-			 if(folder.getFullPath().toPortableString().equals(outputPath))
-				 enabled = Boolean.FALSE;
-			 else
-				 enabled = Boolean.TRUE;
-		 }
-		else
-			enabled = Boolean.TRUE;
-		
+			 String outputPath = ProjectUtils.getProjectOutputPath(project);
+			
+			 enabled = new Boolean(!(folder.getFullPath().toPortableString().equals(outputPath)));
+		} else {
+			 enabled = Boolean.TRUE;
+		}
+			
 		fireSourceChanged(ISources.WORKBENCH, MY_STATE, enabled);
 		
 	}

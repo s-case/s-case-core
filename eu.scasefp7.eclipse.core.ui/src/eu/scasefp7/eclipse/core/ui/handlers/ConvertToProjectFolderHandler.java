@@ -14,6 +14,7 @@ import org.eclipse.jface.viewers.ISelection;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.ui.handlers.HandlerUtil;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
@@ -35,17 +36,15 @@ public class ConvertToProjectFolderHandler extends AbstractHandler {
 				IFolder folder = (IFolder) Platform.getAdapterManager().getAdapter(object, IFolder.class);
 				String path = folder.getFullPath().toPortableString();
 				IProject project = folder.getProject();
-				try {
-					if(type.equals("output"))
-						project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.OUTPUT_FOLDER), path);
-					else if(type.equals("requirements"))
-						project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.REQUIREMENTS_FOLDER), path);
-					else if(type.equals("compositions"))
-						project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.COMPOSITIONS_FOLDER), path);
-					else if(type.equals("models"))
-						project.setPersistentProperty(new QualifiedName("", ScaseUiConstants.MODELS_FOLDER), path);
-				} catch (CoreException e) {
-					Activator.log("Unable to set project folder.", e);
+				
+				if(type.equals("output")) {
+				    ProjectUtils.setProjectOutputPath(project, path);
+				} else if(type.equals("requirements")) {
+				    ProjectUtils.setProjectRequirementsPath(project, path);
+				} else if(type.equals("compositions")) {
+				    ProjectUtils.setProjectCompositionsPath(project, path);
+				} else if(type.equals("models")) {
+				    ProjectUtils.setProjectModelsPath(project, path);
 				}
 			}
 		}

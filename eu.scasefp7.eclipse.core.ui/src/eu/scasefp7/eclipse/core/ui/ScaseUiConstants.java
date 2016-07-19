@@ -86,6 +86,12 @@ public final class ScaseUiConstants {
     /** Project nature */
     public static final String PROJECT_NATURE = "eu.scasefp7.eclipse.core.scaseNature"; //$NON-NLS-1$
     
+    /** Problem marker */
+    public static final String PROBLEM_MARKER = "eu.scasefp7.eclipse.core.problemMarker"; //$NON-NLS-1$
+
+    /** Problem marker */
+    public static final String CONFIG_MARKER = "eu.scasefp7.eclipse.core.configurationMarker"; //$NON-NLS-1$
+    
     /* Links */
     /** URL for the project homepage (http://www.scasefp7.eu/). */
     public static final String PROJECT_HOMEPAGE = "http://www.scasefp7.eu/";
@@ -108,6 +114,9 @@ public final class ScaseUiConstants {
     /** Hashtag #devtherightway. */
     public static final String PROJECT_HASHTAG = "https://twitter.com/hashtag/devtherightway";
     
+    /******************************************************************/
+    /** This is also in eu.scasefp7.eclipse.core.builder.ProjectUtils */
+    
     /** Path to project folders for requirements. */
     public static final String REQUIREMENTS_FOLDER = "eu.scasefp7.eclipse.core.ui.rqsFolder"; //NON-NLS-1$
 
@@ -119,6 +128,8 @@ public final class ScaseUiConstants {
     
     /** Path to project folders for requirements. */
     public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
+    
+    /******************************************************************/
     
     // Source providers
     
