@@ -18,6 +18,7 @@ package eu.scasefp7.eclipse.core.ui.views;
 import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -137,7 +138,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     /**
      * First button is above the button with given string ID.
      */
-    private List<Entry<Control,String>> ordering = new ArrayList<Entry<Control,String>>();
+    private List<Entry<String,String>> ordering = new ArrayList<Entry<String,String>>();
     
     /**
      * The currently selected project.
@@ -197,20 +198,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         }
 		
         // Sort the contributions
-        if(!ordering.isEmpty()){
-            for(Entry<Control, String> e : ordering){
-                String id = e.getValue();
-                Control first = e.getKey();
-                Control second = null;
-                if (buttons.get(id) != null) {
-                    second = buttons.get(id);
-                } else if (groups.get(id) != null) {
-                    second = groups.get(id);
-                }
-                
-                first.moveAbove(second);
-            }
-        }
+        sortContributions();
         
         parent.addControlListener(new ControlAdapter() {
             @Override
@@ -223,6 +211,53 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         currentProject = null;
         updateContentDescription();
         updateButtons();
+	}
+
+	private void sortContributions() {
+		if (!this.ordering.isEmpty()) {
+			// Order the contributions
+			List<Entry<String, String>> ordering = new ArrayList<Entry<String, String>>(this.ordering);
+			List<String> contributions = new ArrayList<String>();
+			while (!ordering.isEmpty()) {
+				// Find the leftmost contribution
+				String leftmostContribution = null;
+				for (Entry<String, String> e : ordering) {
+					String firstId = e.getKey();
+					String secondId = e.getValue();
+					if (secondId.equals(leftmostContribution) || leftmostContribution == null)
+						leftmostContribution = firstId;
+				}
+				for (Iterator<Entry<String, String>> it = ordering.iterator(); it.hasNext();) {
+					Entry<String, String> entry = it.next();
+					if (entry.getKey().equals(leftmostContribution) || entry.getValue().equals(leftmostContribution)) {
+						it.remove();
+					}
+				}
+				contributions.add(leftmostContribution);
+			}
+
+			// Then add the contributions one at a time
+			if (contributions.size() > 0) {
+				String currentContributionId = contributions.get(0);
+				Control currentContribution = null;
+				if (buttons.get(currentContributionId) != null) {
+					currentContribution = buttons.get(currentContributionId);
+				} else if (groups.get(currentContributionId) != null) {
+					currentContribution = groups.get(currentContributionId);
+				}
+				for (int i = 1; i < contributions.size(); i++) {
+					String contributionId = contributions.get(i);
+					Control contribution = null;
+					if (buttons.get(contributionId) != null) {
+						contribution = buttons.get(contributionId);
+					} else if (groups.get(contributionId) != null) {
+						contribution = groups.get(contributionId);
+					}
+					contribution.moveBelow(currentContribution);
+					currentContribution = contribution;
+				}
+			}
+		}
 	}
 
     /**
@@ -330,7 +365,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         }
         
         if(appearsBefore!= null && !appearsBefore.isEmpty()){
-            Entry<Control, String> entry = new AbstractMap.SimpleEntry<Control, String>(group, appearsBefore);
+            Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>(groupId, appearsBefore);
             ordering.add(entry);
         }
     }
@@ -400,7 +435,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         buttons.put(buttonId, btn);
         
         if(appearsBefore!= null && !appearsBefore.isEmpty()){
-            Entry<Control, String> entry = new AbstractMap.SimpleEntry<Control, String>(btn, appearsBefore);
+            Entry<String, String> entry = new AbstractMap.SimpleEntry<String, String>(buttonId, appearsBefore);
             ordering.add(entry);
         }
     }
