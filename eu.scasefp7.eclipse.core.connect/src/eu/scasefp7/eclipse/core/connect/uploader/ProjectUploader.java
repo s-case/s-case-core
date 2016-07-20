@@ -3,6 +3,7 @@ package eu.scasefp7.eclipse.core.connect.uploader;
 import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -15,14 +16,20 @@ import javax.xml.parsers.ParserConfigurationException;
 import org.eclipse.core.resources.IFile;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.IProgressMonitor;
+import org.eclipse.core.runtime.Platform;
+import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.swt.SWT;
+import org.eclipse.swt.widgets.MessageBox;
+import org.eclipse.swt.widgets.Shell;
+import org.eclipse.ui.PlatformUI;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.xml.sax.SAXException;
 
-public class ProjectUploader {
+import com.auth0.jwt.JWTSigner;
 
-	private static final String baseURL = "http://109.231.121.125:8080/s-case/assetregistry";
+public class ProjectUploader {
 
 	public static void uploadProject(IProject project, IProgressMonitor monitor) {
 		String projectName = project.getName();
@@ -33,14 +40,15 @@ public class ProjectUploader {
 
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
+		if (client != null) {
+			// Create or update project
+			createOrUpdateProject(client, projectName);
 
-		// Create or update project
-		createOrUpdateProject(client, projectName);
-
-		// Create all files
-		for (IFile file : files) {
-			monitor.worked(1);
-			uploadFile(client, projectName, file);
+			// Create all files
+			for (IFile file : files) {
+				monitor.worked(1);
+				uploadFile(client, projectName, file);
+			}
 		}
 		monitor.done();
 	}
@@ -63,44 +71,46 @@ public class ProjectUploader {
 
 		// Initialize connection to the assets registry
 		Client client = connectToAssetsRegistry();
+		if (client != null) {
+			// Create or update project
+			createOrUpdateProject(client, projectName);
 
-		// Create or update project
-		createOrUpdateProject(client, projectName);
-
-		// Create all files
-		int i = 0;
-		for (File file : files) {
-			uploadFile(client, projectName, file);
-			printProgress("Uploading artefacts", files.size(), ++i);
+			// Create all files
+			int i = 0;
+			for (File file : files) {
+				uploadFile(client, projectName, file);
+				printProgress("Uploading artefacts", files.size(), ++i);
+			}
 		}
 	}
 
 	private static Client connectToAssetsRegistry() {
 		Client client = ClientBuilder.newClient();
-		Response response = client.target(baseURL + "/version").request().get();
-		if (response.getStatus() != 200)
-			throw new RuntimeException("Failed to get version");
-		else
-			return client;
+		Response response = makeRestRequest("GET", client, "/version");
+		if (response != null) {
+			if (response.getStatus() != 200)
+				throw new RuntimeException("Failed to get version");
+			else
+				return client;
+		}
+		return null;
 	}
 
 	private static void createOrUpdateProject(Client client, String projectName) {
 		Response response;
 		// Delete the project if it already exists
-		response = client.target(baseURL + "/project/" + projectName).request().get();
+		response = makeRestRequest("GET", client, "/project/" + projectName);
 		if (response.getStatus() == 200) {
 			// Project already exists, so delete it
 			// Note that when deleting a project, its artefacts are also deleted
-			response = client.target(baseURL + "/project/" + projectName).request().delete();
+			response = makeRestRequest("DELETE", client, "/project/" + projectName);
 		}
 
 		// Create project
 		// @formatter:off
-		String json =  "{"
-					 + "	\"name\": \"" + projectName + "\""
-					 + "}";
+		String json = "{" + "	\"name\": \"" + projectName + "\"" + "}";
 		// @formatter:on
-		response = client.target(baseURL + "/project").request().post(Entity.json(json));
+		response = makeRestRequest("POST", client, "/project", json);
 	}
 
 	private static void uploadFile(Client client, String projectName, File file) {
@@ -266,13 +276,120 @@ public class ProjectUploader {
 			// @formatter:on
 		}
 		if (json != null)
-			response = client.target(baseURL + "/artefact").request().post(Entity.json(json));
+			response = makeRestRequest("POST", client, "/artefact", json);
 		// System.out.println("Create artefact status: " + response.getStatus());
 		// System.out.println(Entity.json(json).toString());
 		// System.out.print(rqsFile.getName() + "\t" + byteArray.length() + "\t" + bytes.length + "\t");
 		// System.out.println(response.getHeaders());
 		// System.out.println(response.getMediaType());
 		// System.out.println(response.getStatusInfo());
+	}
+
+	/**
+	 * Exception class used to denote that the provided credentials are wrong.
+	 */
+	@SuppressWarnings("serial")
+	static class WrongCredentialsException extends Exception {
+		public WrongCredentialsException() {
+			super();
+		}
+
+		public WrongCredentialsException(String message) {
+			super(message);
+		}
+
+		public WrongCredentialsException(String message, Throwable cause) {
+			super(message, cause);
+		}
+
+		public WrongCredentialsException(Throwable cause) {
+			super(cause);
+		}
+	}
+
+	private static Response makeRestRequest(String type, Client client, String requestURI) {
+		return makeRestRequest(type, client, requestURI, null);
+	}
+
+	private static Response makeRestRequest(String type, Client client, String requestURI, String json) {
+		try {
+			return makeServerRequest(false, type, client, requestURI, json);
+		} catch (WrongCredentialsException e) {
+			showErrorMessage(Platform.getPreferencesService() != null);
+			return null;
+		}
+	}
+
+	private static Response makeServerRequest(boolean useControlTower, String type, Client client, String requestURI,
+			String json) throws WrongCredentialsException {
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+		if (useControlTower) {
+			String CTAddress = preferencesService != null ? preferencesService.getString("euscasefp7.eclipse.core.ui",
+					"controlTowerServiceURI", "http://app.scasefp7.com:3000/", null) : "http://app.scasefp7.com:3000/";
+			String AssetsRegistryServerAddress = CTAddress + "api/proxy/assetregistry";
+			String SCASEToken = preferencesService != null
+					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "controlTowerServiceToken", "", null)
+					: "";
+			String SCASESecret = preferencesService != null
+					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "controlTowerServiceSecret", "", null)
+					: "";
+			JWTSigner signer = new JWTSigner(SCASESecret);
+			HashMap<String, Object> claims = new HashMap<String, Object>();
+			claims.put("token", SCASEToken);
+			if (claims.get("token") == "") {
+				throw new WrongCredentialsException();
+			}
+			String signature = signer.sign(claims);
+			if (type.equals("POST"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request()
+						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).post(Entity.json(json));
+			else if (type.equals("GET"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request()
+						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).get();
+			else if (type.equals("DELETE"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request()
+						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).delete();
+			else
+				return null;
+		} else {
+			String AssetsRegistryServerAddress = preferencesService != null
+					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "assetRegistryServiceURI",
+							"http://109.231.121.125:8080/s-case/assetregistry", null)
+					: "http://109.231.121.125:8080/s-case/assetregistry";
+			if (type.equals("POST"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request().post(Entity.json(json));
+			else if (type.equals("GET"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request().get();
+			else if (type.equals("DELETE"))
+				return client.target(AssetsRegistryServerAddress + requestURI).request().delete();
+			else
+				return null;
+		}
+	}
+
+	/**
+	 * Show an error message to the user.
+	 * 
+	 * @param isEclipse boolean to select to open window in Eclipse ({@code true}) or standalone ({@code false}).
+	 */
+	private static void showErrorMessage(boolean isEclipse) {
+		if (isEclipse) {
+			PlatformUI.getWorkbench().getDisplay().asyncExec(new Runnable() {
+				public void run() {
+					Shell shell = PlatformUI.getWorkbench().getActiveWorkbenchWindow().getShell();
+					MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR);
+					dialog.setText("Authorization problem");
+					dialog.setMessage("Please provide a valid S-CASE token and a valid S-CASE secret");
+					dialog.open();
+				}
+			});
+		} else {
+			Shell shell = new Shell();
+			MessageBox dialog = new MessageBox(shell, SWT.ICON_ERROR);
+			dialog.setText("Authorization problem");
+			dialog.setMessage("Please provide a valid S-CASE token and a valid S-CASE secret");
+			dialog.open();
+		}
 	}
 
 	public static void main(String[] args) {

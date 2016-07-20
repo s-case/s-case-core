@@ -16,4 +16,5 @@ Require-Bundle: org.eclipse.ui,
  org.glassfish.hk2.locator;bundle-version="2.4.0",
  org.glassfish.jersey.bundles.repackaged.jersey-guava;bundle-version="2.22.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
-Import-Package: com.hp.hpl.jena.sparql.pfunction.library
+Import-Package: com.auth0.jwt,
+ com.hp.hpl.jena.sparql.pfunction.library
