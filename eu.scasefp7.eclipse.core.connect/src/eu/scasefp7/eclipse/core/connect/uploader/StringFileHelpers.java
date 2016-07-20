@@ -37,14 +37,15 @@ public class StringFileHelpers {
 	}
 
 	public static String convertStringToBytes(String text) {
-		String byteArray = "";
+		StringBuilder byteArrayBuilder = new StringBuilder();
 		byte[] bytes = text.getBytes(Charset.forName("UTF-8"));
+		String delim = "";
 		for (byte b : bytes) {
-			byteArray += b;
-			byteArray += ",";
+			byteArrayBuilder.append(delim);
+			delim = ",";
+			byteArrayBuilder.append(b);
 		}
-		byteArray = byteArray.length() > 0 ? byteArray.substring(0, byteArray.length() - 1) : "";
-		return byteArray;
+		return byteArrayBuilder.toString();
 	}
 
 }
