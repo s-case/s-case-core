@@ -16,6 +16,11 @@ import org.eclipse.ui.handlers.HandlerUtil;
 import eu.scasefp7.eclipse.core.connect.uploader.ProjectAwareHandler;
 import eu.scasefp7.eclipse.core.connect.uploader.ProjectUploader;
 
+/**
+ * A command handler for uploading a project to the assets registry.
+ * 
+ * @author themis
+ */
 public class UploadProject extends ProjectAwareHandler {
 
 	@Override
@@ -35,7 +40,6 @@ public class UploadProject extends ProjectAwareHandler {
 			};
 			job.setUser(true);
 			job.schedule();
-
 		}
 		return null;
 	}

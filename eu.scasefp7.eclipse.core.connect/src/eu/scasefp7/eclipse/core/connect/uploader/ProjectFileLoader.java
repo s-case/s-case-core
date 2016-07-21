@@ -13,12 +13,26 @@ import org.eclipse.core.runtime.QualifiedName;
 
 import eu.scasefp7.eclipse.core.connect.Activator;
 
+/**
+ * Contains functions for retrieving the files of a project.
+ * 
+ * @author themis
+ */
 public class ProjectFileLoader {
 
+	/**
+	 * Returns one of the folders of an S-CASE project.
+	 * 
+	 * @param project the S-CASE project of which the folders are returned.
+	 * @param folderId the id of the folder to be returned, one of {@code rqsFolder}, {@code compFolder},
+	 *            {@code modelsFolder}, and {@code outputFolder}.
+	 * @return the folder of the project of which the id is given.
+	 */
 	private static IContainer getProjectFolder(IProject project, String folderId) {
 		String folderLocation = null;
 		try {
-			folderLocation = project.getPersistentProperty(new QualifiedName("", folderId));
+			folderLocation = project
+					.getPersistentProperty(new QualifiedName("", "eu.scasefp7.eclipse.core.ui." + folderId));
 		} catch (CoreException e) {
 			Activator.log("Error retrieving project property (folder location)", e);
 		}
@@ -66,23 +80,30 @@ public class ProjectFileLoader {
 			ArrayList<IFile> files = new ArrayList<IFile>();
 			IContainer container = null;
 			if (extension.equals("rqs") || extension.equals("sbd") || extension.equals("uml"))
-				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.rqsFolder");
+				container = getProjectFolder(project, "rqsFolder");
 			else if (extension.equals("scd") || extension.equals("sc") || extension.equals("cservice"))
-				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.compFolder");
+				container = getProjectFolder(project, "compFolder");
 			else if (extension.equals("owl") || extension.equals("yaml"))
-				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.modelsFolder");
+				container = getProjectFolder(project, "modelsFolder");
 			else if (extension.equals("xmi"))
-				container = getProjectFolder(project, "eu.scasefp7.eclipse.core.ui.outputFolder");
+				container = getProjectFolder(project, "outputFolder");
 			processContainer(container, files, extension);
 			allfiles.addAll(files);
 		}
 		return allfiles;
 	}
 
-	private static void processContainer(File container, ArrayList<File> files, String extension) {
-		for (File member : container.listFiles()) {
+	/**
+	 * Finds the files of a folder recursively.
+	 * 
+	 * @param folder a folder instance.
+	 * @param files a list of files that is populated.
+	 * @param extension the extension of the files that are to be retrieved.
+	 */
+	private static void processFolder(File folder, ArrayList<File> files, String extension) {
+		for (File member : folder.listFiles()) {
 			if (member.isDirectory()) {
-				processContainer(member, files, extension);
+				processFolder(member, files, extension);
 			} else {
 				if (extension.equals("") || member.getName().endsWith("." + extension))
 					files.add(member);
@@ -90,11 +111,18 @@ public class ProjectFileLoader {
 		}
 	}
 
+	/**
+	 * Returns the files of the given project folder.
+	 * 
+	 * @param projectFolder the folder of the project of which the files are returned.
+	 * @param extensions the extensions of the returned files.
+	 * @return a list of the files of the project with the given extension.
+	 */
 	public static ArrayList<File> getFilesOfProject(String projectFolder, String... extensions) {
 		ArrayList<File> allfiles = new ArrayList<File>();
 		for (String extension : extensions) {
 			ArrayList<File> files = new ArrayList<File>();
-			processContainer(new File(projectFolder), files, extension);
+			processFolder(new File(projectFolder), files, extension);
 			allfiles.addAll(files);
 		}
 		return allfiles;
