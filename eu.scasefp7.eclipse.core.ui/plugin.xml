@@ -548,15 +548,30 @@
       <menuContribution
            allPopups="false"
            locationURI="toolbar:org.eclipse.ui.main.toolbar">
-        <toolbar
+    	<toolbar
               id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
-              label="S-CASE project website">
+              label="S-CASE Control Tower">
            <command
                  commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
                  icon="icons/view16/s-case_16.png"
-                 label="S-CASE project website"
+                 label="S-CASE Control Tower"
                  style="push"
-                 tooltip="S-CASE tools website">
+                 tooltip="S-CASE Control Tower and Question-answering application">
+              <parameter
+                    name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
+                    value="http://app.scasefp7.com:3000/">
+              </parameter>
+           </command>
+        </toolbar>
+        <toolbar
+              id="eu.scasefp7.eclipse.core.ui.LinksToolbar"
+              label="S-CASE tools website">
+           <command
+                 commandId="eu.scasefp7.eclipse.core.ui.commands.openBrowser"
+                 icon="icons/view16/s-case_16.png"
+                 label="S-CASE tools website"
+                 style="push"
+                 tooltip="Find out more about S-CASE tools, check the documentation and ask for help">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
                     value="http://s-case.github.io/">
@@ -571,7 +586,7 @@
                  icon="icons/view16/s-case_16.png"
                  label="S-CASE project website"
                  style="push"
-                 tooltip="S-CASE project website">
+                 tooltip="Find out more about the S-CASE project">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
                     value="http://www.scasefp7.eu/">
@@ -586,7 +601,7 @@
                  icon="icons/obj16/GitHub-Mark-16px.png"
                  label="S-CASE Github"
                  style="push"
-                 tooltip="S-CASE Github">
+                 tooltip="Check out the source code for S-CASE modules">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
                     value="https://github.com/s-case">
