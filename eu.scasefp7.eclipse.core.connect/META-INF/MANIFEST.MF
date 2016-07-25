@@ -17,4 +17,5 @@ Require-Bundle: org.eclipse.ui,
  org.glassfish.jersey.bundles.repackaged.jersey-guava;bundle-version="2.22.2"
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Import-Package: com.auth0.jwt,
- com.hp.hpl.jena.sparql.pfunction.library
+ com.hp.hpl.jena.sparql.pfunction.library,
+ org.eclipse.equinox.security.storage;version="1.0.0"

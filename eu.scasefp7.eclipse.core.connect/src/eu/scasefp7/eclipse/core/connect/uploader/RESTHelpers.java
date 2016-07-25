@@ -8,12 +8,17 @@ import javax.ws.rs.core.Response;
 
 import org.eclipse.core.runtime.Platform;
 import org.eclipse.core.runtime.preferences.IPreferencesService;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.equinox.security.storage.SecurePreferencesFactory;
+import org.eclipse.equinox.security.storage.StorageException;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.widgets.MessageBox;
 import org.eclipse.swt.widgets.Shell;
 import org.eclipse.ui.PlatformUI;
 
 import com.auth0.jwt.JWTSigner;
+
+import eu.scasefp7.eclipse.core.connect.Activator;
 
 /**
  * Class that contains helper functions for issuing REST requests.
@@ -55,9 +60,12 @@ public class RESTHelpers {
 	 */
 	public static Response makeRestRequest(String type, Client client, String requestURI, String json) {
 		try {
-			return makeServerRequest(false, type, client, requestURI, json);
+			return makeServerRequest(true, type, client, requestURI, json);
 		} catch (WrongCredentialsException e) {
 			showErrorMessage(Platform.getPreferencesService() != null);
+			return null;
+		} catch (StorageException e) {
+			Activator.log("There is a problem with the secure storage", e);
 			return null;
 		}
 	}
@@ -72,20 +80,21 @@ public class RESTHelpers {
 	 * @param json the JSON request body to be sent.
 	 * @return the response of the request.
 	 * @throws WrongCredentialsException if the credentials are not correct.
+	 * @throws StorageException if there is a problem with the way the credentials are stored.
 	 */
 	private static Response makeServerRequest(boolean useControlTower, String type, Client client, String requestURI,
-			String json) throws WrongCredentialsException {
-		IPreferencesService preferencesService = Platform.getPreferencesService();
+			String json) throws WrongCredentialsException, StorageException {
 		if (useControlTower) {
-			String CTAddress = preferencesService != null ? preferencesService.getString("eu.scasefp7.eclipse.core.ui",
-					"controlTowerServiceURI", "http://app.scasefp7.com:3000/", null) : "http://app.scasefp7.com:3000/";
+			ISecurePreferences securePreferencesService = SecurePreferencesFactory.getDefault()
+					.node("eu.scasefp7.eclipse.core.ui");
+			String CTAddress = securePreferencesService != null
+					? securePreferencesService.get("controlTowerServiceURI", "http://app.scasefp7.com:3000/")
+					: "http://app.scasefp7.com:3000/";
 			String AssetsRegistryServerAddress = CTAddress + "api/proxy/assetregistry";
-			String SCASEToken = preferencesService != null
-					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "controlTowerServiceToken", "", null)
-					: "";
-			String SCASESecret = preferencesService != null
-					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "controlTowerServiceSecret", "", null)
-					: "";
+			String SCASEToken = securePreferencesService != null
+					? securePreferencesService.get("controlTowerServiceToken", "") : "";
+			String SCASESecret = securePreferencesService != null
+					? securePreferencesService.get("controlTowerServiceSecret", "") : "";
 			JWTSigner signer = new JWTSigner(SCASESecret);
 			HashMap<String, Object> claims = new HashMap<String, Object>();
 			claims.put("token", SCASEToken);
@@ -105,6 +114,7 @@ public class RESTHelpers {
 			else
 				return null;
 		} else {
+			IPreferencesService preferencesService = Platform.getPreferencesService();
 			String AssetsRegistryServerAddress = preferencesService != null
 					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "assetRegistryServiceURI",
 							"http://109.231.121.125:8080/s-case/assetregistry", null)
