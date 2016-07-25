@@ -17,6 +17,9 @@ import eu.scasefp7.eclipse.core.ui.Activator;
 public class SecurePreferenceStore extends ScopedPreferenceStore {
 
     private static final ISecurePreferences SECURE_PREFERENCES = SecurePreferencesFactory.getDefault();
+    
+    protected ISecurePreferences preferences = null;
+
 
 	/**
 	 * Constructs the preference store focusing on the given context.
@@ -28,12 +31,15 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	 */
 	public SecurePreferenceStore(IScopeContext context, String qualifier) {
 		super(context, qualifier);
+		
+		// Open a qualified node
+		this.preferences = SECURE_PREFERENCES.node(qualifier);
 	}
 
 	@Override
 	public void setValue(String name, boolean value) {
 		try {
-			SECURE_PREFERENCES.putBoolean(name, value, true);
+			preferences.putBoolean(name, value, true);
 		} catch (StorageException e) {
 			Activator.log("Unable to store boolean preference.", e);
 		}
@@ -42,7 +48,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	@Override
 	public void setValue(String name, double value) {
 		try {
-			SECURE_PREFERENCES.putDouble(name, value, true);
+			preferences.putDouble(name, value, true);
 		} catch (StorageException e) {
 		    Activator.log("Unable to store double preference.", e);
 		}
@@ -51,7 +57,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	@Override
 	public void setValue(String name, float value) {
 		try {
-			SECURE_PREFERENCES.putFloat(name, value, true);
+			preferences.putFloat(name, value, true);
 		} catch (StorageException e) {
 		    Activator.log("Unable to store float preference.", e);
 		}
@@ -60,7 +66,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	@Override
 	public void setValue(String name, int value) {
 		try {
-			SECURE_PREFERENCES.putInt(name, value, true);
+			preferences.putInt(name, value, true);
 		} catch (StorageException e) {
 		    Activator.log("Unable to store int preference.", e);
 		}
@@ -69,7 +75,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	@Override
 	public void setValue(String name, long value) {
 		try {
-			SECURE_PREFERENCES.putLong(name, value, true);
+			preferences.putLong(name, value, true);
 		} catch (StorageException e) {
 		    Activator.log("Unable to store long preference.", e);
 		}
@@ -78,7 +84,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	@Override
 	public void setValue(String name, String value) {
 		try {
-			SECURE_PREFERENCES.put(name, value, true);
+			preferences.put(name, value, true);
 		} catch (StorageException e) {
 		    Activator.log("Unable to store string preference.", e);
 		}
@@ -88,7 +94,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public boolean getBoolean(String name) {
 		Boolean result = getDefaultBoolean(name);
 		try {
-			result = SECURE_PREFERENCES.getBoolean(name, result);
+			result = preferences.getBoolean(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load boolean preference.", e);
 		}
@@ -99,7 +105,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public double getDouble(String name) {
 		Double result = getDefaultDouble(name);
 		try {
-			result = SECURE_PREFERENCES.getDouble(name, result);
+			result = preferences.getDouble(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load double preference.", e);
 		}
@@ -110,7 +116,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public float getFloat(String name) {
 		Float result = getDefaultFloat(name);
 		try {
-			result = SECURE_PREFERENCES.getFloat(name, result);
+			result = preferences.getFloat(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load float preference.", e);
 		}
@@ -121,7 +127,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public int getInt(String name) {
 		int result = getDefaultInt(name);
 		try {
-			result = SECURE_PREFERENCES.getInt(name, result);
+			result = preferences.getInt(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load int preference.", e);
 		}
@@ -132,7 +138,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public long getLong(String name) {
 		Long result = getDefaultLong(name);
 		try {
-			result = SECURE_PREFERENCES.getLong(name, result);
+			result = preferences.getLong(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load long preference.", e);
 		}
@@ -143,7 +149,7 @@ public class SecurePreferenceStore extends ScopedPreferenceStore {
 	public String getString(String name) {
 		String result = getDefaultString(name);
 		try {
-			result = SECURE_PREFERENCES.get(name, result);
+			result = preferences.get(name, result);
 		} catch (StorageException e) {
 		    Activator.log("Unable to load string preference.", e);
 		}

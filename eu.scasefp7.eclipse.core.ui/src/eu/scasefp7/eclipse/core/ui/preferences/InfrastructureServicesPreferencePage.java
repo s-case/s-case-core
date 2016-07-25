@@ -30,24 +30,6 @@ public class InfrastructureServicesPreferencePage extends FieldEditorOverlayPage
 	 * restore itself.
 	 */
 	public void createFieldEditors() {
-        addField(new StringFieldEditor(PreferenceConstants.P_CONTROLTOWER_ENDPOINT,
-                "Control Tower &URI:", getFieldEditorParent()));
-        addField(new StringFieldEditor(PreferenceConstants.P_CONTROLTOWER_TOKEN, "Control Tower &Token:",
-				getFieldEditorParent()) {
-			@Override
-			protected void doFillIntoGrid(Composite parent, int numColumns) {
-				super.doFillIntoGrid(parent, numColumns);
-				getTextControl().setEchoChar('*');
-			}
-		});
-        addField(new StringFieldEditor(PreferenceConstants.P_CONTROLTOWER_SECRET, "Control Tower &Secret:",
-				getFieldEditorParent()) {
-			@Override
-			protected void doFillIntoGrid(Composite parent, int numColumns) {
-				super.doFillIntoGrid(parent, numColumns);
-				getTextControl().setEchoChar('*');
-			}
-		});
 		addField(new StringFieldEditor(PreferenceConstants.P_NLP_ENDPOINT,
 		        "NLP service &URI:", getFieldEditorParent()));
         addField(new StringFieldEditor(PreferenceConstants.P_UML_ENDPOINT,
@@ -73,5 +55,10 @@ public class InfrastructureServicesPreferencePage extends FieldEditorOverlayPage
     @Override
     protected String getPageId() {
         return PAGE_ID;
+    }
+
+    @Override
+    protected String getPreferenceQualifier() {
+        return Activator.PLUGIN_ID;
     }
 }

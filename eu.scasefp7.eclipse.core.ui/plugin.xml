@@ -165,6 +165,12 @@
            id="eu.scasefp7.eclipse.core.ui.preferencePages.InfrastructureServicesPreferencePage"
            name="%infrastructureServices.page">
      </page>
+     <page
+           category="eu.scasefp7.eclipse.core.ui.preferences.global"
+           class="eu.scasefp7.eclipse.core.ui.preferences.ControlTowerAccessPreferencePage"
+           id="eu.scasefp7.eclipse.core.ui.preferencePages.ControlTowerAccessPreferencePage"
+           name="%controlTowerAccess.page">
+     </page>
   </extension>
   
   <!-- Dashboard commands -->

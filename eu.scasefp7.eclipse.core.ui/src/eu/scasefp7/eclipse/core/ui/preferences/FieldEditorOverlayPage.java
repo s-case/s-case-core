@@ -107,6 +107,14 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
     protected abstract String getPageId();
 
     /**
+     * Returns the id of the preference qualifier used to store JFace preferences.
+     * Subclasses must implement.
+     * 
+     * @return - the qualifier
+     */
+    protected abstract String getPreferenceQualifier();
+    
+    /**
      * Receives the object that owns the properties shown in this property page.
      * 
      * @see org.eclipse.ui.IWorkbenchPropertyPage#setElement(org.eclipse.core.runtime.IAdaptable)
@@ -173,7 +181,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
             if(project != null)
             {
                 ProjectScope ps = new ProjectScope(getProject());
-                ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, Activator.PLUGIN_ID);
+                ScopedPreferenceStore scoped = new ScopedPreferenceStore(ps, getPreferenceQualifier());
                 scoped.setSearchContexts(new IScopeContext[] { ps, InstanceScope.INSTANCE });
                 overlayStore = scoped;
                 // Set overlay store as current preference store
@@ -350,7 +358,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
             // and show it
             showPreferencePage(pageId, page);
         } catch (InstantiationException | IllegalAccessException e) {
-            Activator.log("Unable to show preference page.", e);
+            Activator.log("Unable to show the preference page.", e);
         }
     }
 

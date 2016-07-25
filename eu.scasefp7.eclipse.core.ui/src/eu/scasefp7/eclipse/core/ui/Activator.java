@@ -14,12 +14,19 @@ import org.eclipse.core.resources.IWorkspace;
 import org.eclipse.core.resources.ResourcesPlugin;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Status;
+import org.eclipse.core.runtime.preferences.ConfigurationScope;
+import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.equinox.security.storage.ISecurePreferences;
+import org.eclipse.jface.preference.IPreferenceStore;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.osgi.service.debug.DebugOptions;
 import org.eclipse.osgi.service.debug.DebugOptionsListener;
 import org.eclipse.osgi.service.debug.DebugTrace;
 import org.eclipse.ui.plugin.AbstractUIPlugin;
+import org.eclipse.ui.preferences.ScopedPreferenceStore;
 import org.osgi.framework.BundleContext;
+
+import eu.scasefp7.eclipse.core.ui.preferences.SecurePreferenceStore;
 
 /**
  * The activator class controls the plug-in life cycle
@@ -49,6 +56,9 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
 
     /** A resource change listener for project folders. */
     private IResourceChangeListener resourceChangeListener;
+
+    /** Secure preference store for the plugin. */
+    private IPreferenceStore securePreferenceStore = null;
 
     /**
      * The constructor.
@@ -193,5 +203,22 @@ public class Activator extends AbstractUIPlugin implements DebugOptionsListener 
     public void optionsChanged(DebugOptions options) {
         DEBUG = options.getBooleanOption(PLUGIN_ID + "/debug", false);
         TRACE = options.newDebugTrace(PLUGIN_ID);
+    }
+
+    /**
+     * Returns the secure preference store for this UI plug-in.
+     * This preference store is used to hold persistent settings for this plug-in in
+     * the context of a workbench. Some of these settings will be user controlled, 
+     * whereas others may be internal setting that are never exposed to the user.
+     *
+     * @return the secure preference store
+     * @see AbstractUIPlugin#getPreferenceStore() 
+     */
+    public IPreferenceStore getSecurePreferenceStore() {
+        if (securePreferenceStore == null) {
+            securePreferenceStore = new SecurePreferenceStore(ConfigurationScope.INSTANCE, getBundle().getSymbolicName());
+        }
+        
+        return securePreferenceStore;
     }
 }
