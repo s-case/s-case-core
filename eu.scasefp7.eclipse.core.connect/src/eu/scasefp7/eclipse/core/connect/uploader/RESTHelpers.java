@@ -77,7 +77,7 @@ public class RESTHelpers {
 			String json) throws WrongCredentialsException {
 		IPreferencesService preferencesService = Platform.getPreferencesService();
 		if (useControlTower) {
-			String CTAddress = preferencesService != null ? preferencesService.getString("euscasefp7.eclipse.core.ui",
+			String CTAddress = preferencesService != null ? preferencesService.getString("eu.scasefp7.eclipse.core.ui",
 					"controlTowerServiceURI", "http://app.scasefp7.com:3000/", null) : "http://app.scasefp7.com:3000/";
 			String AssetsRegistryServerAddress = CTAddress + "api/proxy/assetregistry";
 			String SCASEToken = preferencesService != null
