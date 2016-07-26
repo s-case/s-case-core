@@ -65,22 +65,20 @@ public class OutputFolderActive extends AbstractSourceProvider implements ISelec
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if(!(selection instanceof TreeSelection))
-			return;
-		TreeSelection treeSelection = (TreeSelection)selection;
-		Object element = treeSelection.getFirstElement();
-		if(element != null && element instanceof IFolder) {
-			 IFolder folder = (IFolder)element;
-			 IProject project = folder.getProject();
-			 String outputPath = ProjectUtils.getProjectOutputPath(project);
-			
-			 enabled = new Boolean(!(folder.getFullPath().toPortableString().equals(outputPath)));
-		} else {
-			 enabled = Boolean.TRUE;
+		if(selection instanceof TreeSelection) {
+		    TreeSelection treeSelection = (TreeSelection)selection;
+    		Object element = treeSelection.getFirstElement();
+    		if(element != null && element instanceof IFolder) {
+    		    IFolder folder = (IFolder)element;
+    		    IProject project = folder.getProject();
+    		    String outputPath = ProjectUtils.getProjectOutputPath(project);
+    			
+    			enabled = new Boolean(!(folder.getFullPath().toPortableString().equals(outputPath)));
+    		} else {
+    			 enabled = Boolean.TRUE;
+    		}
+    		fireSourceChanged(ISources.WORKBENCH, MY_STATE, enabled);
 		}
-			
-		fireSourceChanged(ISources.WORKBENCH, MY_STATE, enabled);
-		
 	}
 
 	@Override

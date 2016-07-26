@@ -1,10 +1,8 @@
 package eu.scasefp7.eclipse.core.ui.preferences;
 
-import org.eclipse.core.resources.IResource;
 import org.eclipse.core.resources.IProject;
+import org.eclipse.core.resources.IResource;
 import org.eclipse.core.runtime.Assert;
-import org.eclipse.core.runtime.CoreException;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.preference.PreferencePage;
 import org.eclipse.jface.resource.ImageDescriptor;
 import org.eclipse.jface.viewers.ISelection;
@@ -27,7 +25,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.dialogs.PropertyPage;
 
-import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
 
@@ -37,7 +35,6 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
  */
 public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements IWizardPage {
 
-	private static final String DOMAIN_PROPERTY = ScaseUiConstants.PROP_PROJECT_DOMAIN;
 	private static final int DOMAIN_DEFAULT = -1;
 	
 	private Label domainLabel;
@@ -156,20 +153,12 @@ public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements 
 	 */
 	private int loadProperties() {
 		// Populate domain label
-	    if (getElement() == null)
+	    if (getElement() == null) {
 	        return DOMAIN_DEFAULT;
+	    }
 	    
-		try {
-			IResource project = ((IProject) getElement().getAdapter(IResource.class));
-			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
-			if(domain != null) {
-				return Integer.parseInt(domain);
-			}
-		} catch (CoreException | NumberFormatException e) {
-			return DOMAIN_DEFAULT;
-		}
-		
-		return DOMAIN_DEFAULT;
+		IProject project = ((IProject) getElement().getAdapter(IResource.class));
+		return ProjectUtils.getProjectDomain(project);
 	}
 
 	protected void selectSavedItem()
@@ -215,9 +204,9 @@ public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements 
 	
 	private void createDomainLabel(Composite parent, Object data) {
 		cmpLabels = new Composite(parent, SWT.NONE);
-		GridLayout gl_cmpLabels = new GridLayout(2, false);
-		gl_cmpLabels.marginWidth = 0;
-		cmpLabels.setLayout(gl_cmpLabels);
+		GridLayout glCmpLabels = new GridLayout(2, false);
+		glCmpLabels.marginWidth = 0;
+		cmpLabels.setLayout(glCmpLabels);
 		cmpLabels.setLayoutData(new GridData(SWT.FILL, SWT.FILL, true, false, 1, 1));
 		
 		// Add label
@@ -235,10 +224,10 @@ public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements 
 	 */
 	protected Control createContents(Composite parent) {
 		composite = new Composite(parent, SWT.NONE);
-		GridLayout gl_composite = new GridLayout();
-		gl_composite.marginWidth = 0;
-		gl_composite.marginHeight = 0;
-		composite.setLayout(gl_composite);
+		GridLayout glComposite = new GridLayout();
+		glComposite.marginWidth = 0;
+		glComposite.marginHeight = 0;
+		composite.setLayout(glComposite);
 		GridData data = new GridData(GridData.FILL);
 		data.grabExcessHorizontalSpace = true;
 		composite.setLayoutData(data);
@@ -305,15 +294,10 @@ public class ProjectDomainPropertyAndWizardPage extends PropertyPage implements 
 	}
 	
 	public boolean performOk() {
-		// Store the value in properties
-		try {
-			DomainEntry de = (DomainEntry) domainLabel.getData();
-			if(de != null) {
-				((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
-			}
-		} catch (CoreException e) {
-			return false;
-		}
+		DomainEntry de = (DomainEntry) domainLabel.getData();
+        if(de != null) {
+            ProjectUtils.setProjectDomain((IProject) getElement(), de.getId());
+        }
 		return true;
 	}
 

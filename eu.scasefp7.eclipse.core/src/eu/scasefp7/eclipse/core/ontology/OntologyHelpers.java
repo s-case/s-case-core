@@ -2,12 +2,9 @@ package eu.scasefp7.eclipse.core.ontology;
 
 import org.eclipse.core.resources.IContainer;
 import org.eclipse.core.resources.IProject;
-import org.eclipse.core.resources.IResource;
-import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.Path;
-import org.eclipse.core.runtime.QualifiedName;
 
-import eu.scasefp7.eclipse.core.Activator;
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 
 /**
@@ -30,19 +27,7 @@ public class OntologyHelpers {
 	 * @return {@code true} if the ontology exists, or {@code false} otherwise.
 	 */
 	private static boolean projectHasOntology(IProject project, String ontologyFilename) {
-		String modelsFolderLocation = null;
-		try {
-			modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
-					"eu.scasefp7.eclipse.core.ui.modelsFolder"));
-		} catch (CoreException e) {
-			Activator.log("Error retrieving project property (models folder location)", e);
-		}
-		IContainer container = project;
-		if (modelsFolderLocation != null) {
-		    IResource modelsFolder = project.findMember(new Path(modelsFolderLocation)); 
-			if (modelsFolder != null && modelsFolder.exists())
-				container = (IContainer) modelsFolder;
-		}
+		IContainer container = ProjectUtils.getProjectModelsFolder(project);
 		return container.getFile(new Path(ontologyFilename)).exists();
 	}
 

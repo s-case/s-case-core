@@ -78,6 +78,7 @@ import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
@@ -672,23 +673,27 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private void updateContentDescription() {
 		if (currentProject != null) {
 			if (isSCASEProject(currentProject)) {
-				DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, getProjectDomainId(currentProject));
+				DomainEntry de = findDomainById(IProjectDomains.PROJECT_DOMAINS, ProjectUtils.getProjectDomain(currentProject));
 				setContentDescription("Active project: " + currentProject.getName() + " ("
 						+ (de == null ? "domain unset" : de.getName()) + ")");
-			} else
+			} else {
 				setContentDescription("Active project: " + currentProject.getName() + " (non-S-CASE project)");
-		} else
+			}
+		} else {
 			setContentDescription("Please select a project");
+		}
     }
 
     private void updateButtons() {
 		if (buttons != null) {
 			if (currentProject != null && currentProject.exists() && isSCASEProject(currentProject)) {
-				for (Button button : buttons.values())
+				for (Button button : buttons.values()) {
 					button.setEnabled(true);
+				}
 			} else {
-				for (Button button : buttons.values())
+				for (Button button : buttons.values()) {
 					button.setEnabled(false);
+				}
 			}
 		}
     }
@@ -707,18 +712,6 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
             }
         }
         return null;
-    }
-    
-    private static int getProjectDomainId(IProject project) {
-        try {
-            String domain = project.getPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN));
-            if(domain != null) {
-                return Integer.parseInt(domain);
-            }
-        } catch (CoreException | NumberFormatException e) {
-            Activator.log("Unable to load project domain", e);
-        }
-        return ScaseUiConstants.PROP_PROJECT_DOMAIN_DEFAULT;
     }
     
     @Override

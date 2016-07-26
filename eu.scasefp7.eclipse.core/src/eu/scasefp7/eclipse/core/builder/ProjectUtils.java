@@ -33,6 +33,12 @@ public class ProjectUtils
     /** Path to project folders for requirements. */
     public static final String OUTPUT_FOLDER = "eu.scasefp7.eclipse.core.ui.outputFolder"; //$NON-NLS-1$
     
+    /** Project domain. */
+    public static final String PROJECT_DOMAIN = "eu.scasefp7.eclipse.core.projectDomain"; //$NON-NLS-1$
+    
+    /** Default project domain (unset). */
+    public static final int PROJECT_DOMAIN_DEFAULT = -1;
+    
     /**
 	 * Returns the project that the selected resource(s) belong to.
 	 * 
@@ -119,7 +125,7 @@ public class ProjectUtils
         try {
             project.setPersistentProperty(new QualifiedName("", MODELS_FOLDER), path);
         } catch (CoreException e) {
-            Activator.log("Unable to set project properties.", e);
+            Activator.log("Unable to set project property.", e);
         }
     }
     
@@ -134,7 +140,7 @@ public class ProjectUtils
         try {
             path = project.getPersistentProperty(new QualifiedName("", MODELS_FOLDER));
         } catch (CoreException e) {
-            Activator.log("Error retrieving project property", e);
+            Activator.log("Error retrieving project property.", e);
         }
         return path;
     }
@@ -150,8 +156,9 @@ public class ProjectUtils
         IContainer container = project;
         if (path != null) {
             IResource folder = project.findMember(new Path(path));
-            if (folder != null && folder.exists())
+            if (folder != null && folder.exists()) {
                 container = (IContainer) folder;
+            }
         }
         return container;
     }
@@ -181,7 +188,7 @@ public class ProjectUtils
         try {
             path = project.getPersistentProperty(new QualifiedName("", REQUIREMENTS_FOLDER));
         } catch (CoreException e) {
-            Activator.log("Error retrieving project property", e);
+            Activator.log("Error retrieving project property.", e);
         }
         return path;
     }
@@ -197,8 +204,9 @@ public class ProjectUtils
         IContainer container = project;
         if (path != null) {
             IResource folder = project.findMember(new Path(path));
-            if (folder != null && folder.exists())
+            if (folder != null && folder.exists()) {
                 container = (IContainer) folder;
+            }
         }
         return container;
     }
@@ -213,7 +221,7 @@ public class ProjectUtils
         try {
             project.setPersistentProperty(new QualifiedName("", COMPOSITIONS_FOLDER), path);
         } catch (CoreException e) {
-            Activator.log("Unable to set project properties.", e);
+            Activator.log("Unable to set project property.", e);
         }
     }
     
@@ -228,9 +236,27 @@ public class ProjectUtils
         try {
             path = project.getPersistentProperty(new QualifiedName("", COMPOSITIONS_FOLDER));
         } catch (CoreException e) {
-            Activator.log("Error retrieving project property", e);
+            Activator.log("Error retrieving project property.", e);
         }
         return path;
+    }
+    
+    /**
+     * Gets the project compositions folder.
+     * 
+     * @param project
+     * @return compositions folder
+     */
+    public static IContainer getProjectCompositionsFolder(IProject project) {
+        String path = getProjectCompositionsPath(project);
+        IContainer container = project;
+        if (path != null) {
+            IResource folder = project.findMember(new Path(path));
+            if (folder != null && folder.exists()) {
+                container = (IContainer) folder;
+            }
+        }
+        return container;
     }
     
     /**
@@ -243,7 +269,7 @@ public class ProjectUtils
         try {
             project.setPersistentProperty(new QualifiedName("", OUTPUT_FOLDER), path);
         } catch (CoreException e) {
-            Activator.log("Unable to set project properties.", e);
+            Activator.log("Unable to set project property.", e);
         }
     }
     
@@ -258,9 +284,61 @@ public class ProjectUtils
         try {
             path = project.getPersistentProperty(new QualifiedName("", OUTPUT_FOLDER));
         } catch (CoreException e) {
-            Activator.log("Error retrieving project property", e);
+            Activator.log("Error retrieving project property.", e);
         }
         return path;
+    }
+    
+    /**
+     * Gets the project output folder.
+     * 
+     * @param project
+     * @return output folder
+     */
+    public static IContainer getProjectOutputFolder(IProject project) {
+        String path = getProjectOutputPath(project);
+        IContainer container = project;
+        if (path != null) {
+            IResource folder = project.findMember(new Path(path));
+            if (folder != null && folder.exists()) {
+                container = (IContainer) folder;
+            }
+        }
+        return container;
+    }
+    
+    /**
+     * Gets the project domain.
+     * 
+     * @param project
+     * @return domain
+     */
+    public static int getProjectDomain(IProject project) {
+        try {
+            String domain = project.getPersistentProperty(new QualifiedName("", PROJECT_DOMAIN));
+            if(domain != null) {
+                return Integer.parseInt(domain);
+            }
+        } catch (CoreException ce) {
+            Activator.log("Error retrieving project property.", ce);
+        } catch (NumberFormatException nfe) {
+            Activator.log("Error parsing project domain.", nfe);
+        }
+        return PROJECT_DOMAIN_DEFAULT;
+    }
+
+    /**
+     * Sets the project domain property.
+     * 
+     * @param project to configure
+     * @param domain to set
+     */
+    public static void setProjectDomain(IProject project, int domain) {
+        try {
+            project.setPersistentProperty(new QualifiedName("", PROJECT_DOMAIN), Integer.toString(domain));
+        } catch (CoreException e) {
+            Activator.log("Unable to set project property.", e);
+        }
     }
 }
 

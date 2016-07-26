@@ -39,6 +39,7 @@ import com.hp.hpl.jena.rdf.model.StmtIterator;
 import com.hp.hpl.jena.util.iterator.ExtendedIterator;
 
 import eu.scasefp7.eclipse.core.Activator;
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ontology.OntologySource.OntologyType;
 
 /**
@@ -131,19 +132,7 @@ public class OntologyJenaAPI {
 		String filename = getFilenameForOntologyType(ontologyType);
 		if (project != null) {
 			if (filename != null) {
-				String modelsFolderLocation = null;
-				try {
-					modelsFolderLocation = project.getPersistentProperty(new QualifiedName("",
-							"eu.scasefp7.eclipse.core.ui.modelsFolder"));
-				} catch (CoreException e) {
-					Activator.log("Error retrieving project property (models folder location)", e);
-				}
-				IContainer container = project;
-				if (modelsFolderLocation != null) {
-				    IResource modelsFolder = project.findMember(new Path(modelsFolderLocation)); 
-					if (modelsFolder != null && modelsFolder.exists())
-						container = (IContainer) modelsFolder;
-				}
+				IContainer container = ProjectUtils.getProjectModelsFolder(project);
 				file = container.getFile(new Path(filename));
 			}
 		} else {

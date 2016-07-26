@@ -3,19 +3,17 @@ package eu.scasefp7.eclipse.core.ui.wizards;
 
 import java.net.URI;
 
-import org.eclipse.core.resources.IResource;
+import org.eclipse.core.resources.IProject;
 import org.eclipse.core.runtime.CoreException;
 import org.eclipse.core.runtime.IConfigurationElement;
 import org.eclipse.core.runtime.IExecutableExtension;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.jface.viewers.IStructuredSelection;
 import org.eclipse.jface.wizard.Wizard;
 import org.eclipse.ui.INewWizard;
 import org.eclipse.ui.IWorkbench;
 import org.eclipse.ui.dialogs.WizardNewProjectCreationPage;
 
-import eu.scasefp7.eclipse.core.ui.Activator;
-import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.preferences.PropertyWizardPage;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
 
@@ -98,7 +96,7 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	        location = pageOne.getLocationURI();
 	    } // else location == null
 	 
-	    IResource res = ScaseProjectSupport.createProject(name, location);
+	    IProject res = ScaseProjectSupport.createProject(name, location);
 	    int k;
 	    org.eclipse.swt.widgets.Label domainLabel = pageTwo.getDomainLabel();
 	    DomainEntry de = (DomainEntry) domainLabel.getData();
@@ -107,12 +105,9 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	    } else {
 	    	k =  de.getId();
 	    }
-	    try {
-			res.setPersistentProperty(new QualifiedName("", ScaseUiConstants.PROP_PROJECT_DOMAIN), Integer.toString(k));
-		} catch (CoreException e) {
-			Activator.log("Unable to set project property", e);
-		}
-	    
+
+	    ProjectUtils.setProjectDomain(res, k);
+		
 	    pageThree.performFinish(res);
 	    
 		return true;
