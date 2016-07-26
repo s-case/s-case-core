@@ -71,6 +71,54 @@ public class RESTHelpers {
 	}
 
 	/**
+	 * Retrieves a parameter from the secure preferences store.
+	 * 
+	 * @param parameterName the name of the parameter.
+	 * @param parameterDefaultValue the default value if the parameter is not found or if it does not have a value.
+	 * @return the value of the parameter given.
+	 * @throws StorageException if there is a problem with the way the parameter is stored.
+	 */
+	private static String getParameterFromSecureStore(String parameterName, String parameterDefaultValue)
+			throws StorageException {
+		ISecurePreferences securePreferencesService = SecurePreferencesFactory.getDefault()
+				.node("eu.scasefp7.eclipse.core.ui");
+		return securePreferencesService != null ? securePreferencesService.get(parameterName, parameterDefaultValue)
+				: parameterDefaultValue;
+	}
+
+	/**
+	 * Retrieves a parameter from the preferences store.
+	 * 
+	 * @param parameterName the name of the parameter.
+	 * @param parameterDefaultValue the default value if the parameter is not found or if it does not have a value.
+	 * @return the value of the parameter given.
+	 */
+	private static String getParameterFromPreferenceStore(String parameterName, String parameterDefaultValue) {
+		IPreferencesService preferencesService = Platform.getPreferencesService();
+		return preferencesService != null ? preferencesService.getString("eu.scasefp7.eclipse.core.ui", parameterName,
+				parameterDefaultValue, null) : parameterDefaultValue;
+	}
+
+	/**
+	 * Revceives the S-CASE token and secret and creates the authorization header.
+	 * 
+	 * @param SCASEToken the S-CASE token.
+	 * @param SCASESecret the S-CASE secret.
+	 * @return an authorization header as a string.
+	 * @throws WrongCredentialsException if the credentials are not correct.
+	 */
+	private static String getSignedCredentials(String SCASEToken, String SCASESecret) throws WrongCredentialsException {
+		JWTSigner signer = new JWTSigner(SCASESecret);
+		HashMap<String, Object> claims = new HashMap<String, Object>();
+		claims.put("token", SCASEToken);
+		if (claims.get("token") == "") {
+			throw new WrongCredentialsException();
+		}
+		String signature = signer.sign(claims);
+		return "CT-AUTH " + SCASEToken + ":" + signature;
+	}
+
+	/**
 	 * Inner function that issues a REST request with JSON body returns the response.
 	 * 
 	 * @param useControlTower boolean denoting whether to use the control tower.
@@ -85,40 +133,25 @@ public class RESTHelpers {
 	private static Response makeServerRequest(boolean useControlTower, String type, Client client, String requestURI,
 			String json) throws WrongCredentialsException, StorageException {
 		if (useControlTower) {
-			ISecurePreferences securePreferencesService = SecurePreferencesFactory.getDefault()
-					.node("eu.scasefp7.eclipse.core.ui");
-			String CTAddress = securePreferencesService != null
-					? securePreferencesService.get("controlTowerServiceURI", "http://app.scasefp7.com:3000/")
-					: "http://app.scasefp7.com:3000/";
+			String CTAddress = getParameterFromSecureStore("controlTowerServiceURI", "http://app.scasefp7.com:3000/");
 			String AssetsRegistryServerAddress = CTAddress + "api/proxy/assetregistry";
-			String SCASEToken = securePreferencesService != null
-					? securePreferencesService.get("controlTowerServiceToken", "") : "";
-			String SCASESecret = securePreferencesService != null
-					? securePreferencesService.get("controlTowerServiceSecret", "") : "";
-			JWTSigner signer = new JWTSigner(SCASESecret);
-			HashMap<String, Object> claims = new HashMap<String, Object>();
-			claims.put("token", SCASEToken);
-			if (claims.get("token") == "") {
-				throw new WrongCredentialsException();
-			}
-			String signature = signer.sign(claims);
+			String SCASEToken = getParameterFromSecureStore("controlTowerServiceToken", "");
+			String SCASESecret = getParameterFromSecureStore("controlTowerServiceSecret", "");
+			String credentials = getSignedCredentials(SCASEToken, SCASESecret);
 			if (type.equals("POST"))
 				return client.target(AssetsRegistryServerAddress + requestURI).request()
-						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).post(Entity.json(json));
+						.header("AUTHORIZATION", credentials).post(Entity.json(json));
 			else if (type.equals("GET"))
 				return client.target(AssetsRegistryServerAddress + requestURI).request()
-						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).get();
+						.header("AUTHORIZATION", credentials).get();
 			else if (type.equals("DELETE"))
 				return client.target(AssetsRegistryServerAddress + requestURI).request()
-						.header("AUTHORIZATION", "CT-AUTH " + SCASEToken + ":" + signature).delete();
+						.header("AUTHORIZATION", credentials).delete();
 			else
 				return null;
 		} else {
-			IPreferencesService preferencesService = Platform.getPreferencesService();
-			String AssetsRegistryServerAddress = preferencesService != null
-					? preferencesService.getString("eu.scasefp7.eclipse.core.ui", "assetRegistryServiceURI",
-							"http://109.231.121.125:8080/s-case/assetregistry", null)
-					: "http://109.231.121.125:8080/s-case/assetregistry";
+			String AssetsRegistryServerAddress = getParameterFromPreferenceStore("assetRegistryServiceURI",
+					"http://109.231.121.125:8080/s-case/assetregistry");
 			if (type.equals("POST"))
 				return client.target(AssetsRegistryServerAddress + requestURI).request().post(Entity.json(json));
 			else if (type.equals("GET"))
