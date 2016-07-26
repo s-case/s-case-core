@@ -18,6 +18,7 @@ import org.eclipse.ui.IWorkbenchWindow;
 import org.eclipse.ui.PlatformUI;
 import org.eclipse.ui.services.IServiceLocator;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 
@@ -64,30 +65,20 @@ public class RequirementsFolderActive extends AbstractSourceProvider implements 
 
 	@Override
 	public void selectionChanged(IWorkbenchPart part, ISelection selection) {
-		if(!(selection instanceof TreeSelection))
-			return;
-		TreeSelection treeSelection = (TreeSelection)selection;
-		Object element = treeSelection.getFirstElement();
-		if(element != null && element instanceof IFolder) {
-			 IFolder folder = (IFolder)element;
-			 IProject project = folder.getProject();
-			 String rqsPath = "";
-			try {
-				rqsPath = project.getPersistentProperty(new QualifiedName("",ScaseUiConstants.REQUIREMENTS_FOLDER));
-			} catch (CoreException e) {
-				Activator.log("Unable to read requirements folder path", e);
-			}
-
-			 if(folder.getFullPath().toPortableString().equals(rqsPath))
-				 enabled = Boolean.FALSE;
-			 else
-				 enabled = Boolean.TRUE;
-		 }
-		else
-			enabled = Boolean.TRUE;
-		
-		fireSourceChanged(ISources.WORKBENCH, MY_STATE, enabled);
-		
+		if(selection instanceof TreeSelection) {
+    		TreeSelection treeSelection = (TreeSelection)selection;
+    		Object element = treeSelection.getFirstElement();
+    		if(element != null && element instanceof IFolder) {
+    		    IFolder folder = (IFolder)element;
+    			IProject project = folder.getProject();
+    			String rqsPath = ProjectUtils.getProjectRequirementsPath(project);
+    
+    			enabled = (!folder.getFullPath().toPortableString().equals(rqsPath));
+    		} else {
+    			enabled = Boolean.TRUE;
+    		}
+    		fireSourceChanged(ISources.WORKBENCH, MY_STATE, enabled);
+		}
 	}
 
 	@Override

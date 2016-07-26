@@ -24,6 +24,7 @@ import org.eclipse.ui.dialogs.FilteredTree;
 import org.eclipse.ui.dialogs.PatternFilter;
 import org.eclipse.ui.dialogs.PropertyPage;
 
+import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
 import eu.scasefp7.eclipse.core.ui.ScaseUiConstants;
 import eu.scasefp7.eclipse.core.ui.preferences.internal.DomainEntry;
@@ -104,17 +105,8 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	 */
 	private int loadProperties() {
 		// Populate domain label
-		try {
-			IResource project = ((IProject) getElement().getAdapter(IResource.class));
-			String domain = project.getPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY));
-			if(domain != null) {
-				return Integer.parseInt(domain);
-			}
-		} catch (CoreException | NumberFormatException e) {
-			return DOMAIN_DEFAULT;
-		}
-		
-		return DOMAIN_DEFAULT;
+		IProject project = ((IProject) getElement().getAdapter(IResource.class));
+		return ProjectUtils.getProjectDomain(project);
 	}
 
 	protected void selectSavedItem()
@@ -228,9 +220,7 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	public Label getDomainLabel(){
-		
 		return domainLabel;
-		
 	}
 	
 	protected DomainEntry getSingleSelection(ISelection selection)
@@ -256,26 +246,25 @@ public class ProjectDomainPropertyPage extends PropertyPage {
 	}
 	
 	public boolean performOk() {
-		// Store the value in properties
-		try {
-			DomainEntry de = (DomainEntry) domainLabel.getData();
-			if(de != null) {
-				IAdaptable element = getElement();
-				if(element instanceof IResource) {
-				    ((IResource) getElement()).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
-				} else {
-				    Object resource = element.getAdapter(IResource.class);
-				    if (resource instanceof IResource) {
-				        ((IResource) resource).setPersistentProperty(new QualifiedName("", DOMAIN_PROPERTY), Integer.toString(de.getId()));
-				    } else {
-				        Activator.log("Unable to set project domain on adaptable " + element.toString(), null);
-				    }
-				}
-			}
-		} catch (CoreException e) {
-		    Activator.log("Unable to set project domain.", e);
-			return false;
-		}
+		DomainEntry de = (DomainEntry) domainLabel.getData();
+        if(de != null) {
+        	IAdaptable element = getElement();
+        	IProject project = null;
+        	if(element instanceof IResource) {
+        	    project = (IProject) getElement();
+        	} else {
+        	    Object resource = element.getAdapter(IResource.class);
+        	    if (resource instanceof IResource) {
+        	        project = (IProject) resource; 
+        	    } else {
+        	        Activator.log("Unable to adapt to project: " + element.toString(), null);
+        	    }
+        	}
+        	
+        	if (project != null) {
+        	    ProjectUtils.setProjectDomain(project, de.getId());
+        	}
+        }
 		return true;
 	}
 
