@@ -255,10 +255,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 						break;
 					}
 				}
-				if (matchingGroup == null)
+				if (matchingGroup == null) {
 					matchingGroup = new ArrayList<Map.Entry<String, String>>();
+					allOrderings.add(matchingGroup);
+				}
 				matchingGroup.add(entry);
-				allOrderings.add(matchingGroup);
 			}
 
 			// Iterate over all orderings
