@@ -19,6 +19,7 @@ import java.util.AbstractMap;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.LinkedHashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Map.Entry;
@@ -214,48 +215,85 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         updateButtons();
 	}
 
+	private Control getGroupOrButtonForId(String controlId) {
+		if (buttons.get(controlId) != null)
+			return buttons.get(controlId);
+		else if (groups.get(controlId) != null)
+			return groups.get(controlId);
+		else
+			return null;
+	}
+
 	private void sortContributions() {
 		if (!this.ordering.isEmpty()) {
-			// Order the contributions
-			List<Entry<String, String>> ordering = new ArrayList<Entry<String, String>>(this.ordering);
-			List<String> contributions = new ArrayList<String>();
-			while (!ordering.isEmpty()) {
-				// Find the leftmost contribution
-				String leftmostContribution = null;
-				for (Entry<String, String> e : ordering) {
-					String firstId = e.getKey();
-					String secondId = e.getValue();
-					if (secondId.equals(leftmostContribution) || leftmostContribution == null)
-						leftmostContribution = firstId;
+			// Remove duplicates and split to groups and buttons
+			List<Entry<String, String>> uniqueOrdering = new ArrayList<Entry<String, String>>(
+					new LinkedHashSet<Entry<String, String>>(this.ordering));
+			List<Entry<String, String>> orderingGroups = new ArrayList<Entry<String, String>>();
+			List<Entry<String, String>> orderingButtons = new ArrayList<Entry<String, String>>();
+			for (Entry<String, String> entry : uniqueOrdering) {
+				if (buttons.get(entry.getKey()) != null) {
+					orderingButtons.add(entry);
+				} else if (groups.get(entry.getKey()) != null) {
+					orderingGroups.add(entry);
 				}
-				for (Iterator<Entry<String, String>> it = ordering.iterator(); it.hasNext();) {
-					Entry<String, String> entry = it.next();
-					if (entry.getKey().equals(leftmostContribution) || entry.getValue().equals(leftmostContribution)) {
-						it.remove();
-					}
-				}
-				contributions.add(leftmostContribution);
 			}
 
-			// Then add the contributions one at a time
-			if (contributions.size() > 0) {
-				String currentContributionId = contributions.get(0);
-				Control currentContribution = null;
-				if (buttons.get(currentContributionId) != null) {
-					currentContribution = buttons.get(currentContributionId);
-				} else if (groups.get(currentContributionId) != null) {
-					currentContribution = groups.get(currentContributionId);
-				}
-				for (int i = 1; i < contributions.size(); i++) {
-					String contributionId = contributions.get(i);
-					Control contribution = null;
-					if (buttons.get(contributionId) != null) {
-						contribution = buttons.get(contributionId);
-					} else if (groups.get(contributionId) != null) {
-						contribution = groups.get(contributionId);
+			// Split buttons to groups
+			List<List<Entry<String, String>>> allOrderings = new ArrayList<List<Entry<String, String>>>();
+			allOrderings.add(orderingGroups);
+			for (Entry<String, String> entry : orderingButtons) {
+				String[] splitId = entry.getKey().split("\\.");
+				String groupId = splitId[splitId.length - 2];
+				// Find the group that matches
+				List<Entry<String, String>> matchingGroup = null;
+				for (List<Entry<String, String>> group : allOrderings) {
+					String[] currentSplitId = group.get(0).getKey().split("\\.");
+					String currentGroupId = currentSplitId[currentSplitId.length - 2];
+					if (currentGroupId.equals(groupId)) {
+						matchingGroup = group;
+						break;
 					}
-					contribution.moveBelow(currentContribution);
-					currentContribution = contribution;
+				}
+				if (matchingGroup == null)
+					matchingGroup = new ArrayList<Map.Entry<String, String>>();
+				matchingGroup.add(entry);
+				allOrderings.add(matchingGroup);
+			}
+
+			// Iterate over all orderings
+			for (List<Entry<String, String>> ordering : allOrderings) {
+				// Order the contributions
+				List<String> contributions = new ArrayList<String>();
+				while (!ordering.isEmpty()) {
+					// Find the leftmost contribution
+					String leftmostContribution = null;
+					for (Entry<String, String> e : ordering) {
+						String firstId = e.getKey();
+						String secondId = e.getValue();
+						if (secondId.equals(leftmostContribution) || leftmostContribution == null)
+							leftmostContribution = firstId;
+					}
+					for (Iterator<Entry<String, String>> it = ordering.iterator(); it.hasNext();) {
+						Entry<String, String> entry = it.next();
+						if (entry.getKey().equals(leftmostContribution)
+								|| entry.getValue().equals(leftmostContribution)) {
+							it.remove();
+						}
+					}
+					contributions.add(leftmostContribution);
+				}
+
+				// Then add the contributions one at a time
+				if (contributions.size() > 0) {
+					String currentContributionId = contributions.get(0);
+					Control currentContribution = getGroupOrButtonForId(currentContributionId);
+					for (int i = 1; i < contributions.size(); i++) {
+						String contributionId = contributions.get(i);
+						Control contribution = getGroupOrButtonForId(contributionId);
+						contribution.moveBelow(currentContribution);
+						currentContribution = contribution;
+					}
 				}
 			}
 		}
