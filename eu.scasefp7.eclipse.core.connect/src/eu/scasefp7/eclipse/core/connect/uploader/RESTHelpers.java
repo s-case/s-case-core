@@ -80,8 +80,14 @@ public class RESTHelpers {
 	 */
 	private static String getParameterFromSecureStore(String parameterName, String parameterDefaultValue)
 			throws StorageException {
-		ISecurePreferences securePreferencesService = SecurePreferencesFactory.getDefault()
-				.node("eu.scasefp7.eclipse.core.ui");
+		ISecurePreferences securePreferences;
+		try {
+			securePreferences = SecurePreferencesFactory.getDefault();
+		} catch (NullPointerException e) {
+			securePreferences = null;
+		}
+		ISecurePreferences securePreferencesService = securePreferences != null ? securePreferences
+				.node("eu.scasefp7.eclipse.core.ui") : null;
 		return securePreferencesService != null ? securePreferencesService.get(parameterName, parameterDefaultValue)
 				: parameterDefaultValue;
 	}
