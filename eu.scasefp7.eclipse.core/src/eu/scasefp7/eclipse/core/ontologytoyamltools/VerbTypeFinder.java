@@ -38,7 +38,7 @@ public class VerbTypeFinder {
 
 		READ_VERBS = new HashSet<String>();
 		ArrayList<String> readverbs = new ArrayList<String>(Arrays.asList(new String[] { "retrieve", "check", "choose",
-				"return", "search", "provide", "contact", "get", "take", "see", "find", "ask", "show", "watch", "read",
+				"return", "provide", "contact", "get", "take", "see", "ask", "show", "watch", "read",
 				"open", "reach", "return", "receive", "view", "load" }));
 		for (String verb : readverbs)
 			READ_VERBS.add(Stemmer.stemVerb(verb));
