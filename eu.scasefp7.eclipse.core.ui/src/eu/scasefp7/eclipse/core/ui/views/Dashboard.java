@@ -275,18 +275,24 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 						if (secondId.equals(leftmostContribution) || leftmostContribution == null)
 							leftmostContribution = firstId;
 					}
-					for (Iterator<Entry<String, String>> it = ordering.iterator(); it.hasNext();) {
-						Entry<String, String> entry = it.next();
-						if (entry.getKey().equals(leftmostContribution)
-								|| entry.getValue().equals(leftmostContribution)) {
-							it.remove();
+					if (ordering.size() > 1) {
+						for (Iterator<Entry<String, String>> it = ordering.iterator(); it.hasNext();) {
+							Entry<String, String> e = it.next();
+							String firstId = e.getKey();
+							String secondId = e.getValue();
+							if (secondId.equals(leftmostContribution) || firstId.equals(leftmostContribution))
+								it.remove();
 						}
+						contributions.add(leftmostContribution);
+					} else if (ordering.size() == 1) {
+						contributions.add(leftmostContribution);
+						contributions.add(ordering.remove(0).getValue());
 					}
-					contributions.add(leftmostContribution);
 				}
 
 				// Then add the contributions one at a time
 				if (contributions.size() > 0) {
+					System.out.println(contributions);
 					String currentContributionId = contributions.get(0);
 					Control currentContribution = getGroupOrButtonForId(currentContributionId);
 					for (int i = 1; i < contributions.size(); i++) {
