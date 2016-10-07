@@ -2,8 +2,15 @@ package eu.scasefp7.eclipse.core.connect.uploader;
 
 import java.io.File;
 import java.io.IOException;
+import java.security.KeyManagementException;
+import java.security.NoSuchAlgorithmException;
+import java.security.cert.CertificateException;
+import java.security.cert.X509Certificate;
 import java.util.ArrayList;
 
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
 import javax.ws.rs.core.Response;
@@ -83,12 +90,40 @@ public class ProjectUploader {
 	}
 
 	/**
+	 * Builds and returns a jersey client that accepts SSL certificates.
+	 * For more info check: http://stackoverflow.com/a/33500913
+	 * 
+	 * @return a new jersey client instance.
+	 */
+	private static Client getClient() {
+		Client client = null;
+		try {
+			SSLContext sc = SSLContext.getInstance("TLSv1");
+			sc.init(null, new TrustManager[] { new X509TrustManager() {
+				public void checkClientTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				}
+
+				public void checkServerTrusted(X509Certificate[] chain, String authType) throws CertificateException {
+				}
+
+				public X509Certificate[] getAcceptedIssuers() {
+					return new X509Certificate[0];
+				}
+			} }, new java.security.SecureRandom());
+			client = ClientBuilder.newBuilder().sslContext(sc).hostnameVerifier(null).build();
+		} catch (NoSuchAlgorithmException | KeyManagementException e) {
+			throw new RuntimeException("Failed to create client");
+		}
+		return client;
+	}
+
+	/**
 	 * Tests the connection to the assets registry and returns a {@link Client} instance.
 	 * 
 	 * @return a {@link Client} instance upon connecting to the assets registry.
 	 */
 	private static Client connectToAssetsRegistry() {
-		Client client = ClientBuilder.newClient();
+		Client client = getClient();
 		Response response = RESTHelpers.makeRestRequest("GET", client, "/version");
 		if (response != null) {
 			if (response.getStatus() != 200)
