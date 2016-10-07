@@ -565,7 +565,7 @@
                  tooltip="S-CASE Control Tower and Question-answering application">
               <parameter
                     name="eu.scasefp7.eclipse.core.ui.commands.openBrowser.url"
-                    value="http://app.scasefp7.com:3000/">
+                    value="https://app.scasefp7.com/">
               </parameter>
            </command>
         </toolbar>
