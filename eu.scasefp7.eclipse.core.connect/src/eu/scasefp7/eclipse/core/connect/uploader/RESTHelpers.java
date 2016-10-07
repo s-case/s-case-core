@@ -139,7 +139,7 @@ public class RESTHelpers {
 	private static Response makeServerRequest(boolean useControlTower, String type, Client client, String requestURI,
 			String json) throws WrongCredentialsException, StorageException {
 		if (useControlTower) {
-			String CTAddress = getParameterFromSecureStore("controlTowerServiceURI", "http://app.scasefp7.com:3000/");
+			String CTAddress = getParameterFromSecureStore("controlTowerServiceURI", "https://app.scasefp7.com/");
 			String AssetsRegistryServerAddress = CTAddress + "api/proxy/assetregistry";
 			String SCASEToken = getParameterFromSecureStore("controlTowerServiceToken", "");
 			String SCASESecret = getParameterFromSecureStore("controlTowerServiceSecret", "");
