@@ -3,7 +3,8 @@
       id="eu.scasefp7.eclipse.core.dependencies.feature"
       label="S-CASE Core third-party dependencies"
       version="1.2.0.qualifier"
-      provider-name="S-CASE Consortium">
+      provider-name="S-CASE Consortium"
+      image="s-case-feature.png">
 
    <description url="https://github.com/s-case/s-case-core">
       The dependencies of the S-CASE Core module.
