@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <feature
       id="eu.scasefp7.eclipse.license.feature"
-      version="1.2.0"
+      version="1.2.0.qualifier"
       provider-name="S-CASE Consortium">
 
    <description url="http://s-case.github.io/">

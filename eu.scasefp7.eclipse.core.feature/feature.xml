@@ -5,9 +5,9 @@
       version="1.2.0.qualifier"
       provider-name="S-CASE Consortium"
       plugin="eu.scasefp7.eclipse.core.ui"
-      image="s-case-feature.png"
-      license-feature="eu.scasefp7.eclipse.license.feature"
-      license-feature-version="1.2.0">
+      image="s-case-feature.png">
+<!--      license-feature="eu.scasefp7.eclipse.license.feature"
+      license-feature-version="1.2.0" -->
 
    <description url="https://github.com/s-case/s-case-core">
       The S-CASE Core module contains the integration features of the S-CASE IDE modules.
@@ -28,7 +28,7 @@
      See the License for the specific language governing permissions and
      limitations under the License.
    </copyright>
-<!--
+
    <license url="http://www.scasefp7.eu/licenses/">
       Apache License
                            Version 2.0, January 2004
@@ -207,7 +207,7 @@
 
    END OF TERMS AND CONDITIONS
    </license>
--->
+
    <url>
       <update label="S-CASE update site" url="https://eclipse.scasefp7.com/eclipse/s-case_update_site/"/>
    </url>
