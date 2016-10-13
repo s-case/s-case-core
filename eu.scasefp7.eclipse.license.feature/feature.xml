@@ -5,8 +5,6 @@
       provider-name="S-CASE Consortium">
 
    <description url="http://s-case.github.io/">
-      Easily create RESTful APIs from requirements
-
 S-CASE tools help you to automatically generate RESTful Web Services from multi-modal requirements in order to increase your productivity and simplify your development process from inception to deployment and maintenance.
    </description>
 

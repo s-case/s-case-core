@@ -7,7 +7,7 @@
       image="s-case-feature.png">
 
    <description url="https://github.com/s-case/s-case-core">
-      The dependencies of the S-CASE Core module.
+      Third-party dependencies of S-CASE modules.
    </description>
 
    <copyright url="http://www.scasefp7.eu/copyright">
