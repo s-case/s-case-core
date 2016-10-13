@@ -22,3 +22,5 @@ Import-Package: com.hp.hpl.jena.ontology;version="[2.13.0,3.0.0)",
  org.apache.log4j,
  org.slf4j,
  org.yaml.snakeyaml;version="1.16.0"
+Bundle-Vendor: S-CASE Consortium
+Bundle-Activator: eu.scasefp7.eclipse.core.Activator
