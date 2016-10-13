@@ -6,8 +6,6 @@
       provider-name="S-CASE Consortium"
       plugin="eu.scasefp7.eclipse.core.ui"
       image="s-case-feature.png">
-<!--      license-feature="eu.scasefp7.eclipse.license.feature"
-      license-feature-version="1.2.0" -->
 
    <description url="https://github.com/s-case/s-case-core">
       The S-CASE Core module contains the integration features of the S-CASE IDE modules.
@@ -211,7 +209,7 @@
    <url>
       <update label="S-CASE update site" url="https://eclipse.scasefp7.com/eclipse/s-case_update_site/"/>
    </url>
-   
+
    <plugin
          id="eu.scasefp7.eclipse.core"
          download-size="0"
