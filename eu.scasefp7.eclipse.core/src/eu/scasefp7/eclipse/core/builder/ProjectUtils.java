@@ -3,6 +3,7 @@ package eu.scasefp7.eclipse.core.builder;
 import java.util.List;
 
 import org.eclipse.core.resources.IContainer;
+import org.eclipse.core.resources.IMarker;
 import org.eclipse.core.resources.IProject;
 import org.eclipse.core.resources.IProjectDescription;
 import org.eclipse.core.resources.IResource;
@@ -39,6 +40,9 @@ public class ProjectUtils
     /** Default project domain (unset). */
     public static final int PROJECT_DOMAIN_DEFAULT = -1;
     
+    /** Configuration problem marker */
+    public static final String CONFIG_MARKER_TYPE = "eu.scasefp7.eclipse.core.configurationMarker";
+
     /**
 	 * Returns the project that the selected resource(s) belong to.
 	 * 
@@ -102,18 +106,58 @@ public class ProjectUtils
      * @throws CoreException
      */
     public static void addNature(IProject project, IProgressMonitor monitor) throws CoreException {
-        try {
-            IProjectDescription description = project.getDescription();
-            String[] natures = description.getNatureIds();
-            String[] newNatures = new String[natures.length + 1];
-            System.arraycopy(natures, 0, newNatures, 0, natures.length);
-            newNatures[natures.length] = ScaseNature.NATURE_ID;
-            description.setNatureIds(newNatures);
-            project.setDescription(description, monitor);
-        } catch (CoreException e) {
-            Activator.log("Unable to add S-CASE project nature to project.", e);
+        if(isValidJavaIdentifier(project.getName())) {
+            try {
+                IProjectDescription description = project.getDescription();
+                String[] natures = description.getNatureIds();
+                String[] newNatures = new String[natures.length + 1];
+                System.arraycopy(natures, 0, newNatures, 0, natures.length);
+                newNatures[natures.length] = ScaseNature.NATURE_ID;
+                description.setNatureIds(newNatures);
+                project.setDescription(description, monitor);
+            } catch (CoreException e) {
+                Activator.log("Unable to add S-CASE project nature to project.", e);
+            }
+        } else {
+            setProjectMarker(project, "Project name is not a valid Java identifier", IMarker.SEVERITY_ERROR, IMarker.PRIORITY_HIGH, "(configuration)");
         }
     }
+
+    /**
+     * Add a marker to the project.
+     * 
+     * @param project to add marker on.
+     * @param message of the marker.
+     * @param severity of the marker.
+     * @param priority of the marker.
+     * @param location of the marker.
+     */
+    public static void setProjectMarker(IProject project, String message, int severity, int priority, String location) {
+        try {
+            IMarker marker = project.createMarker(CONFIG_MARKER_TYPE);
+            marker.setAttribute(IMarker.MESSAGE, message);
+            marker.setAttribute(IMarker.SEVERITY, severity);
+            marker.setAttribute(IMarker.PRIORITY, priority);
+            marker.setAttribute(IMarker.LOCATION, location);
+        } catch (CoreException e) {
+            Activator.log("Unable to set marker", e);
+        }
+    }
+    
+    
+    /**
+     * Clear all project markers.
+     *
+     * @param project to clear markers.
+     */
+    public static void clearProjectMarkers(IProject project) {
+        try {
+            project.deleteMarkers(CONFIG_MARKER_TYPE, false, IResource.DEPTH_ZERO);
+        } catch (CoreException e) {
+            Activator.log("Unable to clear marker", e);
+        }
+    }
+    
     
     /**
      * Sets the project models folder property.
@@ -339,6 +383,32 @@ public class ProjectUtils
         } catch (CoreException e) {
             Activator.log("Unable to set project property.", e);
         }
+    }
+
+    /**
+     * Checks if a string is a valid Java identifier.
+     * 
+     * @param name
+     * @return true if project name is valid
+     */
+    public final static boolean isValidJavaIdentifier(String name) {
+         // an empty or null string cannot be a valid identifier
+         if (name == null || name.length() == 0) {
+             return false;
+         }
+    
+         char[] c = name.toCharArray();
+         if (!Character.isJavaIdentifierStart(c[0])) {
+             return false;
+         }
+    
+         for (int i = 1; i < c.length; i++) {
+             if (!Character.isJavaIdentifierPart(c[i])) {
+                 return false;
+             }
+         }
+    
+         return true;
     }
 }
 

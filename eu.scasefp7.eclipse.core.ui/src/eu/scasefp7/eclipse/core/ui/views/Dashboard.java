@@ -43,16 +43,21 @@ import org.eclipse.core.runtime.IExtension;
 import org.eclipse.core.runtime.IExtensionPoint;
 import org.eclipse.core.runtime.IExtensionRegistry;
 import org.eclipse.core.runtime.IRegistryEventListener;
+import org.eclipse.core.runtime.ListenerList;
 import org.eclipse.core.runtime.Platform;
-import org.eclipse.core.runtime.QualifiedName;
 import org.eclipse.core.runtime.RegistryFactory;
 import org.eclipse.jface.action.IMenuListener;
 import org.eclipse.jface.action.IMenuManager;
 import org.eclipse.jface.action.IToolBarManager;
 import org.eclipse.jface.action.MenuManager;
 import org.eclipse.jface.action.Separator;
+import org.eclipse.jface.util.SafeRunnable;
 import org.eclipse.jface.viewers.ISelection;
+import org.eclipse.jface.viewers.ISelectionChangedListener;
+import org.eclipse.jface.viewers.ISelectionProvider;
 import org.eclipse.jface.viewers.IStructuredSelection;
+import org.eclipse.jface.viewers.SelectionChangedEvent;
+import org.eclipse.jface.viewers.StructuredSelection;
 import org.eclipse.swt.SWT;
 import org.eclipse.swt.events.ControlAdapter;
 import org.eclipse.swt.events.ControlEvent;
@@ -78,6 +83,9 @@ import org.eclipse.ui.commands.ICommandService;
 import org.eclipse.ui.handlers.IHandlerService;
 import org.eclipse.ui.part.ViewPart;
 import org.eclipse.ui.services.IServiceLocator;
+import org.eclipse.ui.views.properties.IPropertySheetPage;
+import org.eclipse.ui.views.properties.tabbed.ITabbedPropertySheetPageContributor;
+import org.eclipse.ui.views.properties.tabbed.TabbedPropertySheetPage;
 
 import eu.scasefp7.eclipse.core.builder.ProjectUtils;
 import eu.scasefp7.eclipse.core.ui.Activator;
@@ -93,7 +101,7 @@ import eu.scasefp7.eclipse.core.ui.preferences.internal.IProjectDomains;
  * @author Marin Orlic
  */
 
-public class Dashboard extends ViewPart implements ISelectionListener, IRegistryEventListener {
+public class Dashboard extends ViewPart implements ISelectionListener, IRegistryEventListener, ISelectionProvider, ITabbedPropertySheetPageContributor {
 
 	/**
 	 * The ID of the view as specified by the extension.
@@ -123,6 +131,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     protected HashMap<ICommandListener, String> registeredCommandListeners = new HashMap<ICommandListener, String>();
     
     /**
+     * List of selection change listeners (element type: <code>ISelectionChangedListener</code>).
+     *
+     * @see #fireSelectionChanged
+     */
+    private ListenerList selectionChangedListeners = new ListenerList();
+    
+    /**
      * Composite containing the dashboard view.
      */
     private Composite dashboardComposite;
@@ -148,6 +163,11 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     private IProject currentProject;
     
     /**
+     * The current selection.
+     */
+    private ISelection currentSelection;
+    
+    /**
 	 * The constructor.
 	 */
 	public Dashboard() {
@@ -163,6 +183,7 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 			updateButtons();
         }
         site.getPage().addPostSelectionListener(this);
+        site.setSelectionProvider(this);
         super.init(site);
     }
 
@@ -210,7 +231,8 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
         });
         
         this.dashboardComposite = parent;
-        currentProject = null;
+        this.currentProject = null;
+        this.currentSelection = StructuredSelection.EMPTY;
         updateContentDescription();
         updateButtons();
 	}
@@ -314,25 +336,25 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     @Override
     public void dispose() {
     	super.dispose();
-    	
-    	if(this.registeredCommandListeners.isEmpty()) {
-    		return;
-    	}
-    	
-    	// Get the command service
-    	ICommandService commandService = (ICommandService)getSite().getService(ICommandService.class);
-    	
-    	// Clear out the listeners
-    	for(Map.Entry<ICommandListener, String> entry : this.registeredCommandListeners.entrySet()) {
-    		Command command = commandService.getCommand(entry.getValue());
-    		command.removeCommandListener(entry.getKey());
-    	}
 
+    	if(!this.registeredCommandListeners.isEmpty()) {
+            
+            // Get the command service
+            ICommandService commandService = (ICommandService)getSite().getService(ICommandService.class);
+            
+            // Clear out the listeners
+            for(Map.Entry<ICommandListener, String> entry : this.registeredCommandListeners.entrySet()) {
+                Command command = commandService.getCommand(entry.getValue());
+                command.removeCommandListener(entry.getKey());
+            }
+        }
+    	
         // Remove selection and registry listener registrations
         getSite().getPage().removePostSelectionListener(this);
         RegistryFactory.getRegistry().removeListener(this);
         
         currentProject = null;
+        currentSelection = null;
     }
 
     /**
@@ -342,7 +364,9 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
      */
     @Override
     public void setFocus() {
-   
+        if (this.currentSelection != null) {
+            setSelection(this.currentSelection);
+        }
     }
 
     private void hookContextMenu() {
@@ -662,9 +686,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 
     @Override
     public void selectionChanged(IWorkbenchPart part, ISelection sel) {
+        if (sel == null || sel.equals(currentSelection) || part == this) {
+            return;
+        }
+        
         updateSelection(sel);
         updateContentDescription();
-		updateButtons();
+    	updateButtons();
     }
 
     protected IProject getProjectOfSelectionList(List<Object> selectionList) {
@@ -707,10 +735,13 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
 			if (project != null) {
 				Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: " + project.getName());
 				currentProject = project;
+				setSelection(selection);
 			} else {
 				// This condition is experimental and can be used to retain selection when selecting other views.
 				// if (currentProject == null || !currentProject.exists())
+                Activator.TRACE.trace("/dashboard/selectedProjectChanged", "Selected project: NULL");
 				currentProject = null;
+				setSelection(StructuredSelection.EMPTY);
 			}
 		}
 	}
@@ -777,6 +808,63 @@ public class Dashboard extends ViewPart implements ISelectionListener, IRegistry
     @Override
     public void removed(IExtensionPoint[] extensionPoints) {
         dashboardComposite.update();
+    }
+
+    @Override
+    public void addSelectionChangedListener(ISelectionChangedListener listener) {
+        if(listener != this) {
+            selectionChangedListeners.add(listener);
+        }
+    }
+    
+    @Override
+    public void removeSelectionChangedListener(ISelectionChangedListener listener) {
+        selectionChangedListeners.remove(listener);
+    }
+
+    @Override
+    public ISelection getSelection() {
+        return this.currentSelection;
+    }
+
+    @Override
+    public void setSelection(ISelection selection) {
+        this.currentSelection = selection;
+        fireSelectionChanged(new SelectionChangedEvent(this, selection));
+    }
+    
+    /**
+     * Notifies any selection changed listeners that the viewer's selection has changed.
+     * Only listeners registered at the time this method is called are notified.
+     *
+     * @param event a selection changed event
+     *
+     * @see ISelectionChangedListener#selectionChanged
+     */
+    protected void fireSelectionChanged(final SelectionChangedEvent event) {
+        Object[] listeners = selectionChangedListeners.getListeners();
+        for (Object listener : listeners) {
+            final ISelectionChangedListener l = (ISelectionChangedListener) listener;
+            SafeRunnable.run(new SafeRunnable() {
+                @Override
+                public void run() {
+                    l.selectionChanged(event);
+                }
+            });
+        }
+    }
+
+    @Override
+    public Object getAdapter(Class adapter) {
+        if (adapter == IPropertySheetPage.class) {
+            return new TabbedPropertySheetPage(this);
+        }
+        return super.getAdapter(adapter);
+    }
+    
+    @Override
+    public String getContributorId() {
+        return "org.eclipse.ui.navigator.ProjectExplorer"; // Pretend to be Project explorer
     }
 
 }
