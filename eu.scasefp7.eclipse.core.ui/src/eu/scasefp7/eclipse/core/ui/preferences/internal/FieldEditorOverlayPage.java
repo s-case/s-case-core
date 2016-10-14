@@ -19,6 +19,7 @@ import org.eclipse.core.resources.ProjectScope;
 import org.eclipse.core.runtime.IAdaptable;
 import org.eclipse.core.runtime.preferences.IScopeContext;
 import org.eclipse.core.runtime.preferences.InstanceScope;
+import org.eclipse.jface.preference.BooleanFieldEditor;
 import org.eclipse.jface.preference.FieldEditor;
 import org.eclipse.jface.preference.FieldEditorPreferencePage;
 import org.eclipse.jface.preference.IPreferenceNode;
@@ -291,6 +292,7 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
         // We iterate through all field editors
         boolean enabled = useProjectSettingsButton.getSelection();
         updateFieldEditors(enabled);
+        updateProjectOutputCheckbox(enabled);
     }
 
     /**
@@ -305,6 +307,23 @@ public abstract class FieldEditorOverlayPage extends FieldEditorPreferencePage i
             editor.setEnabled(enabled, parent);
         }
     }
+
+	/**
+	 * Enables or disables the output path according to the checkbox value for using the output folder of the S-CASE
+	 * project.
+	 * @param enabled - true if enabled
+	 */
+	protected void updateProjectOutputCheckbox(boolean enabled) {
+		boolean useProjectOutputFolder = false;
+		for (FieldEditor editor : editors) {
+			if (editor.getPreferenceName().equals("useProjectOutputFolder"))
+				useProjectOutputFolder = ((BooleanFieldEditor) editor).getBooleanValue();
+		}
+		for (FieldEditor editor : editors) {
+			if (editor.getPreferenceName().equals("outputPath"))
+				editor.setEnabled(enabled && !useProjectOutputFolder, getFieldEditorParent());
+		}
+	}
 
     /**
      * We override the performOk method. In case of property pages we copy the
