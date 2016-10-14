@@ -60,7 +60,7 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
             @Override
             protected boolean validatePage() {
                 if(super.validatePage()) {
-                    if (!isValidProjectName(getProjectName())) {
+                    if (!ProjectUtils.isValidJavaIdentifier(getProjectName())) {
                         setErrorMessage("Project name must be a valid Java identifier");
                         return false;
                     }
@@ -111,32 +111,6 @@ public class NewScaseProjectWizard extends Wizard implements INewWizard, IExecut
 	    pageThree.performFinish(res);
 	    
 		return true;
-	}
-	
-	/**
-	 * Checks if project name is valid (must be a valid Java identifier).
-	 * 
-	 * @param name
-	 * @return true if project name is valid
-	 */
-	public final static boolean isValidProjectName(String name) {
-	     // an empty or null string cannot be a valid identifier
-	     if (name == null || name.length() == 0) {
-	         return false;
-	     }
-
-	     char[] c = name.toCharArray();
-	     if (!Character.isJavaIdentifierStart(c[0])) {
-	         return false;
-	     }
-
-	     for (int i = 1; i < c.length; i++) {
-	         if (!Character.isJavaIdentifierPart(c[i])) {
-	             return false;
-	         }
-	     }
-
-	     return true;
 	}
 	
 	@Override
