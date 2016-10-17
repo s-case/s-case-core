@@ -8,7 +8,7 @@
       image="s-case-feature.png">
 
    <description url="https://github.com/s-case/s-case-core">
-S-CASE tools help you to quickly and automatically generate RESTful Web Services from multi-modal requirements in order to increase your productivity and simplify your development process from inception to deployment and maintenance.   
+      S-CASE tools help you to quickly and automatically generate RESTful Web Services from multi-modal requirements in order to increase your productivity and simplify your development process from inception to deployment and maintenance.
    </description>
 
    <copyright url="http://www.scasefp7.eu/copyright">
@@ -209,6 +209,10 @@ S-CASE tools help you to quickly and automatically generate RESTful Web Services
    <url>
       <update label="S-CASE update site" url="https://eclipse.scasefp7.com/eclipse/s-case_update_site/"/>
    </url>
+
+   <includes
+         id="eu.scasefp7.eclipse.core.dependencies.feature"
+         version="0.0.0"/>
 
    <plugin
          id="eu.scasefp7.eclipse.core"
