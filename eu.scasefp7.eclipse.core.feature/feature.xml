@@ -208,6 +208,7 @@
 
    <url>
       <update label="S-CASE update site" url="https://eclipse.scasefp7.com/eclipse/s-case_update_site/"/>
+      <discovery label="M2E update site" url="http://download.eclipse.org/technology/m2e/releases/"/>
    </url>
 
    <includes
