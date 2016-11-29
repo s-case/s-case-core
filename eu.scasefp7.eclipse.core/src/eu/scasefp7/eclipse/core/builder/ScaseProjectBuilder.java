@@ -40,10 +40,10 @@ public class ScaseProjectBuilder extends IncrementalProjectBuilder {
     public static final String BUILDER_ID = "eu.scasefp7.eclipse.core.scaseBuilder";
 
     /** Problem marker */
-    private static final String MARKER_TYPE = "eu.scasefp7.eclipse.core.problemMarker";
+    public static final String MARKER_TYPE = "eu.scasefp7.eclipse.core.problemMarker";
 
-    /** Configuration marker */
-    private static final String CONFIG_MARKER_TYPE = "eu.scasefp7.eclipse.core.configurationMarker";
+    /** Configuration problem marker */
+    public static final String CONFIG_MARKER_TYPE = "eu.scasefp7.eclipse.core.configurationMarker";
     
     class SampleDeltaVisitor implements IResourceDeltaVisitor {
 
