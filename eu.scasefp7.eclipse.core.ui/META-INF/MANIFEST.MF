@@ -15,7 +15,9 @@ Require-Bundle: org.eclipse.core.runtime,
  org.eclipse.ui.forms,
  org.eclipse.ui.trace,
  org.eclipse.equinox.security;bundle-version="[1.2.0,2.0.0)",
- eu.scasefp7.eclipse.core;bundle-version="1.2.0";visibility:=reexport
+ eu.scasefp7.eclipse.core;bundle-version="1.2.0";visibility:=reexport,
+ org.eclipse.ui.intro,
+ org.eclipse.ui.intro.universal
 Bundle-RequiredExecutionEnvironment: JavaSE-1.8
 Export-Package: eu.scasefp7.eclipse.core.ui,
  eu.scasefp7.eclipse.core.ui.preferences

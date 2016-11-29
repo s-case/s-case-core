@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<introContent>
+  	<extensionContent id="eu.scasefp7.eclipse.core.ui.introLink" style="css/sample.css" name="S-CASE" path="overview/@">
+		<group style-id="content-group" id="euscasefp7eclipsecoreui-introLink-group">
+       		<link label="S-CASE" url="https://s-case.github.io/" id="euscasefp7eclipsecoreui-introLink" style-id="content-link">
+          		<text>Learn about S-CASE tools and easily create RESTful APIs from your requirements. Describe your service goals using English text or workflow storyboards and S-CASE wizards will guide you with automatic generation of thousands lines of code implementing your ideas. Reuse existing web services to create your own service mashups and bring your ideas to life in minutes. S-CASE uses model-driven engineering technology to produce highly reliable and maintainable services, create web service documentation and add new functionality when you need it</text>
+       		</link>
+       	</group>
+  	</extensionContent>
+</introContent>

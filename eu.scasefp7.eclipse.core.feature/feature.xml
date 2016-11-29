@@ -215,6 +215,31 @@
          id="eu.scasefp7.eclipse.core.dependencies.feature"
          version="0.0.0"/>
 
+   <requires>
+      <import plugin="org.eclipse.ui.workbench"/>
+      <import plugin="org.eclipse.osgi"/>
+      <import plugin="org.eclipse.core.runtime"/>
+      <import plugin="org.eclipse.core.commands"/>
+      <import plugin="org.eclipse.core.resources"/>
+      <import plugin="org.eclipse.jface"/>
+      <import plugin="org.apache.jena.osgi"/>
+      <import plugin="log4j"/>
+      <import plugin="slf4j.api"/>
+      <import plugin="org.yaml.snakeyaml"/>
+      <import plugin="org.eclipse.ui"/>
+      <import plugin="org.eclipse.mylyn.commons.ui" version="3.0.0" match="compatible"/>
+      <import plugin="org.eclipse.ui.ide"/>
+      <import plugin="org.eclipse.ui.views.properties.tabbed"/>
+      <import plugin="org.eclipse.mylyn.commons.notifications.ui"/>
+      <import plugin="org.eclipse.mylyn.commons.workbench"/>
+      <import plugin="org.eclipse.ui.forms"/>
+      <import plugin="org.eclipse.ui.trace"/>
+      <import plugin="org.eclipse.equinox.security" version="1.2.0" match="compatible"/>
+      <import plugin="eu.scasefp7.eclipse.core" version="1.2.0" match="greaterOrEqual"/>
+      <import plugin="org.eclipse.ui.intro"/>
+      <import plugin="org.eclipse.ui.intro.universal"/>
+   </requires>
+
    <plugin
          id="eu.scasefp7.eclipse.core"
          download-size="0"
