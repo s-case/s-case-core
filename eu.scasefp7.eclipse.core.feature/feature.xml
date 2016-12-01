@@ -223,8 +223,6 @@
       <import plugin="org.eclipse.core.resources"/>
       <import plugin="org.eclipse.jface"/>
       <import plugin="org.apache.jena.osgi"/>
-      <import plugin="log4j"/>
-      <import plugin="slf4j.api"/>
       <import plugin="org.yaml.snakeyaml"/>
       <import plugin="org.eclipse.ui"/>
       <import plugin="org.eclipse.mylyn.commons.ui" version="3.0.0" match="compatible"/>

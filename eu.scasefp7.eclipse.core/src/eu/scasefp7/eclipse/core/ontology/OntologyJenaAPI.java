@@ -174,7 +174,6 @@ public class OntologyJenaAPI {
 	 * memory. <u><b>NOTE</b></u> that you have to call {@link #close()} in order to save your changes to disk.
 	 */
 	private void initialize() {
-		org.apache.log4j.Logger.getRootLogger().setLevel(org.apache.log4j.Level.OFF);
 		base = ModelFactory.createOntologyModel();
 
 		if (file != null) {
