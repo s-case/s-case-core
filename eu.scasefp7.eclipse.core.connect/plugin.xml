@@ -28,7 +28,7 @@
 
    <extension point="org.eclipse.ui.menus">
       <menuContribution locationURI="popup:org.eclipse.ui.popup.any">
-         <command commandId="eu.scasefp7.eclipse.core.connect.commands.uploadProject" id="eu.scasefp7.eclipse.reqeditor.menus.uploadProject">
+         <command commandId="eu.scasefp7.eclipse.core.connect.commands.uploadProject" id="eu.scasefp7.eclipse.core.connect.menus.uploadProject">
       	    <visibleWhen>
       	 	   <with variable="selection">
       	          <iterate>
