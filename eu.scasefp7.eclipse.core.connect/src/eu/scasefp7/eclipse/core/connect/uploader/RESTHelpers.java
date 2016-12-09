@@ -157,7 +157,7 @@ public class RESTHelpers {
 				return null;
 		} else {
 			String AssetsRegistryServerAddress = getParameterFromPreferenceStore("assetRegistryServiceURI",
-					"http://109.231.121.125:8080/s-case/assetregistry");
+					"http://109.231.122.232:8080/s-case/assetregistry");
 			if (type.equals("POST"))
 				return client.target(AssetsRegistryServerAddress + requestURI).request().post(Entity.json(json));
 			else if (type.equals("GET"))
